@@ -1,0 +1,63 @@
+\documentclass[a4paper,12pt]{report}
+
+\usepackage{alltt, fancyvrb, url}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\usepackage[italian]{babel}
+
+\usepackage[italian]{cleveref}
+
+\title{Meta-relazione per\\``Programmazione ad Oggetti''}
+
+\author{
+	Andrea Maria Castronovo \\
+	Leonardo Mengozzi \\
+	Lorenzo Mazzini \\
+	Kleo Rama
+}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\setcounter{page}{2}
+
+\chapter{Analisi}
+
+\section{Descrizione e requisiti}
+
+Wild Encounter è un gioco 2D bullet-heaven\footnote{Categoria di giochi in cui i nemici convergono sul giocatore} ispirato a Vampire Survivors ma ambientato nel mondo Pokémon.
+%
+Il giocatore si trova sempre al centro dello schermo e deve sopravvivere alle orde di Pokémon selvatici che arrivano da ogni lato. 
+%
+Man mano che avanza il tempo i nemici diventano sempre più forti e numerosi, aumentando così il grado di sfida. 
+%
+Affrontando i nemici si guadagna esperienza che permette di salire di livello e di sbloccare nuove MT\footnote{Macchine Techine, ovvero mosse usabili dai Pokémon}.
+%
+Ogni livello appare una scelta di 3 MT che serviranno per fronteggiare i Pokémon selvatici sempre più potenti e numerosi. 
+%
+Ogni MT può salire di livello in base a quante volte è scelta al level-up, fino ad arrivare ad un livello massimo.
+
+\subsection{Requisiti funzionali}
+\begin{itemize}
+	\item Muovere il proprio personaggio all'interno della mappa infinita;
+    \item Presenza di Pokémon che cercano di avvicinarsi e danneggiare il giocatore;
+    \item Combattere i Pokémon
+    \item Aumentare il proprio livello guadagnando esperienza sconfiggento i Pokémon selvatici;
+    \item Scegliere tra diversi tipi di MT ad ogni livello;
+	\item Possibilità di combattere i Pokémon selvatici tramite MT trovate salendo di livello.
+\end{itemize}
+
+\subsection{Requisiti non funzionali}
+\begin{itemize}
+	\item Progredendo nel gioco saranno presenti a schermo quantità di Pokémon elevate, le prestazioni dovranno però restare accettabili
+\end{itemize}
+
+
+\end{document}
