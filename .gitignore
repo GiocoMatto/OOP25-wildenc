@@ -6,8 +6,22 @@ build
 
 bin/
 
-.idea
-
-.settings
-
+# VS Code settings
 .vscode
+
+# LaTeX and report build files
+report.pdf
+*.toc
+*.synctex.gz
+*.synctex.bbl
+*.synctex.blg
+*.log
+*.out
+*.aux
+*.bbl
+*.blg
+*.eps
+*.kate-swp
+*.dvi
+*.fdb_latexmk
+*.fls
