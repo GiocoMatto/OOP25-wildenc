@@ -62,14 +62,14 @@ Ogni MT può salire di livello in base a quante volte è scelta al level-up, fin
 
 \section{Modello del Dominio}
 
-La \emph{Mappa} di gioco conterrà le varie \emph{Entità} che possono essere animate come 
-il \emph{Giocatore} ed i \emph{Nemici} o inanimate come i \emph{Collezionabili}.
+La \emph{Mappa} di gioco conterrà vari \emph{Oggetti} dotati di collisioni, come le varie \emph{Entità} 
+animate (il \emph{Giocatore} ed i \emph{Nemici}) o oggetti inanimati come i \emph{Collezionabili}.
 %
 Durante la partita appariranno casualmente diversi tipi di nemici che arriveranno dai 
 bordi dello schermo, inseguendo il giocatore cercando di danneggiarlo.
 %
-Sia il giocatore che i nemici posseggono delle \emph{Armi}, ciascuna dotata di caratteristiche diverse,
-come ad esempio portata, danno e velocità di attacco.
+Sia il giocatore che i nemici posseggono delle \emph{Armi}, ciascuna dotata di statistiche diverse,
+come ad esempio portata, danno e velocità di attacco, con cui attacheranno passivamente durante tutta la partita.
 %
 Per garantire una corretta progressione del gioco, i nemici, una volta eliminati, rilasceranno 
 punti esperienza, monete o bacche per recuperare vita che possono essere collezionati dal giocatore (Collezionabili).
@@ -80,7 +80,7 @@ Salire di livello permette al giocatore di scegliere delle armi che lo aiuterann
 affrontare i nemici sempre più forti e numerosi. Se il giocatore sceglie un'arma che 
 possiede già potrà potenziarla aumentandone le statistiche fino ad un certo massimo.
 %
-La \autoref{mermaid:domain} mostra le relazioni tra gli oggetti descritti
+La \autoref{mermaid:domain} mostra le relazioni tra gli oggetti descritti.
 
 \begin{figure}[H]
 	\includegraphics[width=13cm]{mermaid/domain.pdf}

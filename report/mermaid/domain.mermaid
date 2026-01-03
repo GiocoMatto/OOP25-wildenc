@@ -50,7 +50,7 @@ classDiagram
     class Weapon {
         <<Interface>>
 
-        +attack( ) void
+        +attack( Enemy ) void
         +isCooldown( ) boolean 
         +upgrade( ) void
     }
@@ -67,7 +67,7 @@ classDiagram
     Entity <|-- Enemy
     Entity <|-- Player
 
-    Entity *-- Weapon
+    Entity o-- Weapon
 
     Weapon <.. Projectile
 
@@ -75,4 +75,4 @@ classDiagram
 
     Movable <|-- Projectile
     
-    Map *-- MapObject
+    Map o-- MapObject
