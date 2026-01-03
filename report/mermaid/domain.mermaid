@@ -1,0 +1,78 @@
+classDiagram
+    class Map {
+        <<Interface>>
+        
+        +addObject(MapObject) void
+        +removeObject(MapObject) boolean
+        +getAll( ) List~MapObject~
+    }
+
+    class MapObject {
+        <<Interface>>
+        
+        +getPosition( ) Point2D
+    }
+
+    class Collectible {
+        <<Interface>>
+        
+        +getValue( ) int
+    }
+
+    class Movable {
+        <<Interface>>
+
+        +moveTo( Point2D ) boolean
+    }
+    
+    class Entity {
+        <<Interface>>
+
+        +getHealth( ) int
+        +takeDamage(int) boolean
+        +getWeapons( ) List~Weapon~
+    }
+
+    class Player {
+        <<Interface>>
+
+        +levelUp( ) void
+        +getExp(int) void
+
+    }
+
+    class Enemy {
+        <<Interface>>
+
+        +getName( ) String
+    }
+
+    class Weapon {
+        <<Interface>>
+
+        +attack( ) void
+        +isCooldown( ) boolean 
+        +upgrade( ) void
+    }
+
+    class Projectile {
+        <<Interface>>
+
+        +getDamage( ) int
+    }
+
+    MapObject <|-- Collectible
+    MapObject <|-- Movable
+
+    Entity <|-- Enemy
+    Entity <|-- Player
+
+    Entity *-- Weapon
+
+    Weapon <.. Projectile
+
+    Movable <|-- Entity
+
+    Movable <|-- Projectile
+    
+    Map *-- MapObject

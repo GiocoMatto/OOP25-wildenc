@@ -5,7 +5,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{float}
 \usepackage{xcolor}
-\usepackage{hyperref}
+\usepackage[italian]{hyperref}
 
 \usepackage[italian]{babel}
 
@@ -56,8 +56,35 @@ Ogni MT può salire di livello in base a quante volte è scelta al level-up, fin
 
 \subsection{Requisiti non funzionali}
 \begin{itemize}
-	\item Progredendo nel gioco saranno presenti a schermo quantità di Pokémon elevate, le prestazioni dovranno però restare accettabili
+	\item Progredendo nel gioco saranno presenti a schermo quantità di Pokémon elevate, le prestazioni dovranno però restare accettabili;
+	\item Possibilità di tenere conto di quanti Pokémon sono stati visti in ogni partita in un Pokédex.
 \end{itemize}
 
+\section{Modello del Dominio}
+
+La \emph{Mappa} di gioco conterrà le varie \emph{Entità} che possono essere animate come 
+il \emph{Giocatore} ed i \emph{Nemici} o inanimate come i \emph{Collezionabili}.
+%
+Durante la partita appariranno casualmente diversi tipi di nemici che arriveranno dai 
+bordi dello schermo, inseguendo il giocatore cercando di danneggiarlo.
+%
+Sia il giocatore che i nemici posseggono delle \emph{Armi}, ciascuna dotata di caratteristiche diverse,
+come ad esempio portata, danno e velocità di attacco.
+%
+Per garantire una corretta progressione del gioco, i nemici, una volta eliminati, rilasceranno 
+punti esperienza, monete o bacche per recuperare vita che possono essere collezionati dal giocatore (Collezionabili).
+%
+Accumulando punti esperienza il giocatore sale di livello, che tornerà a 0 ad ogni partita.
+%
+Salire di livello permette al giocatore di scegliere delle armi che lo aiuteranno ad
+affrontare i nemici sempre più forti e numerosi. Se il giocatore sceglie un'arma che 
+possiede già potrà potenziarla aumentandone le statistiche fino ad un certo massimo.
+%
+La \autoref{mermaid:domain} mostra le relazioni tra gli oggetti descritti
+
+\begin{figure}[H]
+	\includegraphics[width=13cm]{mermaid/domain.pdf}
+	\caption{Schema UML dell'analisi del dominio, con rappresentate le entità principali ed i rapporti fra loro}\label{mermaid:domain}
+\end{figure}
 
 \end{document}

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Depends on node and mermaid-cli (https://github.com/mermaid-js/mermaid-cli)
+# npm install -g @mermaid-js/mermaid-cli
+
+for file in "$(ls mermaid/*.mermaid)";
+do
+    npx -p @mermaid-js/mermaid-cli mmdc -i $file -o "${file%.mermaid}.pdf" --pdfFit
+done

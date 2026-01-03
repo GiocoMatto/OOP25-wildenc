@@ -10,7 +10,7 @@ bin/
 .vscode
 
 # LaTeX and report build files
-report.pdf
+*.pdf
 *.toc
 *.synctex.gz
 *.synctex.bbl
