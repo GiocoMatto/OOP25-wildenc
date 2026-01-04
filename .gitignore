@@ -10,7 +10,8 @@ bin/
 .vscode
 
 # LaTeX and report build files
-*.pdf
+plantuml*.jar
+report.pdf
 *.toc
 *.synctex.gz
 *.synctex.bbl
