@@ -1,0 +1,41 @@
+@startuml Architecture
+
+skinparam shadowing false
+skinparam roundcorner 5
+skinparam dpi 150
+
+skinparam DefaultFontName "Inter"
+skinparam DefaultFontSize 12
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #F9F9F9
+  BorderColor #BFBFBF
+  FontColor #333333
+}
+
+skinparam Arrow {
+  Color #9E9E9E
+  Thickness 1
+}
+
+hide circle
+hide empty members
+
+' =========================
+
+' Subtitle for classes: 
+' \n<size:10><i>(from model)</i></size>
+class "Map\n<size:10><i>(from Model)</i></size>" {
+
+}
+
+class "GameEngine\n<size:10><i>(from Controller)</i></size>" {
+    -views : Collection<UI>
+}
+
+class "UI\n<size:10><i>(from View)</i></size>" {
+    
+}
+
+@enduml

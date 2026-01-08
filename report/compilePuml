@@ -3,7 +3,9 @@
 # Download PlantUML with PDF packages
 plantuml_pdf=$(curl -s https://api.github.com/repos/plantuml/plantuml/releases/latest | grep -- "plantuml-pdf" | grep browser_download_url | grep -v .asc)
 temp="${plantuml_pdf##*https}"
-curl -L -o plantuml.jar https${temp%.jar*}.jar
-
+if [[ ! -e "./plantuml.jar" ]];
+then
+    curl -L -o plantuml.jar https${temp%.jar*}.jar
+fi
 # Compile all PlantUML files in folder uml/ into PDFs 
 java -jar ./plantuml.jar -tpdf "uml/*.p*uml"

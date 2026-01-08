@@ -89,4 +89,30 @@ La \autoref{uml:domain} mostra le relazioni tra gli oggetti descritti.
 	\caption{Schema UML dell'analisi del dominio, con rappresentate le entità principali ed i rapporti fra loro}\label{uml:domain}
 \end{figure}
 
+\chapter{Design}
+
+\section{Architettura}
+
+L'architettura di Wild Encounter segue il pattern MVC\@.
+%
+Il motore di gioco (ossia il Controller) dovrà essere in grado
+di registrare gli input del giocatore e di associarli a delle azioni delle varie entità presenti nel gioco che costituiscono
+il Model, come ad esempio il movimento delle entità Movable o l'interazione con i Collectible. 
+%
+In quanto tale il motore di gioco si limiterà ad orchestrare i vari movimenti o eventi di gioco, gestiti poi singolarmente
+da ogni Entità del model.
+%
+Il motore di gioco dovrà gestire il loop principale che, ad ogni iterazione, dirà al model come aggiornare i valori in base
+ai comandi impartiti.
+%
+Nel gioco sono presenti dei nemici che dovranno avere dei comportamenti autonomi, questi saranno calcolati tramite degli algoritmi
+all'interno del sistema di movimento dei nemici nel model. 
+%
+Nella \autoref{uml:architecture} è illustrata ed evidenziata l'architettura descritta.
+
+\begin{figure}[H]
+	\includegraphics[width=13cm]{Architecture}
+	\caption{Schema UML che evidenzia la struttura MVC delle varie componenti del progetto}\label{uml:architecture}
+\end{figure}
+
 \end{document}
