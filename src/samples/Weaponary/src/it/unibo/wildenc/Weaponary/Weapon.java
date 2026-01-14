@@ -1,5 +1,7 @@
 package it.unibo.wildenc.Weaponary;
 
+import it.unibo.wildenc.Weaponary.AbstractWeapon.WeaponStats;
+
 /**
  * Interface for modelling a Weapon. For instance, a Weapon is a factory of {@link Projectile}s which have specific
  * characteristics specified by the Weapon they're generated.
@@ -24,4 +26,9 @@ public interface Weapon {
      * @return the name of the weapon.
      */
     String getName();
+
+    /**
+     * Method for getting the current stats of the weapon.
+     */
+    WeaponStats getStats();
 }

@@ -7,10 +7,10 @@ import java.util.function.BiFunction;
  */
 public abstract class AbstractWeapon implements Weapon {
 
-    record WeaponStats(double projDamage, double projVelocity, Type projType, BiFunction<Point2D, Integer, Point2D> moveFunction) { }
+    record WeaponStats(double projDamage, double projVelocity, Type projType, BiFunction<Point2D, Double, Point2D> moveFunction) { }
 
-    WeaponStats weaponStats;
-    final String weaponName;
+    protected WeaponStats weaponStats;
+    private final String weaponName;
 
     /**
      * Constructor for the class. This will create a new instance of the record that saves
@@ -22,7 +22,7 @@ public abstract class AbstractWeapon implements Weapon {
      * @param movement the function that describes how the projectile will move in the map
      * @param name the name of the weapon
      */
-    public AbstractWeapon(int dmg, int vel, Type type, BiFunction<Point2D, Integer, Point2D> movement, String name) {
+    public AbstractWeapon(int dmg, int vel, Type type, BiFunction<Point2D, Double, Point2D> movement, String name) {
         this.weaponStats = new WeaponStats(dmg, vel, type, movement);
         this.weaponName = name;
     }
@@ -45,5 +45,9 @@ public abstract class AbstractWeapon implements Weapon {
     @Override
     public String getName() {
         return this.weaponName;
+    }
+    
+    public WeaponStats getStats() {
+        return this.weaponStats;
     }
 }
