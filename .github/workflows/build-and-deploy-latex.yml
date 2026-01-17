@@ -3,6 +3,9 @@ on:
   push:
     paths:
       - 'report/**'
+    branches:
+      - master
+    
 
 jobs:
   Setup-Compile-Deploy:
