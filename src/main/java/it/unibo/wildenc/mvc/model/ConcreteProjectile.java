@@ -1,19 +1,21 @@
-package it.unibo.wildenc.Weaponary;
+package it.unibo.wildenc.mvc.model;
 
 import java.util.function.BiFunction;
+import org.joml.Vector2d;
 
 public class ConcreteProjectile implements Projectile {
 
     protected double projDamage;
     protected double projVelocity;
     protected Type projType;
-    protected BiFunction<Point2D, Double, Point2D> projMovingFunc;
-    private Point2D currentPosition;
+    protected BiFunction<Vector2d, Double, Vector2d> projMovingFunc;
+    protected final double radius = 2;
+    private Vector2d currentPosition;
 
     public ConcreteProjectile(
         double dmg, double vel, Type type,
-        Point2D initialPosition,
-        BiFunction<Point2D, Double, Point2D> func
+        Vector2d initialPosition,
+        BiFunction<Vector2d, Double, Vector2d> func
     ) {
         this.projDamage = dmg;
         this.projVelocity = vel;
@@ -28,7 +30,7 @@ public class ConcreteProjectile implements Projectile {
     }
 
     @Override
-    public Point2D getPosition() {
+    public Vector2d getPosition() {
         return this.currentPosition;
     }
 
@@ -40,6 +42,11 @@ public class ConcreteProjectile implements Projectile {
     @Override
     public Type getType() {
         return this.projType;
+    }
+
+    @Override
+    public double getHitbox() {
+        return this.radius;
     }
 
 }

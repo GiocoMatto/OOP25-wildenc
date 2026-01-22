@@ -1,4 +1,4 @@
-package it.unibo.wildenc.Weaponary;
+package it.unibo.wildenc.mvc.model;
 
 /**
  * Enumeration for the types of the moves. Each type changes the name and

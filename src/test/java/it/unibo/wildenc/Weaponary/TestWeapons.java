@@ -4,7 +4,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.wildenc.Weaponary.AbstractWeapon.WeaponStats; // Make this another class.
+import it.unibo.wildenc.mvc.model.FirstWeapon;
+import it.unibo.wildenc.mvc.model.Projectile;
+import it.unibo.wildenc.mvc.model.Type;
+import it.unibo.wildenc.mvc.model.Weapon;
+import it.unibo.wildenc.mvc.model.AbstractWeapon.WeaponStats;
+
+import org.joml.Vector2d;
 
 public class TestWeapons {
     /**
@@ -16,7 +22,7 @@ public class TestWeapons {
     public void initTest() {
         this.firstWeaponTest = new FirstWeapon(
             1, 1, Type.WATER,
-            (sp, vel) -> new Point2D(sp.x() + vel, sp.y() + vel),
+            (sp, vel) -> new Vector2d(sp.x() + vel, sp.y() + vel),
             "Disintegratore"
         );
     }
@@ -32,22 +38,22 @@ public class TestWeapons {
 
     @Test
     public void testProjectileCreation() {
-        final Projectile testProj = this.firstWeaponTest.attack(new Point2D(0, 0));
+        final Projectile testProj = this.firstWeaponTest.attack(new Vector2d(0, 0));
         assertTrue(testProj.getClass().getSimpleName().equals("ConcreteProjectile"));
-        assertTrue(testProj.getPosition().isEqual(new Point2D(0, 0)));
+        assertTrue(testProj.getPosition().equals(new Vector2d(0, 0)));
         assertTrue(testProj.getType() == Type.WATER);
         assertTrue(testProj.getDamage() == 1.0);
     }
 
     @Test
     public void testProjectileMovement() {
-        final Projectile testProj = this.firstWeaponTest.attack(new Point2D(0, 0));
-        assertTrue(testProj.getPosition().isEqual(new Point2D(0, 0)));
+        final Projectile testProj = this.firstWeaponTest.attack(new Vector2d(0, 0));
+        assertTrue(testProj.getPosition().equals(new Vector2d(0, 0)));
         testProj.move();
-        assertTrue(testProj.getPosition().isEqual(new Point2D(1, 1)));
+        assertTrue(testProj.getPosition().equals(new Vector2d(1, 1)));
         testProj.move();
-        assertFalse(testProj.getPosition().isEqual(new Point2D(1, 1)));
+        assertFalse(testProj.getPosition().equals(new Vector2d(1, 1)));
         testProj.move();
-        assertTrue(testProj.getPosition().isEqual(new Point2D(3, 3)));
+        assertTrue(testProj.getPosition().equals(new Vector2d(3, 3)));
     }
 }

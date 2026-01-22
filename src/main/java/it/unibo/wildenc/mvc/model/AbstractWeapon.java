@@ -1,5 +1,6 @@
-package it.unibo.wildenc.Weaponary;
+package it.unibo.wildenc.mvc.model;
 
+import org.joml.Vector2d;
 import java.util.function.BiFunction;
 
 /**
@@ -7,7 +8,7 @@ import java.util.function.BiFunction;
  */
 public abstract class AbstractWeapon implements Weapon {
 
-    record WeaponStats(double projDamage, double projVelocity, Type projType, BiFunction<Point2D, Double, Point2D> moveFunction) { }
+    record WeaponStats(double projDamage, double projVelocity, Type projType, BiFunction<Vector2d, Double, Vector2d> moveFunction) { }
 
     protected WeaponStats weaponStats;
     private final String weaponName;
@@ -22,7 +23,7 @@ public abstract class AbstractWeapon implements Weapon {
      * @param movement the function that describes how the projectile will move in the map
      * @param name the name of the weapon
      */
-    public AbstractWeapon(int dmg, int vel, Type type, BiFunction<Point2D, Double, Point2D> movement, String name) {
+    public AbstractWeapon(int dmg, int vel, Type type, BiFunction<Vector2d, Double, Vector2d> movement, String name) {
         this.weaponStats = new WeaponStats(dmg, vel, type, movement);
         this.weaponName = name;
     }
@@ -31,7 +32,7 @@ public abstract class AbstractWeapon implements Weapon {
      * {@inheritDocs}
      */
     @Override
-    public abstract Projectile attack(Point2D startingPoint);
+    public abstract Projectile attack(Vector2d startingPoint);
 
     /**
      * {@inheritDocs}

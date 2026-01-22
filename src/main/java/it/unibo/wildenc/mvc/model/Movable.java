@@ -1,7 +1,13 @@
 package it.unibo.wildenc.mvc.model;
 
+/**
+ * Interface for modelling entities that are able to move. A movement is here determined by an algorithm, which
+ * has to select the next point to move to.
+ */
 public interface Movable extends MapObject {
-
-    boolean moveTop(Point2D p);
-
+    /**
+     * Method for moving the entity. There are no parameters due to the fact that the movement doesn't require
+     * a destination as it is determined by the algorithm put inside.
+     */
+    void move();
 }

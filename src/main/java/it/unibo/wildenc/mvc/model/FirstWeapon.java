@@ -2,14 +2,16 @@ package it.unibo.wildenc.Weaponary;
 
 import java.util.function.BiFunction;
 
+import org.joml.Vector2d;
+
 public class FirstWeapon extends AbstractWeapon {
 
-    public FirstWeapon(int dmg, int vel, Type type, BiFunction<Point2D, Double, Point2D> movement, String name) {
+    public FirstWeapon(int dmg, int vel, Type type, BiFunction<Vector2d, Double, Vector2d> movement, String name) {
         super(dmg, vel, type, movement, name);
     }
 
     @Override
-    public Projectile attack(Point2D startingPoint) {
+    public Projectile attack(Vector2d startingPoint) {
         return new ConcreteProjectile(
             this.weaponStats.projDamage(),
             this.weaponStats.projVelocity(),
