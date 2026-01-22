@@ -15,5 +15,10 @@ public interface MapObject {
      */
     Vector2d getPosition();
 
+    /**
+     * Getter method for returning the radius of the entity's hitbox.
+     * This will be used to calculate collisions between 
+     * @return the radius of the hitbox
+     */
     double getHitbox();
 }

@@ -21,16 +21,15 @@ public class TestWeapons {
     @BeforeEach
     public void initTest() {
         this.firstWeaponTest = new FirstWeapon(
-            1, 1, Type.WATER,
-            (sp, vel) -> new Vector2d(sp.x() + vel, sp.y() + vel),
-            "Disintegratore"
+            1, 1, 1, Type.WATER, 1,
+            (sp, vel) -> new Vector2d(sp.x() + vel, sp.y() + vel)
         );
     }
 
     @Test
     public void testStatsCorrect() {
         final WeaponStats currentWeaponStats = firstWeaponTest.getStats();
-        assertEquals("Disintegratore", this.firstWeaponTest.getName());
+        assertEquals("Bollaraggio", this.firstWeaponTest.getName());
         assertTrue(currentWeaponStats.projDamage() == 1.0);
         assertTrue(currentWeaponStats.projVelocity() == 1.0);
         assertTrue(currentWeaponStats.projType() == Type.WATER);

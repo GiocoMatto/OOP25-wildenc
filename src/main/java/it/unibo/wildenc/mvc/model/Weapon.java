@@ -5,7 +5,7 @@ import it.unibo.wildenc.mvc.model.AbstractWeapon.WeaponStats;
 
 /**
  * Interface for modelling a Weapon. For instance, a Weapon is a factory of {@link Projectile}s which have specific
- * characteristics specified by the Weapon they're generated.
+ * characteristics which are determined by the Weapon they're generated.
  */
 public interface Weapon {
     /**
@@ -30,6 +30,7 @@ public interface Weapon {
 
     /**
      * Method for getting the current stats of the weapon.
+     * @return a {@link WeaponStats} object containing all the weapon's characteristics.
      */
     WeaponStats getStats();
 }
