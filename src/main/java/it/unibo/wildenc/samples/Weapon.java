@@ -2,9 +2,11 @@ package it.unibo.wildenc.samples;
 
 import java.util.Optional;
 
+import org.joml.Vector2f;
+
 public interface Weapon {
 
-    Projectile attack(Point2D from, Optional<Vector2D> dir);
+    Projectile attack(Point2D from, Optional<Vector2f> dir);
 
     void upgrade();
 

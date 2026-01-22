@@ -1,7 +1,9 @@
 package it.unibo.wildenc.samples;
 
+import org.joml.Vector2f;
+
 public interface MapObject {
 
-    Point2D getPosition();
+    Vector2f getPosition();
 
 }
