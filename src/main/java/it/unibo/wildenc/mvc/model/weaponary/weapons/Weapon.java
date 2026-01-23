@@ -1,23 +1,35 @@
 package it.unibo.wildenc.mvc.model.weaponary.weapons;
 
+import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import org.joml.Vector2d;
 
+import it.unibo.wildenc.mvc.model.Type;
+import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.AbstractWeapon.WeaponStats;
-
-
 /**
  * Interface for modelling a Weapon. For instance, a Weapon is a factory of {@link Projectile}s which have specific
  * characteristics which are determined by the Weapon they're generated.
  */
 public interface Weapon {
+    
+    public record WeaponStats(
+        double weaponCooldown, double projDamage, double projVelocity,
+        Type projType, String projID, double hbRadius, 
+        BiFunction<Vector2d, AttackMovementInfo, Vector2d> moveFunction,
+        BiConsumer<Integer, WeaponStats> upgradeLogics, Function<Type, String> nameFunc
+    ) {}
+    
     /**
      * Factory Method for the production of projectiles. The stats for the projectiles (damage, velocity, type of trajectory...)
      * are written inside the weapon - thus when the weapon will be upgraded the projectiles will be upgraded as well.
      * @param startingPoint the point where the projectile will be generated.
      * @return the {@link Projectile} this weapon produces.
      */
-    Projectile attack(Vector2d startingPoint);
+    Optional<Projectile> attack(Vector2d startingPoint, Vector2d atkDirection);
 
     /**
      * Method for upgrading the weapon. For mantaining the SRP, this will upgrade a {@link WeaponStats},

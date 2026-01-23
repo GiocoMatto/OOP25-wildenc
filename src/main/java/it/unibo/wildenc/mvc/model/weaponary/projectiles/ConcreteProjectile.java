@@ -4,61 +4,52 @@ import java.util.function.BiFunction;
 import org.joml.Vector2d;
 
 import it.unibo.wildenc.mvc.model.Type;
+import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
 
-/**
- * Basic implementation of a {@link Projectile}.
- */
 public class ConcreteProjectile implements Projectile {
 
-    /* 
-        To Fix: Does having a single projectile type for every weapon have sense?
-        In the future I could want to model weapons which shoot different projectiles
-        at different times (with random speeds, random damage, crit chance...)
-    */
-   
-    private double projDamage;
-    private double projVelocity;
-    private Type projType;
-    private BiFunction<Vector2d, Double, Vector2d> projMovingFunc;
-    private double hbRadius;
-    private Vector2d currentPosition;
+    private ProjectileStats projStats;
 
     public ConcreteProjectile(
-        double dmg, double vel, Type type,
-        Vector2d initialPosition, double hitboxRadius,
-        BiFunction<Vector2d, Double, Vector2d> func
+        double dmg, Type type, double hitboxRadius, String projID, Vector2d initialPosition, 
+        AttackMovementInfo movement, BiFunction<Vector2d, AttackMovementInfo, Vector2d> func
     ) {
-        this.projDamage = dmg;
-        this.projVelocity = vel;
-        this.projType = type;
-        this.projMovingFunc = func;
-        this.hbRadius = hitboxRadius;
-        this.currentPosition = initialPosition;
+        this.projStats = new ProjectileStats(
+            dmg, movement, type, func, projID, hitboxRadius, initialPosition
+        );
     }
 
     @Override
     public void move() {
-        this.currentPosition = projMovingFunc.apply(currentPosition, projVelocity);
+        this.projStats.updatePosition(
+            this.projStats.movingFunc().apply(
+                this.projStats.currentPosition(), this.projStats.movementInfo()
+            )
+        );
     }
 
     @Override
     public Vector2d getPosition() {
-        return this.currentPosition;
+        return this.projStats.currentPosition();
     }
 
     @Override
     public double getDamage() {
-        return this.projDamage;
+        return this.projStats.damage();
     }
 
     @Override
     public Type getType() {
-        return this.projType;
+        return this.projStats.type();
     }
 
     @Override
     public double getHitbox() {
-        return this.hbRadius;
+        return this.projStats.hitboxRadius();
     }
 
+    @Override
+    public String getID(){
+        return this.projStats.id();
+    }
 }
