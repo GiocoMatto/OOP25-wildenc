@@ -1,4 +1,4 @@
-package it.unibo.wildenc.samples;
+package it.unibo.wildenc.mvc.model;
 
 import org.joml.Vector2f;
 
