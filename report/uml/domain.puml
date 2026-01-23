@@ -37,7 +37,7 @@ class Map <<Interface>> {
 }
 
 class MapObject <<Interface>> {
-  +getPosition() : Point2D<
+  +getPosition() : Vector2D
 }
 
 class Collectible <<Interface>> {
@@ -45,7 +45,7 @@ class Collectible <<Interface>> {
 }
 
 class Movable <<Interface>> {
-  +moveTo(p : Point2D) : boolean
+  +updatePosition(long deltaTime) : boolean
 }
 
 class Entity <<Interface>> {

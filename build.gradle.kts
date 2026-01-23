@@ -37,6 +37,10 @@ dependencies {
     // Example library: Guava. Add what you need (and use the latest version where appropriate).
     // implementation("com.google.guava:guava:28.1-jre")
 
+    // JOML: Vectors and Math useful for game calculations
+    val jomlVersion = "1.10.8"
+    implementation("org.joml:joml:$jomlVersion")
+
     // JavaFX: comment out if you do not need them
     val javaFxVersion = "23.0.2"
     implementation("org.openjfx:javafx:$javaFxVersion")
