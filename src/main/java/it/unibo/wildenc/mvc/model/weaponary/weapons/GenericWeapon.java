@@ -12,6 +12,10 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+/**
+ * Implementation of a generic {@link Weapon}. This will be used as a 
+ * schematic to model all {@link Weapons}s each with different characteristics.
+ */
 public class GenericWeapon implements Weapon {
 
     private WeaponStats weaponStats;

@@ -26,8 +26,10 @@ public interface Weapon {
     /**
      * Factory Method for the production of projectiles. The stats for the projectiles (damage, velocity, type of trajectory...)
      * are written inside the weapon - thus when the weapon will be upgraded the projectiles will be upgraded as well.
+     * A {@link Projectile} is generated only if the weapon is not in "cooldown".
+     * 
      * @param startingPoint the point where the projectile will be generated.
-     * @return the {@link Projectile} this weapon produces.
+     * @return an {@link Optional} containing a {@link Projectile} if the attack was succesful, an empty one instead.
      */
     Optional<Projectile> attack(Vector2d startingPoint, Vector2d atkDirection);
 

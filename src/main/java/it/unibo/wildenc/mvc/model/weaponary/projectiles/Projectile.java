@@ -13,11 +13,20 @@ import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
  */
 public interface Projectile extends Movable {
 
+    /**
+     * Record for storing the projectile data, such as how much damage it does,
+     * how does it moves, and other informations for differenciating the projectiles.
+     */
     record ProjectileStats (
         double damage, AttackMovementInfo movementInfo, Type type, 
         BiFunction<Vector2d, AttackMovementInfo, Vector2d> movingFunc,
         String id, double hitboxRadius, Vector2d currentPosition
     ) {
+        /**
+         * Method for updating the position of the projectile without changing it's identity.
+         * @param newPos the new position which the projectile has to travel to. 
+         * @return a new {@link ProjectileStats} with the updated position.
+         */
         ProjectileStats updatePosition(final Vector2d newPos) {
             return new ProjectileStats(damage, movementInfo, type, movingFunc, id, hitboxRadius, newPos);
         }
@@ -34,5 +43,10 @@ public interface Projectile extends Movable {
      */
     Type getType();
 
+    /**
+     * Getter method for getting the projectile's ID. This will be useful to
+     * differentiate between different projectiles.
+     * @return a {@link String} containing the ID of the projectile.
+     */
     String getID();
 }

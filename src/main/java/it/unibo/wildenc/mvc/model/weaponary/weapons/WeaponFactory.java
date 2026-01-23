@@ -24,7 +24,7 @@ public class WeaponFactory {
                     case Type.WATER: return "Bollaraggio";
                     case Type.FIRE: return "Braciere";
                     case Type.GRASS: return "Fogliame";
-                    default: return "BasicAtk";
+                    default: return "BasicProj";
                 }
             },
             (lvl, stats) -> new WeaponStats( // It's bad, should redo.
