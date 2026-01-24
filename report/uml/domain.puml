@@ -37,12 +37,8 @@ class Map <<Interface>> {
 }
 
 class MapObject <<Interface>> {
-<<<<<<< HEAD
-  +getPosition() : Vector2D
-=======
   +getPosition() : Vector2d<
   +getHitbox() : double
->>>>>>> 4c67180 (fix(weaponary): implemented joml into movement)
 }
 
 class Collectible <<Interface>> {
