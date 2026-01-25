@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import org.joml.Vector2d;
 
+import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
 import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
 import it.unibo.wildenc.mvc.model.weaponary.ProjectileStats;
 
@@ -12,13 +13,12 @@ import it.unibo.wildenc.mvc.model.weaponary.ProjectileStats;
  * Implementation of a generic {@link Projectile}. This will be used 
  * as a schematic for modelling any projectile weapons can shoot.
  */
-public class ConcreteProjectile implements Projectile {
+public class ConcreteProjectile extends AbstractMovable implements Projectile {
 
     private static final double MS_TO_S = 1000.0;
 
     private ProjectileStats projStats;
     private Vector2d movementDirection;
-    private Vector2d currentPosition;
     private Optional<Supplier<Vector2d>> followThis;
     private long lastMovement = System.currentTimeMillis();
 
@@ -36,9 +36,9 @@ public class ConcreteProjectile implements Projectile {
         final Vector2d startPos,
         final Optional<Supplier<Vector2d>> toFollow
     ) {
+        super(startPos, pStats.getStatValue("Hitbox"), pStats.getStatValue("Velocity"));
         this.movementDirection = direction;
         this.projStats = pStats;
-        this.currentPosition = startPos;
         this.followThis = toFollow;
     }
 
@@ -46,24 +46,18 @@ public class ConcreteProjectile implements Projectile {
      * {@inheritDoc}
      */
     @Override
-    public void move() {
+    public void updatePosition(final double deltaTime) {
         if(followThis.isPresent()) {
-            this.currentPosition = followThis.get().get();
-        } else {
-            this.currentPosition = this.projStats.getMovementFunction().apply(
-                this.currentPosition,
-                new AttackMovementInfo(movementDirection, this.projStats.getStatValue("Velocity"))
-            );
+            this.getWritablePosition().set(followThis.get().get());
         }
+        this.getWritablePosition().set(this.projStats.getMovementFunction().apply(
+                new Vector2d(this.getWritablePosition()),
+                new AttackMovementInfo(
+                    movementDirection, deltaTime, this.projStats.getStatValue("Velocity")
+                )
+            )
+        );
         lastMovement = System.currentTimeMillis();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Vector2d getPosition() {
-        return this.currentPosition;
     }
 
     /**
@@ -72,14 +66,6 @@ public class ConcreteProjectile implements Projectile {
     @Override
     public double getDamage() {
         return this.projStats.getStatValue("Damage");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double getHitbox() {
-        return this.projStats.getStatValue("Hitbox");
     }
 
     /**
