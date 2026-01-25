@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import it.unibo.wildenc.mvc.model.Enemy;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
+import it.unibo.wildenc.mvc.model.enemies.RangedEnemy;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 
 public class EnemyTest {
@@ -54,11 +55,25 @@ public class EnemyTest {
 
     @Test
     public void RangedEnemyTest() {
-        throw new IllegalStateException();
+        this.enemy = new RangedEnemy(
+            SPAWN_POSITION,
+            HITBOX,
+            SPEED,
+            HEALTH,
+            START_WEAPONS,
+            NAME,
+            TARGET
+        );
+        int count = 0;
+        // TODO: modificare condizione con un futuro contains 
+        while (!enemy.getPosition().equals(TARGET.getPosition())) {
+            enemy.updatePosition(1);
+        }
+        assertEquals(5, count);
     }
 
     @Test
-    public void RunAwayEnemyTest() {
+    public void RoamingEnemyTest() {
         throw new IllegalStateException();
     }
 }
