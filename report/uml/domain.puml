@@ -37,7 +37,8 @@ class Map <<Interface>> {
 }
 
 class MapObject <<Interface>> {
-  +getPosition() : Vector2D
+  +getPosition() : Vector2d<
+  +getHitbox() : double
 }
 
 class Collectible <<Interface>> {
@@ -57,7 +58,7 @@ class Entity <<Interface>> {
 class Player <<Interface>> {
   +levelUp() : void
   +getExp(exp : int) : void
-  +setDirection(Vector2D d) : void
+  +setDirection(Vector2d d) : void
 }
 
 class Enemy <<Interface>> {
