@@ -3,11 +3,9 @@ package it.unibo.wildenc.mvc.model.weaponary.weapons;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import org.joml.Vector2d;
 
-import it.unibo.wildenc.mvc.model.Type;
 import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 /**
@@ -18,9 +16,9 @@ public interface Weapon {
     
     public record WeaponStats(
         double weaponCooldown, double projDamage, double projVelocity,
-        Type projType, String projID, double hbRadius, 
+        String projID, double hbRadius, 
         BiFunction<Vector2d, AttackMovementInfo, Vector2d> moveFunction,
-        BiConsumer<Integer, WeaponStats> upgradeLogics, Function<Type, String> nameFunc
+        BiConsumer<Integer, WeaponStats> upgradeLogics
     ) {}
     
     /**

@@ -3,7 +3,6 @@ package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 import java.util.function.BiFunction;
 import org.joml.Vector2d;
 
-import it.unibo.wildenc.mvc.model.Type;
 import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
 
 /**
@@ -17,7 +16,6 @@ public class ConcreteProjectile implements Projectile {
     /**
      * Constructor for the class. This will initialize the statistics of the projectile.
      * @param dmg the damage of the projectile.
-     * @param type the {@link Type} of the projectile.
      * @param hitboxRadius the hitbox's radius.
      * @param projID the identifier of the weapon that shot this projectile.
      * @param initialPosition the position where this projectile starts at.
@@ -27,11 +25,11 @@ public class ConcreteProjectile implements Projectile {
      *  to move in the space.
      */
     public ConcreteProjectile(
-        double dmg, Type type, double hitboxRadius, String projID, Vector2d initialPosition, 
+        double dmg, double hitboxRadius, String projID, Vector2d initialPosition, 
         AttackMovementInfo movement, BiFunction<Vector2d, AttackMovementInfo, Vector2d> func
     ) {
         this.projStats = new ProjectileStats(
-            dmg, movement, type, func, projID, hitboxRadius, initialPosition
+            dmg, movement, func, projID, hitboxRadius, initialPosition
         );
     }
 
@@ -61,14 +59,6 @@ public class ConcreteProjectile implements Projectile {
     @Override
     public double getDamage() {
         return this.projStats.damage();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Type getType() {
-        return this.projStats.type();
     }
 
     /**

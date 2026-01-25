@@ -5,7 +5,6 @@ import java.util.function.BiFunction;
 import org.joml.Vector2d;
 
 import it.unibo.wildenc.mvc.model.Movable;
-import it.unibo.wildenc.mvc.model.Type;
 import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
 
 /**
@@ -18,7 +17,7 @@ public interface Projectile extends Movable {
      * how does it moves, and other informations for differenciating the projectiles.
      */
     record ProjectileStats (
-        double damage, AttackMovementInfo movementInfo, Type type, 
+        double damage, AttackMovementInfo movementInfo,
         BiFunction<Vector2d, AttackMovementInfo, Vector2d> movingFunc,
         String id, double hitboxRadius, Vector2d currentPosition
     ) {
@@ -28,7 +27,7 @@ public interface Projectile extends Movable {
          * @return a new {@link ProjectileStats} with the updated position.
          */
         ProjectileStats updatePosition(final Vector2d newPos) {
-            return new ProjectileStats(damage, movementInfo, type, movingFunc, id, hitboxRadius, newPos);
+            return new ProjectileStats(damage, movementInfo, movingFunc, id, hitboxRadius, newPos);
         }
     }
     /**
@@ -36,12 +35,6 @@ public interface Projectile extends Movable {
      * @return the damage of the projectile.
      */
     double getDamage();
-
-    /**
-     * Getter method for getting the projectile type.
-     * @return the {@link Type} of the projectile.
-     */
-    Type getType();
 
     /**
      * Getter method for getting the projectile's ID. This will be useful to
