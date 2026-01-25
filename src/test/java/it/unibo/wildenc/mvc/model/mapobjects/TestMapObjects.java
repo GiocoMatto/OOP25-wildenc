@@ -16,7 +16,7 @@ public class TestMapObjects {
         
     }
 
-    private class MovableObjectTest extends MovableAbstract {
+    private class MovableObjectTest extends AbstractMovable {
 
         public MovableObjectTest(Vector2dc spawnPosition, double hitbox, double movementSpeed) {
             super(spawnPosition, hitbox, movementSpeed);

@@ -1,8 +1,12 @@
 package it.unibo.wildenc.mvc.model.enemies;
-import java.util.List;
 
+import java.util.List;
+import org.joml.Vector2dc;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 import it.unibo.wildenc.mvc.model.*;
+
 public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
+    private final MapObject target;
     private final String name;
     
     /**
@@ -12,32 +16,24 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
      * @param name
      */
     public AbstractEnemy(
+        final Vector2dc spawnPosition, 
+        final double hitbox, 
+        final double movementSpeedfinal,
         final int health, 
         final List<Weapon> weapons, 
-        final String name
+        final String name,
+        final MapObject target
     ) {
-        super(health, weapons);
+        super(spawnPosition, hitbox, movementSpeedfinal, health, weapons);
         this.name = name;
-    }
-    
-    /**
-     * 
-     */
-    @Override
-    public boolean moveTop(Point2D p) {
-        if (specificMovement()) {
-            super.moveTop(p);
-        }
-        return false;
+        this.target = target;
     }
     
     public String getName() {
         return this.name;
     }
 
-    /**
-     * Specify the logic of movement of the enemy type.
-     * @return If the enemy can move in the direction specified.
-     */
-    public abstract boolean specificMovement();
+    public MapObject getTarget() {
+        return this.target;
+    }
 }

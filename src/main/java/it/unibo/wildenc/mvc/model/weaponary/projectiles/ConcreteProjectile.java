@@ -2,6 +2,7 @@ package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 
 import java.util.function.BiFunction;
 import org.joml.Vector2d;
+import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Type;
 import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
@@ -38,7 +39,6 @@ public class ConcreteProjectile implements Projectile {
     /**
      * {@inheritDoc}
      */
-    @Override
     public void move() {
         this.projStats.updatePosition(
             this.projStats.movingFunc().apply(
@@ -85,5 +85,29 @@ public class ConcreteProjectile implements Projectile {
     @Override
     public String getID(){
         return this.projStats.id();
+    }
+
+    @Override
+    public void updatePosition(long deltaTime) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updatePosition'");
+    }
+
+    @Override
+    public Vector2dc getDirection() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getDirection'");
+    }
+
+    @Override
+    public void setDirection(Vector2dc direction) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDirection'");
+    }
+
+    @Override
+    public double getSpeed() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSpeed'");
     }
 }

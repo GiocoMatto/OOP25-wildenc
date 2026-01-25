@@ -2,37 +2,41 @@ package it.unibo.wildenc.mvc.model.enemies;
 
 import java.util.List;
 
-import org.joml.Vector2f;
-import it.unibo.wildenc.mvc.model.Point2D;
-import it.unibo.wildenc.mvc.model.Weapon;
+import org.joml.Vector2d;
+import org.joml.Vector2dc;
+
+import it.unibo.wildenc.mvc.model.MapObject;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 
 public class CloseRangeEnemy extends AbstractEnemy{
 
     public CloseRangeEnemy(
-        final int health, 
-        final List<Weapon> weapons,
-        final String name
+        final Vector2dc spawnPosition, 
+        final double hitbox, 
+        final double movementSpeedfinal, 
+        final int health,
+        final List<Weapon> weapons, 
+        final String name,
+        final MapObject target
     ) {
-        super(health, weapons, name);
-        //TODO Auto-generated constructor stub
+        super(
+            spawnPosition, 
+            hitbox, 
+            movementSpeedfinal, 
+            health, 
+            weapons, 
+            name,
+            target
+        );
     }
 
     @Override
-    public boolean moveTop(Point2D p) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'moveTop'");
+    public Vector2dc specificMovement() {
+        final var movement = new Vector2d(this.getTarget().getPosition()).sub(this.getPosition());
+        if (movement.lengthSquared() > 0) {
+            return movement.normalize();
+        }
+        return new Vector2d(0 ,0);
     }
-
-    @Override
-    public Vector2f getPosition() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPosition'");
-    }
-
-    @Override
-    public boolean specificMovement() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'specificMovement'");
-    }
-
+    
 }

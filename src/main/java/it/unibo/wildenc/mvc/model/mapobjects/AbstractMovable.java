@@ -5,12 +5,12 @@ import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Movable;
 
-public class MovableAbstract extends MapObjectAbstract implements Movable {
+public class AbstractMovable extends MapObjectAbstract implements Movable {
 
     private final Vector2d direction = new Vector2d(0, 0);
     private final double speed;
 
-    public MovableAbstract(final Vector2dc spawnPosition, final double hitbox, final double movementSpeed) {
+    public AbstractMovable(final Vector2dc spawnPosition, final double hitbox, final double movementSpeed) {
         super(spawnPosition, hitbox);
         speed = movementSpeed;
     }

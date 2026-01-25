@@ -1,41 +1,62 @@
 package it.unibo.wildenc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.List;
-
+import org.joml.Vector2d;
+import org.joml.Vector2dc;
 import org.junit.jupiter.api.Test;
-import it.unibo.wildenc.mvc.model.*;
-import it.unibo.wildenc.mvc.model.enemies.*;
+import it.unibo.wildenc.mvc.model.Enemy;
+import it.unibo.wildenc.mvc.model.MapObject;
+import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 
 public class EnemyTest {
+    private static final Vector2d SPAWN_POSITION = new Vector2d(0, 0);
+    private static final int HITBOX = 5;
+    private static final int SPEED = 10;
+    private static final int HEALTH = 500;
+    private static final List<Weapon> START_WEAPONS = List.of();
+    private static final String NAME = "Pikachu";
+    private static MapObject TARGET = new MapObject() {
+
+        @Override
+        public Vector2dc getPosition() {
+            return new Vector2d(5, 5);
+        }
+
+        @Override
+        public double getHitbox() {
+            return 3;
+        }
+
+    };
     private Enemy enemy;
 
     @Test
-    public void getNameTest() {
-        this.enemy = new CloseRangeEnemy(100, List.of(), "Pikaciu");
-        assertEquals("pikaciu", enemy.getName());
-    }
-
-    @Test
     public void CloseRangeEnemyTest() {
-        this.enemy = new CloseRangeEnemy(100, List.of(), "Pikaciu");
-        assertTrue(enemy.moveTop(new Point2D(0, 0)));
-        assertTrue(enemy.moveTop(new Point2D(1, 1)));
-        assertTrue(enemy.moveTop(new Point2D(2, 2)));
-        assertTrue(enemy.moveTop(new Point2D(2, 3)));
-        assertTrue(enemy.moveTop(new Point2D(3, 3)));
+        this.enemy = new CloseRangeEnemy(
+            SPAWN_POSITION,
+            HITBOX,
+            SPEED,
+            HEALTH,
+            START_WEAPONS,
+            NAME,
+            TARGET
+        );
+        int count = 0;
+        while (!enemy.getPosition().equals(TARGET.getPosition())) {
+            enemy.updatePosition(1/60);
+        }
+        assertEquals(5, count);
     }
 
     @Test
     public void RangedEnemyTest() {
-        this.enemy = new RangedEnemy(100, List.of(), "Pikaciu");
-        assertTrue(this.enemy.moveTop(new Point2D(0, 0)));
+        throw new IllegalStateException();
     }
 
     @Test
     public void RunAwayEnemyTest() {
-
+        throw new IllegalStateException();
     }
 }
