@@ -1,6 +1,6 @@
 package it.unibo.wildenc.mvc.model;
 
-import java.util.List;
+import java.util.Set;
 
 import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 
@@ -11,24 +11,29 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 public interface Entity extends Movable {
 
     /**
-     * Get entity's health
-     * @return entity's health
+     * Get current entity's health
+     * @return current entity's health
      */
-    int getHealth();
+    int getCurrentHealth();
+
+    /**
+     * Get entity's max health
+     * @return entity's max health
+     */
+    int getMaxHealth();
 
     /**
      * Decrease health by dmg amount
      * @param dmg amount of damage
-     * @return true if the entity has taken damage
      */
-    boolean takeDamage(int dmg);
+    void takeDamage(int dmg);
 
     /**
      * Weapons helded by this Entity
      * @return 
-     *          A {@link List} collecting all the weapons helded by the Entity;
-     *          an empty {@link List} is returned if the entity has no weapon.
+     *          A {@link Set} collecting all the weapons helded by the Entity;
+     *          an empty {@link Set} is returned if the entity has no weapon.
      */
-    List<Weapon> getWeapons();
+    Set<Weapon> getWeapons();
 
 }
