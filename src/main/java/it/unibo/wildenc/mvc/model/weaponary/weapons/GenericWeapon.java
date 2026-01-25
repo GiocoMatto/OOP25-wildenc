@@ -2,14 +2,13 @@ package it.unibo.wildenc.mvc.model.weaponary.weapons;
 
 import org.joml.Vector2d;
 
-import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
 import it.unibo.wildenc.mvc.model.weaponary.ProjectileStats;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ConcreteProjectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**
  * Implementation of a generic {@link Weapon}. This will be used as a 
@@ -40,7 +39,7 @@ public class GenericWeapon implements Weapon {
     @Override
     public Optional<Projectile> attack(
         Vector2d startingPoint,
-        Vector2d atkDirection,
+        Vector2d atkDirection, 
         Optional<Supplier<Vector2d>> toFollow
     ) {
         final long timestamp = System.currentTimeMillis();
