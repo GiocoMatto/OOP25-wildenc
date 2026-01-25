@@ -1,35 +1,11 @@
 package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 
-import java.util.function.BiFunction;
-
-import org.joml.Vector2d;
-
 import it.unibo.wildenc.mvc.model.Movable;
-import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
 
 /**
  * Interface that models projectiles, entities which have to move.
  */
-public interface Projectile extends Movable {
-
-    /**
-     * Record for storing the projectile data, such as how much damage it does,
-     * how does it moves, and other informations for differenciating the projectiles.
-     */
-    record ProjectileStats (
-        double damage, AttackMovementInfo movementInfo,
-        BiFunction<Vector2d, AttackMovementInfo, Vector2d> movingFunc,
-        String id, double hitboxRadius, Vector2d currentPosition
-    ) {
-        /**
-         * Method for updating the position of the projectile without changing it's identity.
-         * @param newPos the new position which the projectile has to travel to. 
-         * @return a new {@link ProjectileStats} with the updated position.
-         */
-        ProjectileStats updatePosition(final Vector2d newPos) {
-            return new ProjectileStats(damage, movementInfo, movingFunc, id, hitboxRadius, newPos);
-        }
-    }
+public interface Projectile extends Movable { 
     /**
      * Getter method for getting the projectile damage.
      * @return the damage of the projectile.
@@ -42,4 +18,10 @@ public interface Projectile extends Movable {
      * @return a {@link String} containing the ID of the projectile.
      */
     String getID();
+
+    /**
+     * Method used to know if the projectile has lived more than its Time To Live.
+     * @return true if the projectile is still alive, false otherwise.
+     */
+    boolean isAlive();
 }

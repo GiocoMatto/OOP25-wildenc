@@ -3,6 +3,7 @@ package it.unibo.wildenc.mvc.model.weaponary.weapons;
 import org.joml.Vector2d;
 
 import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
+import it.unibo.wildenc.mvc.model.weaponary.ProjectileStats;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ConcreteProjectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 
@@ -22,33 +23,31 @@ public class GenericWeapon implements Weapon {
     private final String weaponName;
 
     public GenericWeapon(
-        double cooldown, double dmg, double vel, String id,
-        double hitboxRadius, BiFunction<Vector2d, AttackMovementInfo, Vector2d> movement, 
-        BiConsumer<Integer, WeaponStats> upgradeLogics
+        final double cooldown,
+        final ProjectileStats pStats,
+        final BiConsumer<Integer, WeaponStats> upgradeLogics,
+        final String weaponName
     ) {
         this.weaponStats = new WeaponStats(
-            cooldown, dmg, vel, id, hitboxRadius, movement, upgradeLogics
+            cooldown, pStats, upgradeLogics
         );
-        this.weaponName = "Hello! This needs to be changed";
+        this.weaponName = weaponName;
     }
 
     /**
      * {@inheritDocs}
      */
     @Override
-    public Optional<Projectile> attack(Vector2d startingPoint, Vector2d atkDirection) {
+    public Optional<Projectile> attack(
+        Vector2d startingPoint,
+        Vector2d atkDirection,
+        Optional<Supplier<Vector2d>> toFollow
+    ) {
         final long timestamp = System.currentTimeMillis();
         if(!isInCooldown(timestamp)) {
             this.timeAtLastAtk = timestamp;
             return Optional.ofNullable(
-                    new ConcreteProjectile(
-                    this.weaponStats.projDamage(),
-                    this.weaponStats.hbRadius(),
-                    this.weaponStats.projID(),
-                    startingPoint,
-                    new AttackMovementInfo(atkDirection, this.weaponStats.projVelocity()),
-                    this.weaponStats.moveFunction()
-                )
+                new ConcreteProjectile(this.weaponStats.pStats(), atkDirection, startingPoint, toFollow)
             );
         } else {
             return Optional.empty();

@@ -1,9 +1,12 @@
 package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 
-import java.util.function.BiFunction;
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import org.joml.Vector2d;
 
 import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
+import it.unibo.wildenc.mvc.model.weaponary.ProjectileStats;
 
 /**
  * Implementation of a generic {@link Projectile}. This will be used 
@@ -11,26 +14,32 @@ import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
  */
 public class ConcreteProjectile implements Projectile {
 
+    private static final double MS_TO_S = 1000.0;
+
     private ProjectileStats projStats;
+    private Vector2d movementDirection;
+    private Vector2d currentPosition;
+    private Optional<Supplier<Vector2d>> followThis;
+    private long lastMovement = System.currentTimeMillis();
 
     /**
-     * Constructor for the class. This will initialize the statistics of the projectile.
-     * @param dmg the damage of the projectile.
-     * @param hitboxRadius the hitbox's radius.
-     * @param projID the identifier of the weapon that shot this projectile.
-     * @param initialPosition the position where this projectile starts at.
-     * @param movement an {@link AttackMovementInfo} containing all the informations
-     *  regarding the projectile's movement.
-     * @param func a {@link BiFunction} with the physics the projectile has to follow
-     *  to move in the space.
+     * Constructor of the class.
+     * @param pStats the statistics of the generated projectile
+     * @param direction the direction the projectile has to follow
+     * @param startPos the position where the projectile starts
+     * @param toFollow a {@link Optional} containing a {@link Supplier} 
+     *  of a position that the projectile has to follow
      */
     public ConcreteProjectile(
-        double dmg, double hitboxRadius, String projID, Vector2d initialPosition, 
-        AttackMovementInfo movement, BiFunction<Vector2d, AttackMovementInfo, Vector2d> func
+        final ProjectileStats pStats,
+        final Vector2d direction,
+        final Vector2d startPos,
+        final Optional<Supplier<Vector2d>> toFollow
     ) {
-        this.projStats = new ProjectileStats(
-            dmg, movement, func, projID, hitboxRadius, initialPosition
-        );
+        this.movementDirection = direction;
+        this.projStats = pStats;
+        this.currentPosition = startPos;
+        this.followThis = toFollow;
     }
 
     /**
@@ -38,11 +47,15 @@ public class ConcreteProjectile implements Projectile {
      */
     @Override
     public void move() {
-        this.projStats.updatePosition(
-            this.projStats.movingFunc().apply(
-                this.projStats.currentPosition(), this.projStats.movementInfo()
-            )
-        );
+        if(followThis.isPresent()) {
+            this.currentPosition = followThis.get().get();
+        } else {
+            this.currentPosition = this.projStats.getMovementFunction().apply(
+                this.currentPosition,
+                new AttackMovementInfo(movementDirection, this.projStats.getStatValue("Velocity"))
+            );
+        }
+        lastMovement = System.currentTimeMillis();
     }
 
     /**
@@ -50,7 +63,7 @@ public class ConcreteProjectile implements Projectile {
      */
     @Override
     public Vector2d getPosition() {
-        return this.projStats.currentPosition();
+        return this.currentPosition;
     }
 
     /**
@@ -58,7 +71,7 @@ public class ConcreteProjectile implements Projectile {
      */
     @Override
     public double getDamage() {
-        return this.projStats.damage();
+        return this.projStats.getStatValue("Damage");
     }
 
     /**
@@ -66,7 +79,7 @@ public class ConcreteProjectile implements Projectile {
      */
     @Override
     public double getHitbox() {
-        return this.projStats.hitboxRadius();
+        return this.projStats.getStatValue("Hitbox");
     }
 
     /**
@@ -74,6 +87,14 @@ public class ConcreteProjectile implements Projectile {
      */
     @Override
     public String getID(){
-        return this.projStats.id();
+        return this.projStats.getID();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isAlive() {
+        return (System.currentTimeMillis() - lastMovement) / MS_TO_S < this.projStats.getTTL();
     }
 }
