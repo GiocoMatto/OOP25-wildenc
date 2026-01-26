@@ -52,9 +52,9 @@ public class RoamingEnemy extends AbstractEnemy {
     }
 
     @Override
-    protected boolean canTakeDamage() {
+    public boolean canTakeDamage() {
         final long now = System.currentTimeMillis();
-        if (now - this.startTime >= TIME_SAFE) {
+        if ((now - this.startTime) / 1000 >= TIME_SAFE) {
             return true;
         }
         return false;
