@@ -1,8 +1,6 @@
 package it.unibo.wildenc.mvc.model.entities;
 
 import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.joml.Vector2dc;
@@ -89,15 +87,17 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
     }
     
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public abstract boolean canTakeDamage();
+    
+    /**
      * Alters the entity direction.
      * 
      * @return the {@link Vector2dc} representing the entity's new direction
      */
     protected abstract Vector2dc alterDirection();
 
-    /**
-     * whether the entity can take damage or not
-     */
-    protected abstract boolean canTakeDamage();
 
 }

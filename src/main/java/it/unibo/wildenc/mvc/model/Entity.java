@@ -40,4 +40,11 @@ public interface Entity extends Movable {
      * Add a new weapon.
      */
     void addWeapons(Weapon p);
+    
+    /**
+     * If the entity can take damage.
+     * 
+     * @return true if the entity can take damage.
+     */
+    boolean canTakeDamage();
 }

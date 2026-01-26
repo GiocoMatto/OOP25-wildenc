@@ -70,7 +70,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
      * By default a enemy can alway take damage.
      */
     @Override
-    protected boolean canTakeDamage() {
+    public boolean canTakeDamage() {
         return true;
     }
 
