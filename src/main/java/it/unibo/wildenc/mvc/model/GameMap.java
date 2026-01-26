@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Map of the game, it includes all core logic to update all the entities on it.
  */
-public interface Map {
+public interface GameMap {
 
     /**
      * Add a {@link MapObject} on this Map.

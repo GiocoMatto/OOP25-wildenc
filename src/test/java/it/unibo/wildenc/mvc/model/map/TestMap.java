@@ -8,18 +8,18 @@ import org.joml.Vector2d;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.wildenc.mvc.model.Map;
+import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.MapObject;
 
 public class TestMap {
     
-    private Map map;
+    private GameMap map;
     private MapObject mapObj = new MapObjectTest(new Vector2d(TEST_X, TEST_Y), TEST_HITBOX);
     private MovableObjectTest movableObj = new MovableObjectTest(new Vector2d(TEST_X, TEST_Y), TEST_HITBOX, TEST_SPEED);
 
     @BeforeEach
     void setup() {
-        map = new MapImpl();
+        map = new GameMapImpl();
         movableObj.setDirection(TEST_DIRECTION_UP);
     }
 
