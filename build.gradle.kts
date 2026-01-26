@@ -56,8 +56,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     // The engine that must be available at runtime to run the tests.
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
-    implementation("org.locationtech.jts:jts-core:1.19.0")
 }
 
 tasks.withType<Test> {
