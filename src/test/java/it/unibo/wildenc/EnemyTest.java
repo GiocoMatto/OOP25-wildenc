@@ -2,14 +2,15 @@ package it.unibo.wildenc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Set;
-
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 import org.junit.jupiter.api.Test;
+import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Enemy;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
 import it.unibo.wildenc.mvc.model.enemies.RangedEnemy;
+import it.unibo.wildenc.mvc.model.enemies.RoamingEnemy;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 
 public class EnemyTest {
@@ -74,6 +75,21 @@ public class EnemyTest {
 
     @Test
     public void RoamingEnemyTest() {
-        throw new IllegalStateException();
+        this.enemy = new RoamingEnemy(
+            SPAWN_POSITION,
+            HITBOX,
+            SPEED,
+            HEALTH,
+            START_WEAPONS,
+            NAME,
+            TARGET
+        );
+        try {
+            Thread.sleep(3001);
+            AssertTrue(((Entity)enemy).canTakeDamage());
+        } catch (final InterruptedException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
+
     }
 }
