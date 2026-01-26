@@ -13,7 +13,7 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 /**
  * Abstraction of a general entity.
  * 
- * @author Andrea Maria Castronovo
+ * 
  */
 public abstract class AbstractEntity extends AbstractMovable implements Entity {
 

@@ -11,7 +11,7 @@ import it.unibo.wildenc.mvc.model.Movable;
 /**
  * Basic {@link Map} implementation
  * 
- * @author Andrea Maria Castronovo
+ * 
  */
 public class GameMapImpl implements GameMap {
 

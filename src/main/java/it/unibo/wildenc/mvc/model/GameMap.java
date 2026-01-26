@@ -39,5 +39,4 @@ public interface GameMap {
      *                  how much to update in time.
      */
     void updateEntities(long deltaTime);
-
 }

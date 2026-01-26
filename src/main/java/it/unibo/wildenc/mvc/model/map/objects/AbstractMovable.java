@@ -8,7 +8,7 @@ import it.unibo.wildenc.mvc.model.Movable;
 /**
  * Abstraction of any movable object.
  * 
- * @author Andrea Maria Castronovo
+ * 
  */
 public abstract class AbstractMovable extends AbstractMapObject implements Movable {
 
