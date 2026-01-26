@@ -28,7 +28,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     public AbstractEnemy(
         final Vector2dc spawnPosition, 
         final double hitbox, 
-        final double movementSpeedfinal,
+        final double movementSpeedfinal, 
         final int health, 
         final Set<Weapon> weapons, 
         final String name,

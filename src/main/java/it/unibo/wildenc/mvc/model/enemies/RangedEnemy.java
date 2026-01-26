@@ -5,6 +5,7 @@ import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 import it.unibo.wildenc.mvc.model.MapObject;
+import it.unibo.wildenc.mvc.model.map.CollisionLogic;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 
 public class RangedEnemy extends AbstractEnemy {
@@ -33,13 +34,12 @@ public class RangedEnemy extends AbstractEnemy {
 
     @Override
     public Vector2dc alterDirection() {
-        // if (!maxArea.contains(posEnemy)) {
-        //     return direction(getTarget().getPosition(), this.getPosition()).normalize();
-        // } else if (!minArea.contains(posEnemy)) {
-        //     return new Vector2d(0 ,0);
-        // }
-        // return direction(this.getPosition(), getTarget().getPosition()).normalize();
-        throw new IllegalStateException();
+        if (!CollisionLogic.areInRange(this, getTarget(), MAX_DISTANCE)) {
+            return direction(getTarget().getPosition(), this.getPosition()).normalize();
+        } else if (CollisionLogic.areInRange(this, getTarget(), MIN_DISTANCE)) {
+            return direction(this.getPosition(), getTarget().getPosition()).normalize();
+        }
+        return new Vector2d(0 ,0);
     }
 
 }

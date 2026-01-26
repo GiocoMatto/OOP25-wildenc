@@ -12,11 +12,12 @@ import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
 import it.unibo.wildenc.mvc.model.enemies.RangedEnemy;
 import it.unibo.wildenc.mvc.model.enemies.RoamingEnemy;
+import it.unibo.wildenc.mvc.model.map.CollisionLogic;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 
 public class EnemyTest {
     private static final Vector2d SPAWN_POSITION = new Vector2d(0, 0);
-    private static final int HITBOX = 5;
+    private static final int HITBOX = 2;
     private static final int SPEED = 10;
     private static final int HEALTH = 500;
     private static final Set<Weapon> START_WEAPONS = Set.of();
@@ -31,7 +32,7 @@ public class EnemyTest {
 
         @Override
         public double getHitbox() {
-            return 3;
+            return 1;
         }
 
     };
@@ -39,21 +40,13 @@ public class EnemyTest {
 
     @Test
     public void CloseRangeEnemyTest() {
-        this.enemy = new CloseRangeEnemy(
-            SPAWN_POSITION,
-            HITBOX,
-            SPEED,
-            HEALTH, 
-            START_WEAPONS,
-            NAME,
-            TARGET
-        );
+        this.enemy = new CloseRangeEnemy(SPAWN_POSITION, HITBOX, SPEED, HEALTH, START_WEAPONS, NAME, TARGET);
         int count = 0;
-        // while (!calcHitBox(TARGET, 1, (MapObject)enemy)) {
-        //     enemy.updatePosition(0.1);
-        //     count++;
-        // }
-        assertEquals(4, count);
+        while (!CollisionLogic.areColliding(enemy, TARGET)) {
+            enemy.updatePosition(0.1);
+            count++;
+        }
+        assertEquals(3, count);
     }
 
     @Test
@@ -71,26 +64,18 @@ public class EnemyTest {
             }
 
         };
-        this.enemy = new RangedEnemy(
-            SPAWN_POSITION,
-            HITBOX,
-            SPEED,
-            HEALTH,
-            START_WEAPONS,
-            NAME,
-            target
-        );
+        this.enemy = new RangedEnemy(SPAWN_POSITION, HITBOX, SPEED, HEALTH, START_WEAPONS, NAME, target);
         int count = 0;
-        // while (!calcHitBox(target, RangedEnemy.MIN_DISTANCE, (MapObject)enemy)) {
-        //     enemy.updatePosition(0.1);
-        //     count++;
-        // }
-        assertEquals(5, count);
+        while (!CollisionLogic.areInRange(enemy, target, RangedEnemy.MAX_DISTANCE)) {
+            enemy.updatePosition(0.1);
+            count++;
+        }
+        assertEquals(1, count);
         target = new MapObject() {
 
             @Override
             public Vector2dc getPosition() {
-                return new Vector2d(107, 0);
+                return new Vector2d(77, 0);
             }
 
             @Override
@@ -99,19 +84,18 @@ public class EnemyTest {
             }
 
         };
+        this.enemy = new RangedEnemy(SPAWN_POSITION, HITBOX, SPEED, HEALTH, START_WEAPONS, NAME, target);
+        count = 0;
+        while (CollisionLogic.areInRange(enemy, target, RangedEnemy.MIN_DISTANCE)) {
+            enemy.updatePosition(0.1);
+            count++;
+        }
+        assertEquals(8, count);
     }
 
     @Test
     public void RoamingEnemyTest() {
-        this.enemy = new RoamingEnemy(
-            SPAWN_POSITION,
-            HITBOX,
-            SPEED,
-            HEALTH,
-            START_WEAPONS,
-            NAME,
-            TARGET
-        );
+        this.enemy = new RoamingEnemy(SPAWN_POSITION, HITBOX, SPEED, HEALTH, START_WEAPONS, NAME, TARGET);
         try {
             Thread.sleep(5000);
             assertTrue(((Entity)enemy).canTakeDamage());
