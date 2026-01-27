@@ -1,5 +1,7 @@
 package it.unibo.wildenc.mvc.model;
 
+import java.util.Optional;
+
 public interface Enemy extends Entity {
 
     /**
@@ -12,6 +14,6 @@ public interface Enemy extends Entity {
      * Get the {@link MapObject} of the target (the Player).
      * @return Relative MapObject Player.
      */
-    MapObject getTarget();
+    Optional<MapObject> getTarget();
 
 }

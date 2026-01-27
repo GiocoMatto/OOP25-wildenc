@@ -1,5 +1,6 @@
 package it.unibo.wildenc.mvc.model.enemies;
 
+import java.util.Optional;
 import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
@@ -12,7 +13,7 @@ import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
  * and a Name for the identification.
  */
 public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
-    private final MapObject target;
+    private final Optional<MapObject> target;
     private final String name;
 
     /**
@@ -23,7 +24,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
      * @param health The health of the enemy.
      * @param weapons The weapon that can hit the palyer.
      * @param name The name of the enemy.
-     * @param target The Posion of the payler to hit.
+     * @param target The Optinal Posion of the payler to hit.
      */
     public AbstractEnemy(
         final Vector2dc spawnPosition, 
@@ -32,7 +33,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
         final int health, 
         final Set<Weapon> weapons, 
         final String name,
-        final MapObject target
+        final Optional<MapObject> target
     ) {
         super(spawnPosition, hitbox, movementSpeedfinal, health, weapons);
         this.name = name;
@@ -51,7 +52,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
      * {@inheritDoc}
      */
     @Override
-    public MapObject getTarget() {
+    public Optional<MapObject> getTarget() {
         return this.target;
     }
 

@@ -1,5 +1,6 @@
 package it.unibo.wildenc.mvc.model.enemies;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.joml.Vector2d;
@@ -8,10 +9,16 @@ import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.map.CollisionLogic;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
 
+/**
+ * A enemy that attach to a specific distance by the player.
+ */
 public class RangedEnemy extends AbstractEnemy {
     public static final int MAX_DISTANCE = 100;
     public static final int MIN_DISTANCE = 80;
 
+    /**
+     * {@inheritDoc}
+     */
     public RangedEnemy(
         final Vector2dc spawnPosition, 
         final double hitbox, 
@@ -19,7 +26,7 @@ public class RangedEnemy extends AbstractEnemy {
         final int health,
         final Set<Weapon> weapons, 
         final String name,
-        final MapObject target
+        final Optional<MapObject> target
     ) {
         super(
             spawnPosition, 
@@ -32,12 +39,15 @@ public class RangedEnemy extends AbstractEnemy {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector2dc alterDirection() {
-        if (!CollisionLogic.areInRange(this, getTarget(), MAX_DISTANCE)) {
-            return direction(getTarget().getPosition(), this.getPosition()).normalize();
-        } else if (CollisionLogic.areInRange(this, getTarget(), MIN_DISTANCE)) {
-            return direction(this.getPosition(), getTarget().getPosition()).normalize();
+        if (!CollisionLogic.areInRange(this, getTarget().get(), MAX_DISTANCE)) {
+            return direction(getTarget().get().getPosition(), this.getPosition()).normalize();
+        } else if (CollisionLogic.areInRange(this, getTarget().get(), MIN_DISTANCE)) {
+            return direction(this.getPosition(), getTarget().get().getPosition()).normalize();
         }
         return new Vector2d(0 ,0);
     }
