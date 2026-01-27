@@ -60,18 +60,24 @@ public class GameMapImpl implements GameMap {
     public void updateEntities(final long deltaTime) {
         final double deltaSeconds = deltaTime / NANO_TO_SECOND_FACTOR;
         List<MapObject> objToRemove = new LinkedList<>();
-        // Update objects positions
+        /*
+         * Update objects positions
+         */
         Stream.concat(mapObjects.stream(), Stream.of(player))
             .filter(e -> e instanceof Movable)
             .map(o -> (Movable)o)
             .forEach(o -> o.updatePosition(deltaSeconds));
-        // Check collisions of projectiles with player
+        /*
+         * Check collisions of projectiles with player 
+         */
         mapObjects.stream()
             .filter(e -> e instanceof Projectile)
             .map(o -> (Projectile)o)
             .filter(o -> CollisionLogic.areColliding(player, o))
             .forEach(o -> projectileHit(o, player, objToRemove));
-        // Check collision of projectiles with enemies
+        /*
+         * Check collision of projectiles with enemies
+         */ 
         List<Projectile> projectiles = getAllObjects().stream()
             .filter(e -> e instanceof Projectile)
             .map(e -> (Projectile) e)

@@ -5,22 +5,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.LinkedHashSet;
+
 import org.joml.Vector2d;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.MapObject;
+import it.unibo.wildenc.mvc.model.Player;
 
 public class TestMap {
     
     private GameMap map;
     private MapObject mapObj = new MapObjectTest(new Vector2d(TEST_X, TEST_Y), TEST_HITBOX);
     private MovableObjectTest movableObj = new MovableObjectTest(new Vector2d(TEST_X, TEST_Y), TEST_HITBOX, TEST_SPEED);
+    private Player player = new PlayerTest(TEST_DIRECTION_DOWN, TEST_HITBOX, TEST_SPEED, TEST_HITBOX, new LinkedHashSet<>());
 
     @BeforeEach
     void setup() {
-        map = new GameMapImpl(null); // FIXME Player!!!!!!
+        map = new GameMapImpl(player);
         movableObj.setDirection(TEST_DIRECTION_UP);
     }
 
@@ -59,5 +63,11 @@ public class TestMap {
         movableObj.setDirection(TEST_DIRECTION_DOWN);
         map.updateEntities(TEST_TIME_NANOSECONDS);
         assertFalse(CollisionLogic.areColliding(movableObj, mapObj));
+    }
+
+    @Test
+    void testProjectilesCollisions() {
+        testAddingObjects();
+        // TODO: whole test lol
     }
 }
