@@ -110,14 +110,10 @@ public class EnemyTest {
         }
         /* Verify enemy direction randomly change evry 11 hit */
         enemy.updatePosition(DELTA_SECONDS);
-        final Vector2dc dir1 = enemy.getDirection();
-        System.out.println("dir1" + dir1);
-        for (int i = 0; i < RoamingEnemy.STEP_FOR_CHANGE_DIRECTION - 1; i++) {
+        final Vector2dc dir1 = new Vector2d(enemy.getDirection());
+        for (int i = 0; i < RoamingEnemy.STEP_FOR_CHANGE_DIRECTION; i++) {
             enemy.updatePosition(DELTA_SECONDS);
         }
-        enemy.updatePosition(DELTA_SECONDS);
-        final Vector2dc dir2 = enemy.getDirection();
-        System.out.println("dir2" + dir2);
-        assertNotEquals(dir1, dir2);
+        assertNotEquals(dir1, enemy.getDirection());
     }
 }
