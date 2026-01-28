@@ -10,7 +10,7 @@ import org.joml.Vector2dc;
  * Class for representing important information used in an attack.
  */
 public class AttackContext {
-    private Vector2d lastPosition;
+    private Vector2dc lastPosition;
     private double atkDirection;
     private Optional<Supplier<Vector2d>> toFollow;
     private double velocity;
@@ -21,7 +21,7 @@ public class AttackContext {
      * @param entityToFollow an {@link Optional} of a {@link Supplier} for a position to follow.
      */
     public AttackContext(
-        final Vector2d initialPosition,
+        final Vector2dc initialPosition,
         final double initialDirection,
         Optional<Supplier<Vector2d>> entityToFollow
     ) {
