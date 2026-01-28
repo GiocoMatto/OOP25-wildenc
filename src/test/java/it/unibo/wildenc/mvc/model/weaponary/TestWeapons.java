@@ -1,6 +1,5 @@
 package it.unibo.wildenc.mvc.model.weaponary;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -18,7 +17,6 @@ import it.unibo.wildenc.mvc.model.Weapon.WeaponStats;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;
-import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
 public class TestWeapons {

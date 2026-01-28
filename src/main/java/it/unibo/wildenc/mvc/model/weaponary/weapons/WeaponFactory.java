@@ -13,12 +13,12 @@ import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStat
 public class WeaponFactory {
     public Weapon getDefaultWeapon() {
         return new GenericWeapon(
-            1, 
+            1,
             new ProjectileStats(
                 10, 
-                2, 
-                1, 
-                10, 
+                2,
+                1,
+                10,
                 "BasicProj",
                 (dt, atkInfo) -> {
                     final Vector2dc start = atkInfo.getLastPosition();
@@ -32,10 +32,10 @@ public class WeaponFactory {
                     weaponStats.pStats().setMultiplier(ProjStatType.VELOCITY, level);
                     weaponStats.pStats().setMultiplier(ProjStatType.HITBOX, level);
                 },
-                (atkInfos, projStats) -> Set.of(new ConcreteProjectile(projStats, atkInfos.getFirst())),
+                (atkInfos, projStats) -> Set.of(new ConcreteProjectile(projStats, atkInfos.getFirst().protectiveCopy())),
                 2,
                 "BasicWeapon"
-        );
+        );        
     }
 }
 
