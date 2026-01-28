@@ -43,49 +43,5 @@ public class TestingVariables {
         }
 
     }
-
-    public static class PlayerTest extends AbstractEntity implements Player {
-
-        protected PlayerTest(Vector2dc spawnPosition, double hitbox, double movementSpeed, int health,
-                Set<Weapon> weapons) {
-            super(spawnPosition, hitbox, movementSpeed, health, weapons);
-            //TODO Auto-generated constructor stub
-        }
-
-        @Override
-        public void addWeapons(Weapon p) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'addWeapons'");
-        }
-
-        @Override
-        public void levelUp() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'levelUp'");
-        }
-
-        @Override
-        public void getExp() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getExp'");
-        }
-
-        @Override
-        public void setDirection(Vector2d dir) {
-            setDirection(dir);
-        }
-
-        @Override
-        public boolean canTakeDamage() {
-            return true;
-        }
-
-        @Override
-        protected Vector2dc alterDirection() {
-            return getDirection();
-        }
-
-    }
-
     private TestingVariables() { }
 }

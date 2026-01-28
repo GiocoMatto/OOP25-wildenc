@@ -20,7 +20,7 @@ public class TestMap {
     private GameMap map;
     private MapObject mapObj = new MapObjectTest(new Vector2d(TEST_X, TEST_Y), TEST_HITBOX);
     private MovableObjectTest movableObj = new MovableObjectTest(new Vector2d(TEST_X, TEST_Y), TEST_HITBOX, TEST_SPEED);
-    private Player player = new PlayerTest(TEST_DIRECTION_DOWN, TEST_HITBOX, TEST_SPEED, TEST_HITBOX, new LinkedHashSet<>());
+    private Player player = null; // FIXME
 
     @BeforeEach
     void setup() {
