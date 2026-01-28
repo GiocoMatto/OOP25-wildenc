@@ -66,6 +66,12 @@ public class GameMapImpl implements GameMap {
         Stream.concat(mapObjects.stream(), Stream.of(player))
             .filter(e -> e instanceof Movable)
             .map(o -> (Movable)o)
+            .peek(o -> {
+                System.out.println(o.getClass() + " x: " + o.getPosition().x() + " y: " + o.getPosition().y());
+                if (o instanceof Entity e) {
+                    System.out.println("health: " + e.getCurrentHealth());
+                }
+            })
             .forEach(o -> o.updatePosition(deltaSeconds));
         /*
          * Check collisions of projectiles with player 
@@ -98,7 +104,15 @@ public class GameMapImpl implements GameMap {
     }
 
     private void projectileHit(Projectile p, Entity e, List<MapObject> toRemove) {
+        if (!e.canTakeDamage()) { 
+            return;
+        }
+        System.out.println("!!!!!! Projectile hit !!!!!!"); 
         e.takeDamage((int) p.getDamage()); // FIXME: avoidable cast
         toRemove.add(p);
+        if (e.getCurrentHealth() <= 0) {
+            System.out.println(e.getClass().toString() + " died!!!");
+            toRemove.add(e);
+        }
     }
 }
