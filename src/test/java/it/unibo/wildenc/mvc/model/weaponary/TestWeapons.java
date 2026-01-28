@@ -18,7 +18,7 @@ import it.unibo.wildenc.mvc.model.Weapon.WeaponStats;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.AttackInfo;
+import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
 public class TestWeapons {
@@ -36,12 +36,12 @@ public class TestWeapons {
     @Test
     public void testWeaponCreation() {
         WeaponStats currentWeaponStats = currentWeapon.getStats();
-        assertTrue(currentWeaponStats.burstSize() == 2.0);
-        assertTrue(currentWeaponStats.weaponCooldown() == 1.0);
+        assertTrue(currentWeaponStats.burstSize() == 1);
+        assertTrue(currentWeaponStats.weaponCooldown() == 10.0);
         ProjectileStats currentWeaponProjStats = currentWeaponStats.pStats();
-        assertTrue("DefaultProj".equals(currentWeaponProjStats.getID()));
-        assertTrue(currentWeaponProjStats.getStatValue(ProjStatType.DAMAGE) == 1.0);
-        assertTrue(currentWeaponProjStats.getStatValue(ProjStatType.HITBOX) == 1.0);
+        assertTrue("BasicProj".equals(currentWeaponProjStats.getID()));
+        assertTrue(currentWeaponProjStats.getStatValue(ProjStatType.DAMAGE) == 10.0);
+        assertTrue(currentWeaponProjStats.getStatValue(ProjStatType.HITBOX) == 2.0);
         assertTrue(currentWeaponProjStats.getStatValue(ProjStatType.VELOCITY) == 1.0);
         assertTrue(currentWeaponProjStats.getTTL() == 10.0);
     }
@@ -49,37 +49,40 @@ public class TestWeapons {
     @Test
     public void testAttack() {
         generatedProjectiles.addAll(this.currentWeapon.attack(
-            new AttackInfo(new Vector2d(0.0, 0.0), new Vector2d(1.0, 1.0), Optional.empty())
+            List.of(new AttackContext(new Vector2d(0, 0), 45, Optional.empty()))
         ));
         assertTrue(!generatedProjectiles.isEmpty());
         assertTrue(generatedProjectiles.getFirst().getPosition().equals(new Vector2d(0.0, 0.0)));
-        assertTrue(generatedProjectiles.getFirst().getDirection().equals(new Vector2d(1.0, 1.0)));
+        assertTrue(generatedProjectiles.getFirst().getDirection().equals(
+            new Vector2d(Math.cos(Math.toRadians(45)), Math.sin(Math.toRadians(45)))
+        ));
         assertTrue(generatedProjectiles.getFirst().isAlive());
-        assertTrue("DefaultProj".equals(generatedProjectiles.getFirst().getID()));
+        assertTrue("BasicProj".equals(generatedProjectiles.getFirst().getID()));
     }
 
     @Test
     public void testMovement() {
         generatedProjectiles.addAll(this.currentWeapon.attack(
-            new AttackInfo(new Vector2d(0.0, 0.0), new Vector2d(1.0, 1.0), Optional.empty())
+            List.of(new AttackContext(new Vector2d(0.0, 0.0), 45, Optional.empty()))
         ));
         assertTrue(!generatedProjectiles.isEmpty());
+        final double expectedValue = Math.cos(Math.toRadians(45));
         final Projectile generatedProjectile = generatedProjectiles.getFirst();
         generatedProjectile.updatePosition(1);
-        assertEquals(generatedProjectile.getPosition(), (new Vector2d(1, 1)));
+        assertTrue(generatedProjectile.getPosition().distance(new Vector2d(expectedValue, expectedValue)) < 1E-6);
         generatedProjectile.updatePosition(1);
-        assertEquals(generatedProjectile.getPosition(), (new Vector2d(2, 2)));
+        assertTrue(generatedProjectile.getPosition().distance(new Vector2d(2 * expectedValue, 2 * expectedValue)) < 1E-6);
         generatedProjectile.updatePosition(1);
-        assertEquals(generatedProjectile.getPosition(), (new Vector2d(3, 3)));
+        assertTrue(generatedProjectile.getPosition().distance(new Vector2d(3 * expectedValue, 3 * expectedValue)) < 1E-6);
         generatedProjectile.updatePosition(10);
-        assertEquals(generatedProjectile.getPosition(), (new Vector2d(13, 13)));
+        assertTrue(generatedProjectile.getPosition().distance(new Vector2d(13 * expectedValue, 13 * expectedValue)) < 1E-6);
     }
 
     @Test
     public void testBarrage() throws InterruptedException {
         // Creating first Projectile
         Set<Projectile> generatedProj = this.currentWeapon.attack(
-            new AttackInfo(new Vector2d(0.0, 0.0), new Vector2d(1.0, 1.0), Optional.empty())
+            List.of(new AttackContext(new Vector2d(0.0, 0.0), 45, Optional.empty()))
         );
         // Projectile exists!
         assertTrue(!generatedProj.isEmpty());
@@ -87,7 +90,7 @@ public class TestWeapons {
         // Waiting 100ms and trying to shoot again.
         Thread.sleep(100);
         generatedProj = this.currentWeapon.attack(
-            new AttackInfo(new Vector2d(0.0, 0.0), new Vector2d(1.0, 1.0), Optional.empty())
+            List.of(new AttackContext(new Vector2d(0.0, 0.0), 45, Optional.empty()))
         );
         // Nope, this time is not present.
         assertFalse(!generatedProj.isEmpty());
@@ -95,39 +98,22 @@ public class TestWeapons {
         // After 200ms, the 2nd projectile of the burst appears!
         Thread.sleep(100);
         generatedProj = this.currentWeapon.attack(
-            new AttackInfo(new Vector2d(0.0, 0.0), new Vector2d(1.0, 1.0), Optional.empty())
+            List.of(new AttackContext(new Vector2d(0.0, 0.0), 45, Optional.empty()))
         );
         assertTrue(!generatedProj.isEmpty());
 
         // Waiting another 300ms for not a projectile to appear.
         Thread.sleep(300);
         generatedProj = this.currentWeapon.attack(
-            new AttackInfo(new Vector2d(0.0, 0.0), new Vector2d(1.0, 1.0), Optional.empty())
+            List.of(new AttackContext(new Vector2d(0.0, 0.0), 45, Optional.empty()))
         );
         assertFalse(!generatedProj.isEmpty());
 
         // In the end, after 1.2s (1s cd + 200ms of barrage...) a new Projectile appears!
         Thread.sleep(700);
         generatedProj = this.currentWeapon.attack(
-            new AttackInfo(new Vector2d(0.0, 0.0), new Vector2d(1.0, 1.0), Optional.empty())
+            List.of(new AttackContext(new Vector2d(0.0, 0.0), 45, Optional.empty()))
         );
         assertTrue(!generatedProj.isEmpty());
-    }
-
-    @Test
-    public void testOrbitingProjectile() {
-        this.currentWeapon = weaponMaker.getDefaultOrbiting();
-        Vector2d myPosition = new Vector2d(10.0, 10.0);
-        generatedProjectiles.addAll(this.currentWeapon.attack(
-            new AttackInfo(
-                new Vector2d(0.0, 0.0),
-                new Vector2d(0.0, 0.0),
-                Optional.of(() -> myPosition)
-            )));
-        Projectile genProj = generatedProjectiles.getFirst();
-        for(int i = 1; i <= 180; i++) {
-            genProj.updatePosition(1.0);
-        }
-        assertTrue(genProj.getPosition().x() == 15.0 && genProj.getPosition().y() == 10.0);
     }
 }

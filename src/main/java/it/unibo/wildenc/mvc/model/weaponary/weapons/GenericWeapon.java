@@ -1,9 +1,11 @@
 package it.unibo.wildenc.mvc.model.weaponary.weapons;
 
 import it.unibo.wildenc.mvc.model.Weapon;
+import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -22,13 +24,13 @@ public class GenericWeapon implements Weapon {
     private double timeAtLastAtk;
     private final String weaponName;
     private int currentBullet;
-    BiFunction<AttackInfo, ProjectileStats, Set<Projectile>> atkFunc;
+    BiFunction<List<AttackContext>, ProjectileStats, Set<Projectile>> atkFunc;
 
     public GenericWeapon(
         final double cooldown,
         final ProjectileStats pStats,
         final BiConsumer<Integer, WeaponStats> upgradeLogics,
-        final BiFunction<AttackInfo, ProjectileStats, Set<Projectile>> atkFunc,
+        final BiFunction<List<AttackContext>, ProjectileStats, Set<Projectile>> atkFunc,
         final int initialBurst,
         final String weaponName
     ) {
@@ -43,7 +45,7 @@ public class GenericWeapon implements Weapon {
      * {@inheritDocs}
      */
     @Override
-    public Set<Projectile> attack(final AttackInfo atkInfo) {
+    public Set<Projectile> attack(final List<AttackContext> atkInfo) {
         if(canBurst()) {
             if(!isInCooldown()) {
                 currentBullet = 0;

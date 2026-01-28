@@ -1,13 +1,10 @@
 package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import org.joml.Vector2d;
+import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
+import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.AttackInfo;
 
 /**
  * Implementation of a generic {@link Projectile}. This will be used 
@@ -18,9 +15,8 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
     private static final double MS_TO_S = 1000.0;
 
     private ProjectileStats projStats;
-    private Optional<Supplier<Vector2d>> followThis;
+    private AttackContext attackInformation;
     private long lastMovement = System.currentTimeMillis();
-    private double currentAngle;
 
     /**
      * Constructor of the class.
@@ -30,14 +26,12 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
      */
     public ConcreteProjectile(
         final ProjectileStats pStats,
-        final AttackInfo atkInfo,
-        final double baseAngle
+        final AttackContext baseMovementInfo
     ) {
-        super(atkInfo.startingPos(), pStats.getStatValue(ProjStatType.HITBOX), pStats.getStatValue(ProjStatType.VELOCITY));
-        this.setDirection(atkInfo.atkDirection());
-        this.currentAngle = baseAngle;
+        super(baseMovementInfo.getLastPosition(), pStats.getStatValue(ProjStatType.HITBOX), pStats.getStatValue(ProjStatType.VELOCITY));
         this.projStats = pStats;
-        this.followThis = atkInfo.toFollow();
+        this.attackInformation = baseMovementInfo;
+        this.attackInformation.setVelocity(pStats.getStatValue(ProjStatType.VELOCITY));
     }
 
     /**
@@ -54,17 +48,11 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
      */
     @Override
     public void updatePosition(final double deltaTime) {
-        this.currentAngle = this.projStats.getStatValue(ProjStatType.ANGULAR) != 0 ?
-            (this.currentAngle + this.projStats.getStatValue(ProjStatType.ANGULAR) * deltaTime) % 360 : 0;
-        if(followThis.isPresent()) {
-            this.getWritablePosition().set(followThis.get().get());
-        }
-        this.getWritablePosition().set(
-            this.projStats.getMovementFunction().apply(
-                new Vector2d(this.getWritablePosition()),
-                new AttackMovementInfo(this.getDirection(), deltaTime, this.projStats.getStatValue(ProjStatType.VELOCITY), this.currentAngle)
-            )
-        );
+        this.getWritablePosition().set(this.projStats.getMovementFunction().apply(
+            deltaTime,
+            attackInformation
+        ));
+        this.attackInformation.updateLastPosition(getPosition());
         lastMovement = System.currentTimeMillis();
     }
 
@@ -90,5 +78,13 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
     @Override
     public boolean isAlive() {
         return (System.currentTimeMillis() - lastMovement) / MS_TO_S < this.projStats.getTTL();
+    }
+
+    /**
+     * {@inhritDoc}
+     */
+    @Override
+    public Vector2dc getDirection() {
+        return this.attackInformation.getDirectionVersor();
     }
 }
