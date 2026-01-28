@@ -37,5 +37,23 @@ public class WeaponFactory {
                 "BasicWeapon"
         );        
     }
+
+    public Weapon getMeleeWeapon(final double hbRadius, final double baseDmg) {
+        return new GenericWeapon(
+            1, 
+            new ProjectileStats(
+                baseDmg, 
+                hbRadius, 
+                0, 
+                0.1,
+                "MeleeProj", 
+                (dt, atkInfos) -> atkInfos.getFollowing().get().get()
+            ), 
+            (lvl, weaponStats) -> {}, 
+            (atkInfos, projStats) -> Set.of(new ConcreteProjectile(projStats, atkInfos.getFirst().protectiveCopy())), 
+            1, 
+            "BasicMeleeWeapon"
+        );
+    }
 }
 
