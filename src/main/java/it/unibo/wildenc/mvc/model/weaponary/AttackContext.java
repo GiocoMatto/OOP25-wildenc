@@ -91,4 +91,12 @@ public class AttackContext {
     public double getVelocity() {
         return this.velocity;
     }
+
+    /**
+     * Method to create a protective copy of this class.
+     * @return a copy of this object.
+     */
+    public AttackContext protectiveCopy() {
+        return new AttackContext(this.lastPosition, this.atkDirection, this.toFollow);
+    }
 }
