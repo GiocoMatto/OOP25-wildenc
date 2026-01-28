@@ -9,7 +9,7 @@ import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMapObject;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
+import it.unibo.wildenc.mvc.model.Weapon;
 
 public class TestingVariables {
     public static final int TEST_X = 0;

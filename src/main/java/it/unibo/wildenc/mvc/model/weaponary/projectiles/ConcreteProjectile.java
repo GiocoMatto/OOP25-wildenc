@@ -1,14 +1,10 @@
 package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 
-import java.util.Optional;
-import java.util.function.Supplier;
-
-import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
-import it.unibo.wildenc.mvc.model.weaponary.AttackMovementInfo;
-import it.unibo.wildenc.mvc.model.weaponary.ProjectileStats;
+import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
+import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;
 
 /**
  * Implementation of a generic {@link Projectile}. This will be used 
@@ -19,45 +15,44 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
     private static final double MS_TO_S = 1000.0;
 
     private ProjectileStats projStats;
-    private Vector2d movementDirection;
-    private Optional<Supplier<Vector2d>> followThis;
+    private AttackContext attackInformation;
     private long lastMovement = System.currentTimeMillis();
 
     /**
      * Constructor of the class.
-     * @param pStats the statistics of the generated projectile
-     * @param direction the direction the projectile has to follow
-     * @param startPos the position where the projectile starts
-     * @param toFollow a {@link Optional} containing a {@link Supplier} 
-     *  of a position that the projectile has to follow
+     * @param pStats the stats of the generated Projectile, in form of a {@link ProjectileStats}
+     * @param attackInfo the informations about the initial state of the projectile in form of
+     *  a {@link AttackInfo}
      */
     public ConcreteProjectile(
         final ProjectileStats pStats,
-        final Vector2d direction,
-        final Vector2d startPos,
-        final Optional<Supplier<Vector2d>> toFollow
+        final AttackContext baseMovementInfo
     ) {
-        super(startPos, pStats.getStatValue("Hitbox"), pStats.getStatValue("Velocity"));
-        this.movementDirection = direction;
+        super(baseMovementInfo.getLastPosition(), pStats.getStatValue(ProjStatType.HITBOX), pStats.getStatValue(ProjStatType.VELOCITY));
         this.projStats = pStats;
-        this.followThis = toFollow;
+        this.attackInformation = baseMovementInfo;
+        this.attackInformation.setVelocity(pStats.getStatValue(ProjStatType.VELOCITY));
     }
 
     /**
      * {@inheritDoc}
+     * Specific method implementation for generalizing the movement of the Projectile.
+     * When an attack is made, the Projectile is just being generated in a specific position
+     * but it won't move yet. When an updatePosition is called on a Projectile, it will be moving
+     * followng it's movement function, which is specified at the moment of the creation in its
+     * ProjectileStats. After this, there are 2 main cases for the generation of the Projectile:
+     *  - It could be moving according to physics' laws (for example, by going straight in a direction)
+     *  - Else, it could lock its position to the position specified at followThis (for example giving the player an aura
+     *      that moves with him)
+     *  If the generated Projectile doesn't need to use angles, it's initial angle and it's angular velocity will be set to 0.
      */
     @Override
     public void updatePosition(final double deltaTime) {
-        if(followThis.isPresent()) {
-            this.getWritablePosition().set(followThis.get().get());
-        }
         this.getWritablePosition().set(this.projStats.getMovementFunction().apply(
-                new Vector2d(this.getWritablePosition()),
-                new AttackMovementInfo(
-                    movementDirection, deltaTime, this.projStats.getStatValue("Velocity")
-                )
-            )
-        );
+            deltaTime,
+            attackInformation
+        ));
+        this.attackInformation.updateLastPosition(getPosition());
         lastMovement = System.currentTimeMillis();
     }
 
@@ -66,7 +61,7 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
      */
     @Override
     public double getDamage() {
-        return this.projStats.getStatValue("Damage");
+        return this.projStats.getStatValue(ProjStatType.DAMAGE);
     }
 
     /**
@@ -85,21 +80,11 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
         return (System.currentTimeMillis() - lastMovement) / MS_TO_S < this.projStats.getTTL();
     }
 
+    /**
+     * {@inhritDoc}
+     */
     @Override
     public Vector2dc getDirection() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDirection'");
-    }
-
-    @Override
-    public void setDirection(Vector2dc direction) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setDirection'");
-    }
-
-    @Override
-    public double getSpeed() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSpeed'");
+        return this.attackInformation.getDirectionVersor();
     }
 }

@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
+import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.*;
 import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 

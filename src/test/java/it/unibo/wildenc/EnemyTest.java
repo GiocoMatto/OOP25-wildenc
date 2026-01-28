@@ -16,7 +16,7 @@ import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
 import it.unibo.wildenc.mvc.model.enemies.RangedEnemy;
 import it.unibo.wildenc.mvc.model.enemies.RoamingEnemy;
 import it.unibo.wildenc.mvc.model.map.CollisionLogic;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
+import it.unibo.wildenc.mvc.model.Weapon;
 
 public class EnemyTest {
     private static final double DELTA_SECONDS = 0.1;

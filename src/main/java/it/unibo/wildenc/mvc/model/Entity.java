@@ -2,8 +2,6 @@ package it.unibo.wildenc.mvc.model;
 
 import java.util.Set;
 
-import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
-
 /**
  * A living entity. An Entity has an amount of health, can take damage, can have weapons.
  * Entities typically move on the map.

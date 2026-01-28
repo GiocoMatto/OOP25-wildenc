@@ -1,13 +1,12 @@
-package it.unibo.wildenc.mvc.model.weaponary.weapons;
+package it.unibo.wildenc.mvc.model;
 
-import java.util.Optional;
+import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
-import org.joml.Vector2d;
-
-import it.unibo.wildenc.mvc.model.weaponary.ProjectileStats;
+import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
+import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 /**
  * Interface for modelling a Weapon. For instance, a Weapon is a factory of {@link Projectile}s which have specific
  * characteristics which are determined by the Weapon they're generated.
@@ -15,7 +14,7 @@ import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 public interface Weapon {
     
     public record WeaponStats(
-        double weaponCooldown, ProjectileStats pStats,
+        double weaponCooldown, ProjectileStats pStats, int burstSize,
         BiConsumer<Integer, WeaponStats> upgradeLogics
     ) {}
     
@@ -24,10 +23,10 @@ public interface Weapon {
      * are written inside the weapon - thus when the weapon will be upgraded the projectiles will be upgraded as well.
      * A {@link Projectile} is generated only if the weapon is not in "cooldown".
      * 
-     * @param startingPoint the point where the projectile will be generated.
-     * @return an {@link Optional} containing a {@link Projectile} if the attack was succesful, an empty one instead.
+     * @param atkInfo the informations regarding each projectile to spawn, such as starting position, starting direction, etc...
+     * @return a {@link Set} containing one or more {@link Projectile}s if the attack was succesful, an empty one instead.
      */
-    Optional<Projectile> attack(Vector2d startingPoint, Vector2d atkDirection, Optional<Supplier<Vector2d>> toFollow);
+    Set<Projectile> attack(final List<AttackContext> atkInfo);
 
     /**
      * Method for upgrading the weapon. For mantaining the SRP, this will upgrade a {@link WeaponStats},

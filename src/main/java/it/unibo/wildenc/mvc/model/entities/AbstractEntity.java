@@ -8,7 +8,7 @@ import org.joml.Vector2dc;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Movable;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
+import it.unibo.wildenc.mvc.model.Weapon;
 
 /**
  * Abstraction of a general entity.

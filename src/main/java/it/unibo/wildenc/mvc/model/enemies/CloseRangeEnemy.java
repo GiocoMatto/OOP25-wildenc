@@ -5,7 +5,7 @@ import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 import it.unibo.wildenc.mvc.model.MapObject;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.Weapon;
+import it.unibo.wildenc.mvc.model.Weapon;
 
 /**
  * A enemy that move to the palyer until their hitbox collaps.
