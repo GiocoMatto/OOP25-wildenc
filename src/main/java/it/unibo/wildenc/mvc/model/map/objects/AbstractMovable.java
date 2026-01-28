@@ -8,9 +8,8 @@ import it.unibo.wildenc.mvc.model.Movable;
 /**
  * Abstraction of any movable object.
  * 
- * @author Andrea Maria Castronovo
  */
-public class AbstractMovable extends AbstractMapObject implements Movable {
+public abstract class AbstractMovable extends AbstractMapObject implements Movable {
 
     private final Vector2d direction = new Vector2d(0, 0); // start by staying still
     private final double speed;

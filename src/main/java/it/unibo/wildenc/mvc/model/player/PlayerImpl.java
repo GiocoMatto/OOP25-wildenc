@@ -1,9 +1,13 @@
 package it.unibo.wildenc.mvc.model.player;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Player;
+import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 
 /**
@@ -24,7 +28,7 @@ public class PlayerImpl extends AbstractEntity implements Player {
      */
     public PlayerImpl(final Vector2dc startPos, final double hitbox, final double speed, final int maxHealth) {
         // inizializzazione con valori iniziali
-        super(startPos, hitbox, speed, maxHealth);
+        super(startPos, hitbox, speed, maxHealth, new LinkedHashSet<>());
         this.experience = 0;
         this.level = 1;
     }
@@ -36,7 +40,7 @@ public class PlayerImpl extends AbstractEntity implements Player {
     }
 
     @Override
-    protected boolean canTakeDamage() {
+    public boolean canTakeDamage() {
         //il giocatore non è mai invulnerabile
         return true; 
     }
@@ -56,4 +60,11 @@ public class PlayerImpl extends AbstractEntity implements Player {
         this.level++;
         // TODO: Implementare logica di aumento statistiche o scelta weapon
     }
+
+    @Override
+    public void addWeapons(Weapon p) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'addWeapons'");
+    }
+
 }

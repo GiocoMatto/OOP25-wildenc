@@ -8,7 +8,6 @@ import it.unibo.wildenc.mvc.model.MapObject;
 /**
  * Abstraction of any map object.
  * 
- * @author Andrea Maria Castronovo
  */
 public abstract class AbstractMapObject implements MapObject {
 
@@ -18,7 +17,7 @@ public abstract class AbstractMapObject implements MapObject {
     /**
      * Creates a {@link MapObject} with a position and an hitbox.
      * 
-     * @param spawnPosition the position of the object in the {@link Map}
+     * @param spawnPosition the position of the object in the {@link GameMap}
      * @param hitbox
      */
     public AbstractMapObject(final Vector2dc spawnPosition, final double hitbox) {
