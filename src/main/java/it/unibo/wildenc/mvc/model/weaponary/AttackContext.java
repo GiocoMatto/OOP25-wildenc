@@ -43,7 +43,6 @@ public class AttackContext {
      * @return a {@link Vector2d} representing the direction versor the attack has to follow.
      */
     public Vector2dc getDirectionVersor() {
-        System.out.println(atkVersorDirection);
         return this.atkVersorDirection;
     }
 
