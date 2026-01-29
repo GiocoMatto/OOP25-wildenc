@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.List;
 
+import org.joml.Vector2d;
 import org.joml.Vector2dc;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,7 +85,7 @@ public class TestMap {
     @Test
     void whenEnemyProjectileHitboxTouchesPlayerHitboxPlayerLifeShouldDecrease() {
         final TestObject enemyConf = TestObject.EnemyObject;
-        final Enemy enemy = enemyConf.getAsCloseRangeEnemy(Set.of(new WeaponFactory().getDefaultWeapon()), "testEnemy", Optional.of(player));
+        final Enemy enemy = enemyConf.getAsCloseRangeEnemy(Set.of(new WeaponFactory().getDefaultWeapon(5, 10, 2, 2, 100101, 1)), "testEnemy", Optional.of(player));
         map.addObject(enemy);
 
         // Enemy should arrive in player hitbox at the 20th tick
@@ -93,17 +94,11 @@ public class TestMap {
             enemy.getWeapons()
                 .forEach(e -> e.attack(List.of(new AttackContext(
                     enemy.getPosition(), 
-                    calculteAngleFromPositions(enemy.getPosition(), player.getPosition()),
+                    new Vector2d(player.getPosition()).sub(enemy.getPosition()),
                     Optional.empty())))
                 .forEach(e2 -> map.addObject(e2)));
         }
         assertTrue(player.getCurrentHealth() < player.getMaxHealth(), "Player health didn't change.");
         assertTrue(enemy.getCurrentHealth() == enemy.getMaxHealth(), "Enemy health must not change.");
-    }
-
-    // FIXME: It does not work. Waiting for Weapon
-    double calculteAngleFromPositions(Vector2dc start, Vector2dc dest) {
-        System.err.println(start.angle(dest));
-        return Math.toDegrees(start.angle(dest));
     }
 }
