@@ -19,9 +19,9 @@ public final class MapTestingCommons {
     // Objects
     public enum TestObject {
         StaticObject(0, 10, 5, 0, 0),
-        MovableObject(0, 10, 5, 10, 0),
-        PlayerObject(0, 0, 5, 10, 100),
-        EnemyObject(10, 20, 5, 7, 100);
+        MovableObject(0, 10, 5, 1, 0),
+        PlayerObject(0, 0, 5, 1, 100),
+        EnemyObject(30, 0, 5, 1, 100);
 
         public final Vector2dc pos;
         public final double hitbox;
