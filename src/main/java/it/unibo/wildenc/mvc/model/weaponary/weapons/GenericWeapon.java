@@ -17,13 +17,12 @@ import java.util.function.BiFunction;
 public class GenericWeapon implements Weapon {
 
     private static final double BURST_DELAY = 0.2;
-    private static final double MS_TO_S = 1000.0;
 
     private WeaponStats weaponStats;
     private int level = 0;
-    private double timeAtLastAtk;
+    private double timeSinceLastAtk = Double.MAX_VALUE;
     private final String weaponName;
-    private int currentBullet;
+    private int currentBullet = 0;
     BiFunction<List<AttackContext>, ProjectileStats, Set<Projectile>> atkFunc;
 
     public GenericWeapon(
@@ -45,13 +44,14 @@ public class GenericWeapon implements Weapon {
      * {@inheritDocs}
      */
     @Override
-    public Set<Projectile> attack(final List<AttackContext> atkInfo) {
+    public Set<Projectile> attack(final List<AttackContext> atkInfo, final double deltaTime) {
+        this.timeSinceLastAtk += deltaTime;
         if(canBurst()) {
             if(!isInCooldown()) {
                 currentBullet = 0;
             }
             currentBullet++;
-            timeAtLastAtk = System.currentTimeMillis();
+            timeSinceLastAtk = 0;
             return this.atkFunc.apply(atkInfo, this.weaponStats.pStats());
         }
         return Set.of();
@@ -71,12 +71,12 @@ public class GenericWeapon implements Weapon {
     }
 
     private boolean isInCooldown() {
-        return (System.currentTimeMillis() - timeAtLastAtk) / MS_TO_S < this.weaponStats.weaponCooldown();
+        return timeSinceLastAtk < this.weaponStats.weaponCooldown();
     }
 
     private boolean canBurst() {
         return !isInCooldown() ? true :
-            (currentBullet < this.weaponStats.burstSize() && (System.currentTimeMillis() - timeAtLastAtk) / MS_TO_S >= BURST_DELAY);
+            (currentBullet < this.weaponStats.burstSize() && timeSinceLastAtk >= BURST_DELAY);
     }
 
     @Override

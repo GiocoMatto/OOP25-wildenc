@@ -102,7 +102,7 @@ public class TestMap {
                 .forEach(e -> e.attack(List.of(new AttackContext(
                     enemy.getPosition(), 
                     new Vector2d(player.getPosition()).sub(enemy.getPosition()),
-                    Optional.empty())))
+                    Optional.empty())), 0)
                 .forEach(e2 -> map.addObject(e2)));
         }
 
@@ -125,7 +125,7 @@ public class TestMap {
                 .forEach(e -> e.attack(List.of(new AttackContext(
                     player.getPosition(), 
                     new Vector2d(enemy.getPosition()).sub(player.getPosition()),
-                    Optional.empty())))
+                    Optional.empty())), 0)
                 .forEach(e2 -> map.addObject(e2)));
         }
 
