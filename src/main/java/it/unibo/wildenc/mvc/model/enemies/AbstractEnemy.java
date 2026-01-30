@@ -19,12 +19,12 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     /**
      * Create a new general Enemey.
      * @param spawnPosition The position of spawn.
-     * @param hitbox The area of map where the paler can hit the nemey.
+     * @param hitbox The area of map where the player can hit the nemey.
      * @param movementSpeedfinal the speed of movement of the enemy.
      * @param health The health of the enemy.
-     * @param weapons The weapon that can hit the palyer.
+     * @param weapons The weapon that can hit the player.
      * @param name The name of the enemy.
-     * @param target The Optinal Posion of the payler to hit.
+     * @param target The Optional Position of the player to hit.
      */
     public AbstractEnemy(
         final Vector2dc spawnPosition, 
@@ -68,7 +68,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
 
     /**
      * Say if a enemy can take Damage rispect some condition. 
-     * By default a enemy can alway take damage.
+     * By default a enemy can always take damage.
      */
     @Override
     public boolean canTakeDamage() {
