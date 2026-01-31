@@ -15,6 +15,7 @@ public interface GameMap {
      */
     void addObject(MapObject mObj);
 
+    
     /**
      * Remove a {@link MapObject} from this Map.
      * 
