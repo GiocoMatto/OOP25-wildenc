@@ -3,15 +3,17 @@ package it.unibo.wildenc.mvc.controller.impl;
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.map.GameMapImpl;
+import it.unibo.wildenc.mvc.view.GameViewImpl;
+import it.unibo.wildenc.mvc.view.api.GameView;
 
 public class EngineImpl implements Engine{
-    // a field for the view
-    private final GameMap gm;
+    private final GameMap gm = new GameMapImpl(null);;
+    private final GameView gv = new GameViewImpl();;
     private final GameLoop loop = new GameLoop();
 
     public EngineImpl() {
-        gm = new GameMapImpl(null);
-        
+        this.gv.setEngine(this);
+        this.gv.start();
     }
 
     @Override
