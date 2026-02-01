@@ -92,6 +92,14 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
     public void addWeapon(Weapon p) {
         weapons.add(p);
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isAlive() {
+        return currentHealth >= 0;
+    }
 
     /**
      * {@inheritDoc}
@@ -105,5 +113,6 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
      * @return the {@link Vector2dc} representing the entity's new direction
      */
     protected abstract Vector2dc alterDirection();
+
 
 }

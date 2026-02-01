@@ -21,4 +21,11 @@ public interface MapObject {
      * @return the radius of the hitbox
      */
     double getHitbox();
+
+    /**
+     * Whether the object is alive (so it should be in the map).
+     * 
+     * @return true if the object should be on map, false if the object should be removed from the map
+     */
+    boolean isAlive();
 }

@@ -248,4 +248,9 @@ public class GameMapImpl implements GameMap {
         this.es = spawnLogic;
     }
 
+    @Override
+    public boolean gameEnded() {
+        return !player.isAlive();
+    }
+
 }

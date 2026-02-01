@@ -74,4 +74,12 @@ public interface GameMap {
      * @param spawnLogic a {@link EnemySpawner} logic.
      */
     void setEnemySpawnLogic(final EnemySpawner spawnLogic);
+
+    /**
+     * Whether the game is ended.
+     * 
+     * @return true if the game ended, false otherwise.
+     */
+    boolean gameEnded();
+
 }

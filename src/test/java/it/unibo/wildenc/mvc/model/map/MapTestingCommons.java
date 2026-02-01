@@ -123,6 +123,11 @@ public final class MapTestingCommons {
             super(spawnPosition, hitbox);
         }
 
+        @Override
+        public boolean isAlive() {
+            return true;
+        }
+
     }
 
     public static class MovableObjectTest extends AbstractMovable {
@@ -134,6 +139,11 @@ public final class MapTestingCommons {
         @Override
         public void setDirection(Vector2dc direction) {
             super.setDirection(direction);
+        }
+
+        @Override
+        public boolean isAlive() {
+            return true;
         }
 
     }

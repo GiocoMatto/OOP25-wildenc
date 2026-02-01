@@ -4,7 +4,6 @@ import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.Weapon;
-import it.unibo.wildenc.mvc.model.GameMap.PlayerType;
 import it.unibo.wildenc.mvc.model.enemies.EnemySpawnerImpl;
 import it.unibo.wildenc.mvc.model.Enemy;
 
@@ -13,9 +12,6 @@ import it.unibo.wildenc.mvc.model.map.MapTestingCommons.MovableObjectTest;
 import it.unibo.wildenc.mvc.model.map.MapTestingCommons.TestDirections;
 import it.unibo.wildenc.mvc.model.map.MapTestingCommons.TestObject;
 import it.unibo.wildenc.mvc.model.map.MapTestingCommons.TestWeapon;
-import it.unibo.wildenc.mvc.model.map.objects.TestMapObjects;
-import it.unibo.wildenc.mvc.model.player.PlayerImpl;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
 import static it.unibo.wildenc.mvc.model.map.MapTestingCommons.TEST_SIMULATION_TICKS;
 import static it.unibo.wildenc.mvc.model.map.MapTestingCommons.TEST_TIME_NANOSECONDS;
@@ -32,11 +28,8 @@ import java.util.function.Function;
 import java.util.LinkedHashSet;
 
 
-import org.joml.Vector2d;
-
 import org.junit.jupiter.api.Test;
 
-// FIXME: fix all tests: gamemap now handles projectiles and natural enemy spawn
 public class TestMap {
 
     private GameMap getEmptyMapWithObjects(Player player, Set<MapObject> objs) {
@@ -148,9 +141,4 @@ public class TestMap {
         assertTrue(map.getAllObjects().size() > initialSize, "No enemies were spawend.");
     }
 
-    @Test
-    void spawnedEnemiesFollowAndShootPlayer() {
-        
-    }
-    
 }
