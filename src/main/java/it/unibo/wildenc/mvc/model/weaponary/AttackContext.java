@@ -22,10 +22,12 @@ public class AttackContext {
      */
     public AttackContext(
         final Vector2dc initialPosition,
+        final double velocity,
         Supplier<Vector2d> postionToFollow
     ) {
         this.lastPosition = initialPosition;
         this.toFollow = postionToFollow;
+        this.velocity = velocity;
         this.atkVersorDirection = new Vector2d(this.toFollow.get()).sub(initialPosition).normalize();
     }
 
@@ -102,6 +104,6 @@ public class AttackContext {
      * @return a copy of this object.
      */
     public AttackContext protectiveCopy() {
-        return new AttackContext(this.lastPosition, this.toFollow);
+        return new AttackContext(this.lastPosition, this.velocity, this.toFollow);
     }
 }

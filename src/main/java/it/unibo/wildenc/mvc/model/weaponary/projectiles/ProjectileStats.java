@@ -2,7 +2,6 @@ package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
