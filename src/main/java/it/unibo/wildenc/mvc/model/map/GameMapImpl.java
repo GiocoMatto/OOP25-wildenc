@@ -39,8 +39,8 @@ public class GameMapImpl implements GameMap {
     private final EnemySpawner es;
 
     public enum PlayerType {
-        Charmender(10, 20, 100, (wf, p) -> {
-            p.addWeapon(wf.getDefaultWeapon(10, 10, 2, 2, 100, 1, p, () -> new Vector2d(0, 30)));
+        Charmender(10, 5, 100, (wf, p) -> {
+            p.addWeapon(wf.getDefaultWeapon(10, 10, 2, 2, 100, 1, p, () -> new Vector2d(0, 30))); // FIXME: understand how to pass this value in a better way. It should be mouse position
         }),
         Bulbasaur(20, 30, 200, (wf, p) -> {
             // p.addWeapon(wf.getMeleeWeapon(7, 5, p));
@@ -142,21 +142,23 @@ public class GameMapImpl implements GameMap {
         //
         handleAttacks(deltaSeconds);
         // Spawn enemies by the logic of the Enemy Spawner
-        // spawnEnemies();
+        // spawnEnemies(); FIXME: EnemySpawner needs tweaking. Commented to allow testing of other mechanics
         // remove used objects
         mapObjects.removeAll(objToRemove);
     }
     
     private void handleAttacks(double deltaSeconds) {
+        List<MapObject> toAdd = new LinkedList<>();
         mapObjects.stream()
             .filter(e -> e instanceof Entity)
             .map(e -> (Entity) e)
             .forEach(e -> {
                 e.getWeapons().stream()
                     .forEach(w -> {
-                        w.attack(deltaSeconds);
+                        toAdd.addAll(w.attack(deltaSeconds));
                     });
                 });
+        this.addAllObjects(toAdd);
     }
 
     private void checkCollectibles(List<MapObject> objToRemove) {
