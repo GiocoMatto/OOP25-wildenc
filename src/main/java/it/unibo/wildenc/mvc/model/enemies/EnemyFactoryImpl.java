@@ -31,23 +31,23 @@ public class EnemyFactoryImpl implements EnemyFactory {
     }
 
     private void addDefaultWeaponTo(final Enemy e) {
-        e.addWeapon(wf.getDefaultWeapon(
-            BASE_COOLDOWN_PROJECTILE,
-            BASE_DAMAGE_PROJECTILE, 
-            BASE_HITBOX_PROJECTILE, 
-            BASE_VELOCITY_PROJECTILE, 
-            BASE_TIME_TO_LIVE_PROJECTILE, 
-            BASE_BURST_PROJECTILE, 
-            e
-        ));
+        // e.addWeapon(wf.getDefaultWeapon(
+        //     BASE_COOLDOWN_PROJECTILE,
+        //     BASE_DAMAGE_PROJECTILE, 
+        //     BASE_HITBOX_PROJECTILE, 
+        //     BASE_VELOCITY_PROJECTILE, 
+        //     BASE_TIME_TO_LIVE_PROJECTILE, 
+        //     BASE_BURST_PROJECTILE, 
+        //     e
+        // ));
     }
 
     private void addMeleeWeaponTo(final Enemy e) {
-        e.addWeapon(wf.getMeleeWeapon(
-            BASE_HITBOX_PROJECTILE, 
-            BASE_DAMAGE_PROJECTILE, 
-            e
-        ));
+        // e.addWeapon(wf.getMeleeWeapon(
+        //     BASE_HITBOX_PROJECTILE, 
+        //     BASE_DAMAGE_PROJECTILE, 
+        //     e
+        // ));
     }
 
     /**

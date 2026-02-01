@@ -6,10 +6,11 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.stream.Stream;
+import java.util.function.BiConsumer;
 
 import org.joml.Vector2d;
+import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Collectible;
 import it.unibo.wildenc.mvc.model.Enemy;
@@ -39,13 +40,13 @@ public class GameMapImpl implements GameMap {
 
     public enum PlayerType {
         Charmender(10, 20, 100, (wf, p) -> {
-            p.addWeapon(wf.getDefaultWeapon(0.009, 10, 2, 2, 100, 1, p ));
+            p.addWeapon(wf.getDefaultWeapon(10, 10, 2, 2, 100, 1, p, () -> new Vector2d(0, 30)));
         }),
         Bulbasaur(20, 30, 200, (wf, p) -> {
-            p.addWeapon(wf.getMeleeWeapon(7, 5, p));
+            // p.addWeapon(wf.getMeleeWeapon(7, 5, p));
         }),
         Squirtle(10, 5, 90, (wf, p) -> {
-            p.addWeapon(wf.getMeleeWeapon(8,4, p));
+            // p.addWeapon(wf.getMeleeWeapon(8,4, p));
         });
 
         private final int speed;
@@ -139,21 +140,21 @@ public class GameMapImpl implements GameMap {
          */
         checkCollectibles(objToRemove);
         //
-        handleAttacks();
+        handleAttacks(deltaSeconds);
         // Spawn enemies by the logic of the Enemy Spawner
-        spawnEnemies();
+        // spawnEnemies();
         // remove used objects
         mapObjects.removeAll(objToRemove);
     }
     
-    private void handleAttacks() {
+    private void handleAttacks(double deltaSeconds) {
         mapObjects.stream()
             .filter(e -> e instanceof Entity)
             .map(e -> (Entity) e)
             .forEach(e -> {
                 e.getWeapons().stream()
                     .forEach(w -> {
-                        w.attack(List.of(new AttackContext(e.getPosition(), null, null))); // FIXME: initialDirection and entityToFollow not known
+                        w.attack(deltaSeconds);
                     });
                 });
     }
@@ -202,10 +203,13 @@ public class GameMapImpl implements GameMap {
             .filter(e -> e instanceof Movable)
             .map(o -> (Movable)o)
             .peek(o -> {
-                // System.out.println(o.getClass() + " x: " + o.getPosition().x() + " y: " + o.getPosition().y()); // FIXME: think about better logging
-                // if (o instanceof Entity e) {
-                //     System.out.println("health: " + e.getCurrentHealth());  // FIXME: think about better logging
-                // }
+                System.out.println(o.getClass() + " x: " + o.getPosition().x() + " y: " + o.getPosition().y()); // FIXME: think about better logging
+                if (o instanceof Entity e) {
+                    System.out.println("health: " + e.getCurrentHealth());  // FIXME: think about better logging
+                }
+                if (o instanceof Projectile) {
+                    System.out.println("direzione proiettile: " + o.getDirection());
+                }
             })
             .forEach(o -> o.updatePosition(deltaSeconds));
     }

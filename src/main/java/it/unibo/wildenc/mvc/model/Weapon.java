@@ -26,7 +26,7 @@ public interface Weapon {
      * @param atkInfo the informations regarding each projectile to spawn, such as starting position, starting direction, etc...
      * @return a {@link Set} containing one or more {@link Projectile}s if the attack was succesful, an empty one instead.
      */
-    Set<Projectile> attack(final List<AttackContext> atkInfo);
+    Set<Projectile> attack(final double deltaTime);
 
     /**
      * Method for upgrading the weapon. For mantaining the SRP, this will upgrade a {@link WeaponStats},

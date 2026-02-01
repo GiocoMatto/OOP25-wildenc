@@ -2,8 +2,10 @@ package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 
 import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.joml.Vector2d;
 
@@ -90,6 +92,7 @@ public class ProjectileStats {
     private final String projID;
     private final Entity projOwner;
     private final BiFunction<Double, AttackContext, Vector2d> projMovementFunction;
+    private Supplier<Vector2d> positionToFollow;
 
     /**
      * Constructor for the class. This will be passed to a Projectile when it will be generated,
@@ -109,7 +112,9 @@ public class ProjectileStats {
         final double ttl,
         final String id,
         final Entity ownedBy,
+        final Supplier<Vector2d> toFollow,
         final BiFunction<Double, AttackContext, Vector2d> moveFunc
+
     ) {
         projStats.add(new ProjStat(ProjStatType.DAMAGE, baseDamage));
         projStats.add(new ProjStat(ProjStatType.HITBOX, baseRadius));
@@ -117,6 +122,7 @@ public class ProjectileStats {
         this.timeToLive = ttl;
         this.projID = id;
         this.projOwner = ownedBy;
+        this.positionToFollow = toFollow;
         this.projMovementFunction = moveFunc;
     }
 
@@ -146,6 +152,10 @@ public class ProjectileStats {
      */
     public BiFunction<Double, AttackContext, Vector2d> getMovementFunction() {
         return this.projMovementFunction;
+    }
+
+    public Supplier<Vector2d> getPositionToHit() {
+        return this.positionToFollow;
     }
 
     /**

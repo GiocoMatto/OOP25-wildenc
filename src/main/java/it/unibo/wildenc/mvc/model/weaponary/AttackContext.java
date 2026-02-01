@@ -12,7 +12,7 @@ import org.joml.Vector2dc;
 public class AttackContext {
     private Vector2dc lastPosition;
     private Vector2dc atkVersorDirection;
-    private Optional<Supplier<Vector2d>> toFollow;
+    private Supplier<Vector2d> toFollow;
     private double velocity;
 
     /**
@@ -22,19 +22,18 @@ public class AttackContext {
      */
     public AttackContext(
         final Vector2dc initialPosition,
-        final Vector2dc initialDirection,
-        Optional<Supplier<Vector2d>> entityToFollow
+        Supplier<Vector2d> postionToFollow
     ) {
         this.lastPosition = initialPosition;
-        this.atkVersorDirection = new Vector2d(initialDirection).normalize();
-        this.toFollow = entityToFollow;
+        this.toFollow = postionToFollow;
+        this.atkVersorDirection = new Vector2d(this.toFollow.get()).sub(initialPosition).normalize();
     }
 
     /**
      * Getter method for the position the attack has to follow.
      * @return the {@link Optional} of a {@link Supplier} for a position to follow. Could be empty.
      */
-    public Optional<Supplier<Vector2d>> getFollowing() {
+    public Supplier<Vector2d> getFollowing() {
         return this.toFollow;
     }
 
@@ -59,17 +58,15 @@ public class AttackContext {
      * @return the point contained in toFollow if present, if not the last position occupied by the Projectile.
      */
     public Vector2dc getLastPosition() {
-        return toFollow.isPresent() ? toFollow.get().get() : lastPosition;
+        return lastPosition;
     }
 
     /**
-     * Method for updating the last occupied position by the Projectile, if toFollow isn't specified.
+     * Method for updating the last occupied position by the Projectile.
      * @param newPos the new position occupied by the Projectile.
      */
     public void updateLastPosition(final Vector2dc newPos) {
-        if(!toFollow.isPresent()) {
-            this.lastPosition = new Vector2d(newPos);
-        }
+        this.lastPosition = new Vector2d(newPos);
     }
 
     /**
@@ -105,6 +102,6 @@ public class AttackContext {
      * @return a copy of this object.
      */
     public AttackContext protectiveCopy() {
-        return new AttackContext(this.lastPosition, this.atkVersorDirection, this.toFollow);
+        return new AttackContext(this.lastPosition, this.toFollow);
     }
 }
