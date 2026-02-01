@@ -40,7 +40,7 @@ public interface Entity extends Movable {
      * @param p
      *          The weapon to add.
      */
-    void addWeapons(Weapon p);
+    void addWeapon(Weapon p);
     
     /**
      * If the entity can take damage.

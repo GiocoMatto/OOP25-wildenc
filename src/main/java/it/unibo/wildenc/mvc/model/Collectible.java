@@ -7,8 +7,9 @@ public interface Collectible extends MapObject {
 
     /**
      * Gets the value of the collectible
-     * @return quantity of the collectible (example: 15 experience, 2 health regen...)
+     * 
+     * @param p the player to apply the collectible
      */
-    int getValue();
+    int apply(Player p);
 
 }

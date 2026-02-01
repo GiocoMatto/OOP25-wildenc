@@ -2,17 +2,21 @@ package it.unibo.wildenc.mvc.model.map;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Enemy;
+import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMapObject;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
 public final class MapTestingCommons {
     
@@ -21,7 +25,7 @@ public final class MapTestingCommons {
         StaticObject(0, 10, 5, 0, 0),
         MovableObject(0, 10, 5, 1, 0),
         PlayerObject(0, 0, 5, 1, 100),
-        EnemyObject(100, 0, 5, 1, 100);
+        EnemyObject(0, 30, 5, 1, 100);
 
         public final Vector2dc pos;
         public final double hitbox;
@@ -51,7 +55,38 @@ public final class MapTestingCommons {
         }
 
         public Enemy getAsCloseRangeEnemy(Set<Weapon> weapons, String name, Optional<MapObject> target) {
-            return new CloseRangeEnemy(pos, hitbox, speed, health, weapons, name, target);
+            final Enemy e = new CloseRangeEnemy(pos, hitbox, speed, health, name, target);
+            for (final var w : weapons) {
+                e.addWeapon(w);
+            }
+            return e;
+        }
+    }
+
+    // Weapons
+    public enum TestWeapon {
+        DEFAULT_WEAPON(5, 10, 2, 2, 99, 1, (e) -> () -> new Vector2d(e));
+        
+        private double baseCooldown;
+        private double baseDamage;
+        private double hbRadius;
+        private double baseVelocity;
+        private double baseTTL;
+        private int baseBurst;
+        private Function<Vector2dc, Supplier<Vector2d>> posToHit;
+
+        private TestWeapon(double baseCooldown, double baseDamage, double hbRadius, double baseVelocity, double baseTTL, int baseBurst, Function<Vector2dc, Supplier<Vector2d>> posToHit) {
+            this.baseCooldown = baseCooldown;
+            this.baseDamage = baseDamage;
+            this.hbRadius = hbRadius;
+            this.baseVelocity = baseVelocity;
+            this.baseTTL = baseTTL;
+            this.baseBurst = baseBurst;
+            this.posToHit = posToHit;
+        }
+        
+        Weapon getAsWeapon(Entity owner,  Vector2dc target) {
+            return new WeaponFactory().getDefaultWeapon(baseCooldown, baseDamage, hbRadius, baseVelocity, baseTTL, baseBurst, owner, posToHit.apply(target));
         }
     }
 
@@ -80,8 +115,8 @@ public final class MapTestingCommons {
     /**
      * 20 ticks of 1 second each, 20 seconds
      */
-    public static final int TEST_SIMULATION_TICKS = 100;
-    
+    public static final int TEST_SIMULATION_TICKS = 20;
+
     public static class MapObjectTest extends AbstractMapObject {
 
         public MapObjectTest(Vector2dc spawnPosition, double hitbox) {

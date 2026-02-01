@@ -1,13 +1,10 @@
 package it.unibo.wildenc.mvc.model.enemies;
 
 import java.util.Optional;
-import java.util.Set;
-
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.map.CollisionLogic;
-import it.unibo.wildenc.mvc.model.Weapon;
 
 /**
  * A enemy that attach to a specific distance by the player.
@@ -24,7 +21,6 @@ public class RangedEnemy extends AbstractEnemy {
         final double hitbox, 
         final double movementSpeedfinal, 
         final int health,
-        final Set<Weapon> weapons, 
         final String name,
         final Optional<MapObject> target
     ) {
@@ -33,7 +29,6 @@ public class RangedEnemy extends AbstractEnemy {
             hitbox, 
             movementSpeedfinal, 
             health, 
-            weapons, 
             name,
             target
         );

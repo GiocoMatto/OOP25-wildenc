@@ -89,9 +89,10 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
      * {@inheritDoc}
      */
     @Override
-    public void addWeapons(Weapon p) {
+    public void addWeapon(Weapon p) {
         weapons.add(p);
     }
+
     /**
      * {@inheritDoc}
      */
@@ -104,6 +105,5 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
      * @return the {@link Vector2dc} representing the entity's new direction
      */
     protected abstract Vector2dc alterDirection();
-
 
 }

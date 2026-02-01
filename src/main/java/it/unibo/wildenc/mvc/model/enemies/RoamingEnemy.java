@@ -2,10 +2,8 @@ package it.unibo.wildenc.mvc.model.enemies;
 
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
-import it.unibo.wildenc.mvc.model.Weapon;
 
 /**
  * A enemy that run in random direction in the map and 
@@ -34,7 +32,6 @@ public class RoamingEnemy extends AbstractEnemy {
         final double hitbox, 
         final double movementSpeedfinal, 
         final int health,
-        final Set<Weapon> weapons, 
         final String name
     ) {
         super(
@@ -42,7 +39,6 @@ public class RoamingEnemy extends AbstractEnemy {
             hitbox, 
             movementSpeedfinal, 
             health, 
-            weapons, 
             name,
             Optional.empty()
         );

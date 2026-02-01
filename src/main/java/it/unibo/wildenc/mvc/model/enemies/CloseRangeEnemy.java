@@ -20,7 +20,6 @@ public class CloseRangeEnemy extends AbstractEnemy{
         final double hitbox, 
         final double movementSpeedfinal, 
         final int health,
-        final Set<Weapon> weapons, 
         final String name,
         final Optional<MapObject> target
     ) {
@@ -29,7 +28,6 @@ public class CloseRangeEnemy extends AbstractEnemy{
             hitbox, 
             movementSpeedfinal, 
             health, 
-            weapons, 
             name,
             target
         );

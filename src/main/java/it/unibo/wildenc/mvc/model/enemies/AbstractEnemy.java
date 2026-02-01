@@ -1,10 +1,9 @@
 package it.unibo.wildenc.mvc.model.enemies;
 
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
-import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.*;
 import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 
@@ -19,23 +18,22 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     /**
      * Create a new general Enemey.
      * @param spawnPosition The position of spawn.
-     * @param hitbox The area of map where the paler can hit the nemey.
+     * @param hitbox The area of map where the player can hit the nemey.
      * @param movementSpeedfinal the speed of movement of the enemy.
      * @param health The health of the enemy.
-     * @param weapons The weapon that can hit the palyer.
+     * @param weapons The weapon that can hit the player.
      * @param name The name of the enemy.
-     * @param target The Optinal Posion of the payler to hit.
+     * @param target The Optional Position of the player to hit.
      */
     public AbstractEnemy(
         final Vector2dc spawnPosition, 
         final double hitbox, 
         final double movementSpeedfinal, 
         final int health, 
-        final Set<Weapon> weapons, 
         final String name,
         final Optional<MapObject> target
     ) {
-        super(spawnPosition, hitbox, movementSpeedfinal, health, weapons);
+        super(spawnPosition, hitbox, movementSpeedfinal, health, new HashSet<>());
         this.name = name;
         this.target = target;
     }
@@ -68,19 +66,11 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
 
     /**
      * Say if a enemy can take Damage rispect some condition. 
-     * By default a enemy can alway take damage.
+     * By default a enemy can always take damage.
      */
     @Override
     public boolean canTakeDamage() {
         return true;
     }
-
-    // /**
-    //  * {@inheritDoc}
-    //  */
-    // @Override
-    // public void addWeapons(final Weapon p) {
-    //     throw new IllegalStateException();
-    // }
 
 }
