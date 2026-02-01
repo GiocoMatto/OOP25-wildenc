@@ -1,9 +1,7 @@
 package it.unibo.wildenc.mvc.model.weaponary.weapons;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
@@ -11,7 +9,6 @@ import org.joml.Vector2dc;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
-import it.unibo.wildenc.mvc.model.weaponary.projectiles.ConcreteProjectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;
 
@@ -49,10 +46,14 @@ public class WeaponFactory {
                     weaponStats.pStats().setMultiplier(ProjStatType.VELOCITY, level);
                     weaponStats.pStats().setMultiplier(ProjStatType.HITBOX, level);
                 },
-                projStats -> List.of(new AttackContext(projStats.getOwner().getPosition(), posToHit)),
+                projStats -> List.of(new AttackContext(
+                    projStats.getOwner().getPosition(), 
+                    projStats.getStatValue(ProjStatType.VELOCITY), 
+                    projStats.getPositionToHit())
+                ),
                 baseBurst,
                 "BasicWeapon"
-        );        
+        );
     }
 }
 

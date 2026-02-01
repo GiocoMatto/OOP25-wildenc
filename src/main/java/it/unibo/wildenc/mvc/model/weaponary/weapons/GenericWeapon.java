@@ -39,6 +39,7 @@ public class GenericWeapon implements Weapon {
         this.weaponStats = new WeaponStats(
             cooldown, pStats, initialBurst, upgradeLogics
         );
+        this.attackInfoGenerator = attackInfoGenerator;
         this.weaponName = weaponName;
     }
 
