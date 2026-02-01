@@ -1,22 +1,13 @@
 package it.unibo.wildenc.mvc.model;
 
-import java.util.List;
 import java.util.Set;
-import java.util.function.BiConsumer;
 
-import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
-import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
-import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 /**
  * Interface for modelling a Weapon. For instance, a Weapon is a factory of {@link Projectile}s which have specific
  * characteristics which are determined by the Weapon they're generated.
  */
 public interface Weapon {
-    
-    public record WeaponStats(
-        double weaponCooldown, ProjectileStats pStats, int burstSize,
-        BiConsumer<Integer, WeaponStats> upgradeLogics
-    ) {}
     
     /**
      * Factory Method for the production of projectiles. The stats for the projectiles (damage, velocity, type of trajectory...)

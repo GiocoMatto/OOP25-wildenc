@@ -13,7 +13,7 @@ import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Movable;
 import it.unibo.wildenc.mvc.model.Player;
-import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
+import it.unibo.wildenc.mvc.model.Projectile;
 
 /**
  * Basic {@link Map} implementation

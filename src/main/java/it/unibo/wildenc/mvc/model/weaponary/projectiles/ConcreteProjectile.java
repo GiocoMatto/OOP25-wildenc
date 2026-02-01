@@ -3,6 +3,7 @@ package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Entity;
+import it.unibo.wildenc.mvc.model.Projectile;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;

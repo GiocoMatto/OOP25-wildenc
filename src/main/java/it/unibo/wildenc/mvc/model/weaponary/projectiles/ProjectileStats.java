@@ -7,6 +7,7 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.joml.Vector2d;
+import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
@@ -91,7 +92,7 @@ public class ProjectileStats {
     private final String projID;
     private final Entity projOwner;
     private final BiFunction<Double, AttackContext, Vector2d> projMovementFunction;
-    private Supplier<Vector2d> positionToFollow;
+    private Supplier<Vector2dc> positionToFollow;
 
     /**
      * Constructor for the class. This will be passed to a Projectile when it will be generated,
@@ -111,7 +112,7 @@ public class ProjectileStats {
         final double ttl,
         final String id,
         final Entity ownedBy,
-        final Supplier<Vector2d> toFollow,
+        final Supplier<Vector2dc> toFollow,
         final BiFunction<Double, AttackContext, Vector2d> moveFunc
 
     ) {
@@ -153,7 +154,7 @@ public class ProjectileStats {
         return this.projMovementFunction;
     }
 
-    public Supplier<Vector2d> getPositionToHit() {
+    public Supplier<Vector2dc> getPositionToHit() {
         return this.positionToFollow;
     }
 

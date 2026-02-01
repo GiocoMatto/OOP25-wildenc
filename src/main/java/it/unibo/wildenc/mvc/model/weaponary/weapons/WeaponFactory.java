@@ -1,5 +1,6 @@
 package it.unibo.wildenc.mvc.model.weaponary.weapons;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -20,12 +21,16 @@ public class WeaponFactory {
         final double hbRadius, 
         final double baseVelocity,
         final double baseTTL,
+        final int baseProjAtOnce,
         final int baseBurst,
         final Entity ownedBy,
-        final Supplier<Vector2d> posToHit 
+        final Supplier<Vector2dc> posToHit 
     ) {
         return new GenericWeapon(
+            "BasicWeapon",
             baseCooldown,
+            baseBurst,
+            baseProjAtOnce,
             new ProjectileStats(
                 baseDamage, 
                 hbRadius,
@@ -40,20 +45,50 @@ public class WeaponFactory {
                         start.x() + dt * atkInfo.getVelocity() * atkInfo.getDirectionVersor().x(),
                         start.y() + dt * atkInfo.getVelocity() * atkInfo.getDirectionVersor().y()
                     );
-                }), 
+                }),
                 (level, weaponStats) -> {
-                    weaponStats.pStats().setMultiplier(ProjStatType.DAMAGE, level * 5);
-                    weaponStats.pStats().setMultiplier(ProjStatType.VELOCITY, level);
-                    weaponStats.pStats().setMultiplier(ProjStatType.HITBOX, level);
+                    weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, level * 5);
+                    weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, level);
+                    weaponStats.getProjStats().setMultiplier(
+                        ProjStatType.HITBOX, 
+                        weaponStats.getProjStats().getStatValue(ProjStatType.HITBOX) + level
+                    );
+                    weaponStats.setBurstSize(level);
                 },
-                projStats -> List.of(new AttackContext(
-                    projStats.getOwner().getPosition(), 
-                    projStats.getStatValue(ProjStatType.VELOCITY), 
-                    projStats.getPositionToHit())
-                ),
-                baseBurst,
-                "BasicWeapon"
+                weaponStats -> {
+                    int pelletNumber = weaponStats.getProjectilesShotAtOnce();
+                    double totalArc = Math.toRadians(45);
+                    
+                    Vector2dc origin = weaponStats.getProjStats().getOwner().getPosition();
+                    double velocity = weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY);
+                    Vector2dc targetPos = weaponStats.getProjStats().getPositionToHit().get();
+                    
+                    Vector2d centralDirection = new Vector2d(targetPos).sub(origin).normalize();
+
+                    List<AttackContext> projContext = new ArrayList<>();
+
+                    for (int i = 0; i < pelletNumber; i++) {
+                        double currentAngle = (pelletNumber > 1) 
+                            ? -(totalArc / 2.0) + (i * (totalArc / (pelletNumber - 1))) 
+                            : 0;
+
+                        double cos = Math.cos(currentAngle);
+                        double sin = Math.sin(currentAngle);
+                        
+                        double rotatedX = centralDirection.x() * cos - centralDirection.y() * sin;
+                        double rotatedY = centralDirection.x() * sin + centralDirection.y() * cos;
+                        Vector2d rotatedDir = new Vector2d(rotatedX, rotatedY);
+                        
+                        Vector2d fakeTarget = new Vector2d(origin).add(rotatedDir);
+
+                        projContext.add(new AttackContext(
+                            origin, 
+                            velocity, 
+                            () -> fakeTarget
+                        ));
+                    }
+                    return projContext;
+                }
         );
     }
 }
-

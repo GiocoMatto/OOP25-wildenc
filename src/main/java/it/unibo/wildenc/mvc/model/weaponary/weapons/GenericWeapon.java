@@ -1,15 +1,14 @@
 package it.unibo.wildenc.mvc.model.weaponary.weapons;
 
+import it.unibo.wildenc.mvc.model.Projectile;
 import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ConcreteProjectile;
-import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -21,23 +20,27 @@ public class GenericWeapon implements Weapon {
 
     private static final double BURST_DELAY = 0.2;
 
-    private WeaponStats weaponStats;
-    private int level = 0;
-    private double timeSinceLastAtk = Double.MAX_VALUE;
     private final String weaponName;
+    Function<WeaponStats, List<AttackContext>> attackInfoGenerator;
+    private WeaponStats weaponStats;
+    private double timeSinceLastAtk = Double.MAX_VALUE;
     private int currentBullet = 0;
-    Function<ProjectileStats, List<AttackContext>> attackInfoGenerator;
 
     public GenericWeapon(
-        final double cooldown,
+        final String weaponName,
+        final double initialCooldown,
+        final int initialBurst,
+        final int initialProjAtOnce,
         final ProjectileStats pStats,
         final BiConsumer<Integer, WeaponStats> upgradeLogics,
-        final Function<ProjectileStats, List<AttackContext>> attackInfoGenerator,
-        final int initialBurst,
-        final String weaponName
+        final Function<WeaponStats, List<AttackContext>> attackInfoGenerator
     ) {
         this.weaponStats = new WeaponStats(
-            cooldown, pStats, initialBurst, upgradeLogics
+            initialCooldown,
+            pStats,
+            initialBurst,
+            initialProjAtOnce,
+            upgradeLogics
         );
         this.attackInfoGenerator = attackInfoGenerator;
         this.weaponName = weaponName;
@@ -55,7 +58,7 @@ public class GenericWeapon implements Weapon {
             }
             currentBullet++;
             timeSinceLastAtk = 0;
-            return generateProjectiles(this.attackInfoGenerator.apply(this.weaponStats.pStats()));
+            return generateProjectiles(this.attackInfoGenerator.apply(this.weaponStats));
         }
         return Set.of();
     }
@@ -65,7 +68,7 @@ public class GenericWeapon implements Weapon {
      */
     @Override
     public void upgrade() {
-        this.weaponStats.upgradeLogics().accept(this.level, this.weaponStats);
+        this.weaponStats.levelUp();
     }
     
     // This method is used for testing purposes only.
@@ -74,17 +77,17 @@ public class GenericWeapon implements Weapon {
     }
 
     private boolean isInCooldown() {
-        return timeSinceLastAtk < this.weaponStats.weaponCooldown();
+        return timeSinceLastAtk < this.weaponStats.getCooldown();
     }
 
     private boolean canBurst() {
         return !isInCooldown() ? true :
-            (currentBullet < this.weaponStats.burstSize() && timeSinceLastAtk >= BURST_DELAY);
+            (currentBullet < this.weaponStats.getCurrentBurstSize() && timeSinceLastAtk >= BURST_DELAY);
     }
 
     private Set<Projectile> generateProjectiles(List<AttackContext> contexts) {
         return contexts.stream()
-            .map(e -> new ConcreteProjectile(e, this.weaponStats.pStats()))
+            .map(e -> new ConcreteProjectile(e, this.weaponStats.getProjStats()))
             .collect(Collectors.toSet());
     }
 
