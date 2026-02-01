@@ -1,7 +1,6 @@
 package it.unibo.wildenc.mvc.controller.impl;
 
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.stream.Collectors;
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
@@ -16,7 +15,7 @@ public class EngineImpl implements Engine{
     private final GameLoop loop = new GameLoop();
     private final GameMap model;
 
-    public EngineImpl(final PlayerType playerType) {
+    public EngineImpl(final GameMap.PlayerType playerType) {
         model = new GameMapImpl(playerType);
         view.setEngine(this);
         view.start();
@@ -41,6 +40,7 @@ public class EngineImpl implements Engine{
         public void run() {
             while (true) {
                 final long timeUpdateView = System.nanoTime();
+                /* condition game state */
                 view.updateSprites(model.getAllObjects().stream()
                     .map(e -> new MapObjViewData(
                         "null", 
@@ -52,8 +52,7 @@ public class EngineImpl implements Engine{
                 try {
                     Thread.sleep(SLEEP_TIME);
                 } catch (InterruptedException e) {}
-                /* update model and other */
-                model.updateEntities(System.nanoTime() - timeUpdateView);
+                model.updateEntities(System.nanoTime() - timeUpdateView, movements.poll().getVector());
             }
         }
 
