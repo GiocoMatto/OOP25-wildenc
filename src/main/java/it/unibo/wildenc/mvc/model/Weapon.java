@@ -1,10 +1,8 @@
 package it.unibo.wildenc.mvc.model;
 
-import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
-import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 /**
