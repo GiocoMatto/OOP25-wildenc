@@ -43,6 +43,7 @@ dependencies {
 
     // log4J: Library used for logging.
     val log4jVersion = "2.25.3"
+    implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
     
 
