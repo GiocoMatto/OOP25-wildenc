@@ -35,8 +35,8 @@ public class EnemySpawnerImpl implements EnemySpawner{
     @Override
     public Set<Enemy> spawn(Player p, int enemyCount) {
         // final int target = BASE_ENEMY + Math.pow(p.getExp(), LOAD_FACTOR); //TODO: kleo devi farmi queto.
-        // final int n = Math.max(0, target - enemycount);        
-        final int n = 10;
+        final int n = Math.max(0, 10 - enemyCount);        
+        // final int n = 10;
         return IntStream.range(0, n)
             .mapToObj(i -> {
                 final Vector2d v = new Vector2d(p.getPosition()).add(

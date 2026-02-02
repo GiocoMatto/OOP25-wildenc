@@ -2,7 +2,7 @@ package it.unibo.wildenc.mvc.view.api;
 
 import java.util.Collection;
 import it.unibo.wildenc.mvc.controller.api.Engine;
-import it.unibo.wildenc.mvc.model.MapObject;
+import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 
 public interface GameView {
 
@@ -20,11 +20,10 @@ public interface GameView {
 
     /**
      * Update all the sprites on the screen.
-     * TODO: MapObject is a Model class, should not be used here in the view. Needs to be processed by the Controller.
      * 
-     * @param mObjs a {@link Collection} of {@link MapObject}s that will have the infos necessary to be rendered.
+     * @param mObjs a {@link Collection} of {@link MapObjViewData}s that will have the infos necessary to be rendered.
      */
-    void updateSprites(Collection<MapObject> mObjs);
+    void updateSprites(Collection<MapObjViewData> mObjs);
 
     /**
      * Display the win screen.

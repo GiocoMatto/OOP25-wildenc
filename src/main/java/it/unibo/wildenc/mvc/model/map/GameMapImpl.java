@@ -21,6 +21,7 @@ import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Movable;
 import it.unibo.wildenc.mvc.model.Player;
+import it.unibo.wildenc.mvc.model.enemies.EnemySpawnerImpl;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
@@ -44,6 +45,7 @@ public class GameMapImpl implements GameMap {
      */
     public GameMapImpl(final PlayerType p) {
         player = getPlayerByPlayerType(p);
+        es = new EnemySpawnerImpl(player);
     }
 
     /**
