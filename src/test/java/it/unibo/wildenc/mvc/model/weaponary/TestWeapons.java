@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
@@ -14,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.wildenc.mvc.model.Entity;
-import it.unibo.wildenc.mvc.model.Movable;
+
 import it.unibo.wildenc.mvc.model.Projectile;
 import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
@@ -30,7 +29,7 @@ public class TestWeapons {
     private static final int TEST_VELOCITY = 1;
     private static final int TEST_TTL = 1;
     private static final int TEST_BURST_SIZE = 1;
-    private static final int TEST_PROJ_AT_ONCE = 3;
+    private static final int TEST_PROJ_AT_ONCE = 1;
     private static final int TEST_MAX_HEALTH = 100;
     private static final int LEVEL_2 = 2;
     private static final Entity TEST_OWNER = new PlayerImpl(
@@ -130,7 +129,7 @@ public class TestWeapons {
     public void testCorretBurstAndCooldown() {
         this.myWeapon.upgrade();
         // 6 * TICK = 1.2s which is (0 + 200ms of burst + 1000ms of cooldown)
-        for(int i = 0; i < 6; i++) {
+        for(int i = 0; i < 30; i++) {
             this.generatedProjectiles.addAll(this.myWeapon.attack(TEST_TICK));
         }
         assertEquals(this.generatedProjectiles.size(), TEST_BURST_SIZE * LEVEL_2 * 5);

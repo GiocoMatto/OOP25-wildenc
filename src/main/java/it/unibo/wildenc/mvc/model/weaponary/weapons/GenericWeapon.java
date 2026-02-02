@@ -21,11 +21,22 @@ public class GenericWeapon implements Weapon {
     private static final double BURST_DELAY = 0.2;
 
     private final String weaponName;
-    Function<WeaponStats, List<AttackContext>> attackInfoGenerator;
-    private WeaponStats weaponStats;
+    private final Function<WeaponStats, List<AttackContext>> attackInfoGenerator;
+    private final WeaponStats weaponStats;
     private double timeSinceLastAtk = Double.MAX_VALUE;
-    private int currentBullet = 0;
+    private int currentBullet;
 
+    /**
+     * Constructor for the class.
+     * 
+     * @param weaponName the name of the weapon.
+     * @param initialCooldown the initial cooldown of the weapon.
+     * @param initialBurst the initial quantity of Projectiles in a burst.
+     * @param initialProjAtOnce the initial quantity of Projectile shot in one attack.
+     * @param pStats the statistics of the Projectile this weapon will shoot.
+     * @param upgradeLogics the logics of upgrading for this weapon.
+     * @param attackInfoGenerator a {@link Function} specifing how the Projectiles should be shot.
+     */
     public GenericWeapon(
         final String weaponName,
         final double initialCooldown,
@@ -47,13 +58,13 @@ public class GenericWeapon implements Weapon {
     }
 
     /**
-     * {@inheritDocs}
+     * {@inheritDoc}
      */
     @Override
     public Set<Projectile> attack(final double deltaTime) {
         this.timeSinceLastAtk += deltaTime;
-        if(canBurst()) {
-            if(!isInCooldown()) {
+        if (canBurst()) {
+            if (!isInCooldown()) {
                 currentBullet = 0;
             }
             currentBullet++;
@@ -64,14 +75,17 @@ public class GenericWeapon implements Weapon {
     }
 
     /**
-     * {@inheritDocs}
+     * {@inheritDoc}
      */
     @Override
     public void upgrade() {
         this.weaponStats.levelUp();
     }
-    
-    // This method is used for testing purposes only.
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public WeaponStats getStats() {
         return this.weaponStats;
     }
@@ -81,16 +95,19 @@ public class GenericWeapon implements Weapon {
     }
 
     private boolean canBurst() {
-        return !isInCooldown() ? true :
-            (currentBullet < this.weaponStats.getCurrentBurstSize() && timeSinceLastAtk >= BURST_DELAY);
+        return !isInCooldown() 
+            || (currentBullet < this.weaponStats.getCurrentBurstSize() && timeSinceLastAtk >= BURST_DELAY);
     }
 
-    private Set<Projectile> generateProjectiles(List<AttackContext> contexts) {
+    private Set<Projectile> generateProjectiles(final List<AttackContext> contexts) {
         return contexts.stream()
             .map(e -> new ConcreteProjectile(e, this.weaponStats.getProjStats()))
             .collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return this.weaponName;
