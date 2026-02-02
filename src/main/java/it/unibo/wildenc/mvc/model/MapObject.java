@@ -30,4 +30,11 @@ public interface MapObject {
      * @return true if the object should be on map, false if the object should be removed from the map.
      */
     boolean isAlive();
+
+    /**
+     * Get the object's name, which will be it's identifier.
+     * 
+     * @return A String in this format "objectType:objectName"; i.e. "enemy:pikachu".
+     */
+    String getName();
 }

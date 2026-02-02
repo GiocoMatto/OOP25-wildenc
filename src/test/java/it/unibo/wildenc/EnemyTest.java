@@ -38,6 +38,12 @@ public class EnemyTest {
         @Override
         public boolean isAlive() {
             return true;
+        }
+
+        @Override
+        public String getName() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'getName'");
         };
 
     };
@@ -56,6 +62,12 @@ public class EnemyTest {
         @Override
         public boolean isAlive() {
             return true;
+        }
+
+        @Override
+        public String getName() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'getName'");
         };
 
     };
@@ -74,6 +86,12 @@ public class EnemyTest {
         @Override
         public boolean isAlive() {
             return true;
+        }
+
+        @Override
+        public String getName() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'getName'");
         };
 
     };

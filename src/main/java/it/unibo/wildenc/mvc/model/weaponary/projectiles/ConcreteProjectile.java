@@ -95,5 +95,11 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
     public Entity getOwner() {
         return this.projStats.getOwner();
     }
+
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+    }
 }
 

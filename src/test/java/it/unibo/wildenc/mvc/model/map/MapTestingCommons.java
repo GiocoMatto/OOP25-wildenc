@@ -78,6 +78,11 @@ public final class MapTestingCommons {
             return true;
         }
 
+        @Override
+        public String getName() {
+            throw new UnsupportedOperationException("Not needed for testing.");
+        }
+
     }
 
     /**
@@ -112,6 +117,10 @@ public final class MapTestingCommons {
             return true;
         }
 
+        @Override
+        public String getName() {
+            throw new UnsupportedOperationException("Not needed for testing.");
+        }
     }
 
     /**

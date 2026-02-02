@@ -59,4 +59,10 @@ public class PlayerImpl extends AbstractEntity implements Player {
         // TODO: Implementare logica di aumento statistiche o scelta weapon
     }
 
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+    }
+
 }
