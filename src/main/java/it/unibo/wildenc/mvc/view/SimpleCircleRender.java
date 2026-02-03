@@ -1,4 +1,5 @@
-package it.unibo.wildenc.mvc.view.impl;
+/*
+package it.unibo.wildenc.mvc.view;
 
 import java.util.stream.Stream;
 
@@ -65,3 +66,4 @@ public class SimpleCircleRender implements SpriteRender {
 
     }
 }
+*/

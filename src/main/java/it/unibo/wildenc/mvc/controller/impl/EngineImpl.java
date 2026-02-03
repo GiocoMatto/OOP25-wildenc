@@ -64,7 +64,7 @@ public class EngineImpl implements Engine{
                     e.printStackTrace();
                 }
                 /* update model and other */
-                gm.updateEntities(System.nanoTime() - timeUpdateView, new Vector2d(0, -1));
+                gm.updateEntities(System.nanoTime() - timeUpdateView, new Vector2d(0, 0));
                 /* update enemys in model */
             }
         }

@@ -17,8 +17,8 @@ import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
 
 public class EnemySpawnerImpl implements EnemySpawner{
-    private static final int DISTANCE_SPAWN_X = 30;
-    private static final int DISTANCE_SPAWN_Y = 13;
+    private static final int DISTANCE_SPAWN_X = 3000;
+    private static final int DISTANCE_SPAWN_Y = 1300;
     private static final int BASE_ENEMY = 10;
     private static final double LOAD_FACTOR = 1.3;
     private static final int PROBABILITY_DISTRIBUTION = 16;

@@ -21,7 +21,7 @@ public class GameViewImpl implements GameView {
     final Canvas canvas = new Canvas(1600, 900);
 
     public GameViewImpl() {
-        renderer = new SimpleCircleRender();        
+        renderer = new AnotherSimpleCircleRender();        
         renderer.setCanvas(canvas);
     }
 
@@ -46,6 +46,7 @@ public class GameViewImpl implements GameView {
         final VBox vbox = new VBox();
         vbox.getChildren().add(canvas);
         gameStage.setScene(new Scene(vbox, 1600, 900));
+        gameStage.centerOnScreen();
         gameStage.show();
     }
 
@@ -55,7 +56,7 @@ public class GameViewImpl implements GameView {
     @Override
     public void updateSprites(Collection<MapObjViewData> mObj) {
         renderer.clean();
-        mObj.forEach(renderer::render);
+        renderer.renderAll(mObj);
     }
 
     /**
