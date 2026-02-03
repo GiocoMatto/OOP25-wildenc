@@ -95,5 +95,10 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
     public Entity getOwner() {
         return this.projStats.getOwner();
     }
+
+    @Override
+    public String getName() {
+        return "projectile:1"; // FIXME
+    }
 }
 

@@ -42,17 +42,7 @@ public class EngineImpl implements Engine{
 
     private Collection<MapObjViewData> getObjectViewData(Collection<MapObject> c) {
         return c.stream()
-            .map(e -> {
-                String s = "default:-1";
-                if (e instanceof Player) {
-                    s = "player:1";
-                } else if (e instanceof Enemy) {
-                    s = "enemy:1";
-                } else if (e instanceof Projectile) {
-                    s = "projectile:1";
-                }
-                return new MapObjViewData(s, e.getPosition().x(), e.getPosition().y());
-            })
+            .map(e -> new MapObjViewData(e.getName(), e.getPosition().x(), e.getPosition().y()))
             .toList();
     }
 
@@ -74,7 +64,7 @@ public class EngineImpl implements Engine{
                     e.printStackTrace();
                 }
                 /* update model and other */
-                gm.updateEntities(System.nanoTime() - timeUpdateView, new Vector2d(0, 0));
+                gm.updateEntities(System.nanoTime() - timeUpdateView, new Vector2d(0, -1));
                 /* update enemys in model */
             }
         }

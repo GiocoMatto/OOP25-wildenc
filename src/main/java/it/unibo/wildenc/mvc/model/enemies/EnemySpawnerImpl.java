@@ -44,13 +44,13 @@ public class EnemySpawnerImpl implements EnemySpawner{
                     rand.nextInt(-DISTANCE_SPAWN_Y, DISTANCE_SPAWN_Y)
                 );
                 return switch (i % PROBABILITY_DISTRIBUTION) {
-                    case 1, 2, 3, 14, 15 -> this.ef.CloseRangeEnemy(v, "Pippo");
-                    case 4, 5, 6 -> this.ef.CloseRangeFastEnemy(v, "PaperoniDePaperoni");
-                    case 7, 8, 13 -> this.ef.RangedEnemy(v, "Topolino");
-                    case 9, 10 -> this.ef.RangedDoubleShotEnemy(v, "Topolina");
-                    case 11, 16 -> this.ef.RoamingEnemy(v, "Pluto");
-                    case 12 -> this.ef.RoamingLongLifeEnemy(v, "Chip");
-                    default -> this.ef.CloseRangeEnemy(v, "Paperino");
+                    case 1, 2, 3, 14, 15 -> this.ef.CloseRangeEnemy(v, "enemy:Pippo");
+                    case 4, 5, 6 -> this.ef.CloseRangeFastEnemy(v, "enemy:PaperoniDePaperoni");
+                    case 7, 8, 13 -> this.ef.RangedEnemy(v, "enemy:Topolino");
+                    case 9, 10 -> this.ef.RangedDoubleShotEnemy(v, "enemy:Topolina");
+                    case 11, 16 -> this.ef.RoamingEnemy(v, "enemy:Pluto");
+                    case 12 -> this.ef.RoamingLongLifeEnemy(v, "enemy:Chip");
+                    default -> this.ef.CloseRangeEnemy(v, "enemy:Paperino");
                 };
             }).collect(Collectors.toSet());
     }

@@ -78,6 +78,12 @@ public final class MapTestingCommons {
             return true;
         }
 
+        @Override
+        public String getName() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'getName'");
+        }
+
     }
 
     /**
@@ -110,6 +116,12 @@ public final class MapTestingCommons {
         @Override
         public boolean isAlive() {
             return true;
+        }
+
+        @Override
+        public String getName() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'getName'");
         }
 
     }

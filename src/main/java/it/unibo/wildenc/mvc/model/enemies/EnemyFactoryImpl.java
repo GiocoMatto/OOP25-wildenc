@@ -18,9 +18,9 @@ public class EnemyFactoryImpl implements EnemyFactory {
     private static final double BASE_COOLDOWN_PROJECTILE = 3;
     private static final double BASE_DAMAGE_PROJECTILE = 25;
     private static final double BASE_HITBOX_PROJECTILE = 2;
-    private static final double BASE_VELOCITY_PROJECTILE = 3;
+    private static final double BASE_VELOCITY_PROJECTILE = 25*5;
     private static final double BASE_TIME_TO_LIVE_PROJECTILE = 15;
-    private static final int BASE_BURST_PROJECTILE =5;
+    private static final int BASE_BURST_PROJECTILE = 5;
 
     private final WeaponFactory wf;
     private final MapObject target;
@@ -31,15 +31,16 @@ public class EnemyFactoryImpl implements EnemyFactory {
     }
 
     private void addDefaultWeaponTo(final Enemy e) {
-        // e.addWeapon(wf.getDefaultWeapon(
-        //     BASE_COOLDOWN_PROJECTILE,
-        //     BASE_DAMAGE_PROJECTILE, 
-        //     BASE_HITBOX_PROJECTILE, 
-        //     BASE_VELOCITY_PROJECTILE, 
-        //     BASE_TIME_TO_LIVE_PROJECTILE, 
-        //     BASE_BURST_PROJECTILE, 
-        //     e
-        // ));
+        e.addWeapon(wf.getDefaultWeapon(
+            BASE_COOLDOWN_PROJECTILE,
+            BASE_DAMAGE_PROJECTILE, 
+            BASE_HITBOX_PROJECTILE, 
+            BASE_VELOCITY_PROJECTILE, 
+            BASE_TIME_TO_LIVE_PROJECTILE, 
+            BASE_BURST_PROJECTILE, 
+            e,
+            () -> new Vector2d(target.getPosition())
+        ));
     }
 
     private void addMeleeWeaponTo(final Enemy e) {

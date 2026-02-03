@@ -30,4 +30,6 @@ public interface MapObject {
      * @return true if the object should be on map, false if the object should be removed from the map.
      */
     boolean isAlive();
+
+    String getName();
 }
