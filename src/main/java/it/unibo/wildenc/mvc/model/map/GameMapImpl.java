@@ -25,12 +25,18 @@ import it.unibo.wildenc.mvc.model.player.PlayerImpl;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.Level;
+
 /**
  * Basic {@link Map} implementation.
  * 
  */
 public class GameMapImpl implements GameMap {
 
+    private static final Logger LOGGER = LogManager.getLogger("Ciao!");
     private static final double NANO_TO_SECOND_FACTOR = 1_000_000_000.0;
 
     private final Player player;
@@ -44,6 +50,7 @@ public class GameMapImpl implements GameMap {
      */
     public GameMapImpl(final PlayerType p) {
         player = getPlayerByPlayerType(p);
+        setupLogger();
     }
 
     /**
@@ -58,6 +65,11 @@ public class GameMapImpl implements GameMap {
         player = p;
         setEnemySpawnLogic(es);
         addAllObjects(initialObjs);
+        setupLogger();
+    }
+
+    private void setupLogger() {
+        Configurator.setRootLevel(Level.DEBUG);
     }
 
     private Player getPlayerByPlayerType(final PlayerType playerType) {
@@ -220,12 +232,12 @@ public class GameMapImpl implements GameMap {
 
     // FIXME: think about better logging
     private void log(final Movable o) {
-        System.out.println(o.getClass() + " x: " + o.getPosition().x() + " y: " + o.getPosition().y());
+        LOGGER.debug(o.getClass() + " x: " + o.getPosition().x() + " y: " + o.getPosition().y());
         if (o instanceof Entity e) {
-            System.out.println("health: " + e.getCurrentHealth());
+            LOGGER.debug("health: " + e.getCurrentHealth());
         }
         if (o instanceof Projectile) {
-            System.out.println("direzione proiettile: " + o.getDirection());
+            LOGGER.debug("direzione proiettile: " + o.getDirection());
         }
     }
 
@@ -233,11 +245,11 @@ public class GameMapImpl implements GameMap {
         if (!e.canTakeDamage()) { 
             return;
         }
-        System.out.println("!!!!!! Projectile hit !!!!!!");  // FIXME: better logging
+        LOGGER.debug("!!!!!! Projectile hit !!!!!!");  // FIXME: better logging
         e.takeDamage((int) p.getDamage()); // FIXME: avoidable cast
         toRemove.add(p);
         if (e.getCurrentHealth() <= 0) {
-            System.out.println(e.getClass().toString() + " died!!!");  // FIXME: think about better logging
+            LOGGER.debug(e.getClass().toString() + " died!!!");  // FIXME: think about better logging
             toRemove.add(e);
         }
     }
