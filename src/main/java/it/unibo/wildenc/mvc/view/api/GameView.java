@@ -1,6 +1,8 @@
 package it.unibo.wildenc.mvc.view.api;
 
 import java.util.Collection;
+import java.util.List;
+
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 
@@ -39,5 +41,12 @@ public interface GameView {
      * Display the pause screen.
      */
     void pause();
+
+    /**
+     * Display the list of power up.
+     * @param powerUps List of power up.
+     * @return the player chose.
+     */
+    String powerUp(final List<String> powerUps);
 
 }
