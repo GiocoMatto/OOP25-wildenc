@@ -10,4 +10,6 @@ public interface Engine {
     // esporre solo per aggiungere il metodo.
     void processInput(MovementInput movement);
 
+    void onLeveUpChoise(String choise);
+
 }
