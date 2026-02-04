@@ -21,6 +21,12 @@ public interface Player extends Entity {
     int getExp();
 
     /**
+     * Adds experience points to the player.
+     * @param amount the experience to add.
+     */
+    void addExp(int amount);
+
+    /**
      * Sets the movement direction of the player.
      * This is typically called by an Input Controller.
      * * @param direction 
