@@ -7,6 +7,7 @@ import org.joml.Vector2d;
 import it.unibo.wildenc.mvc.model.Enemy;
 import it.unibo.wildenc.mvc.model.EnemyFactory;
 import it.unibo.wildenc.mvc.model.MapObject;
+import it.unibo.wildenc.mvc.model.enemies.AbstractEnemy.AbstractEnemyField;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
 /**
@@ -16,6 +17,9 @@ public class EnemyFactoryImpl implements EnemyFactory {
     /* Enemy */
     private static final double BASE_HITBOX_ENEMY = 5;
     private static final double BASE_VELOCITY_ENEMY = 1;
+    private static final int SMALL_LOOT = 15;
+    private static final int MID_LOOT = 40;
+    private static final int BIG_LOOT = 70;
     /* Projectile */
     private static final double BASE_COOLDOWN_PROJECTILE = 3;
     private static final double BASE_DAMAGE_PROJECTILE = 25;
@@ -62,14 +66,15 @@ public class EnemyFactoryImpl implements EnemyFactory {
      */
     @Override
     public Enemy closeRangeEnemy(final Vector2d spawnPosition, final int healt, final String name) {
-        final Enemy e = new CloseRangeEnemy(
+        final Enemy e = new CloseRangeEnemy(new AbstractEnemyField(
             spawnPosition, 
             BASE_HITBOX_ENEMY, 
             BASE_VELOCITY_ENEMY, 
             healt, 
             name, 
-            Optional.of(target)
-        );
+            Optional.of(target),
+            SMALL_LOOT
+        ));
         addMeleeWeaponTo(e);
         return e;
     }
@@ -79,14 +84,15 @@ public class EnemyFactoryImpl implements EnemyFactory {
      */
     @Override
     public Enemy closeRangeFastEnemy(final Vector2d spawnPosition, final int healt, final String name) {
-        final Enemy e = new CloseRangeEnemy(
+        final Enemy e = new CloseRangeEnemy(new AbstractEnemyField(
             spawnPosition, 
             BASE_HITBOX_ENEMY, 
             2 * BASE_VELOCITY_ENEMY, 
             healt, 
             name, 
-            Optional.of(target)
-        );
+            Optional.of(target),
+            SMALL_LOOT
+        ));
         addMeleeWeaponTo(e);
         return e;
     }
@@ -96,14 +102,15 @@ public class EnemyFactoryImpl implements EnemyFactory {
      */
     @Override
     public Enemy rangedEnemy(final Vector2d spawnPosition, final int healt, final String name) {
-        final Enemy e = new RangedEnemy(
+        final Enemy e = new RangedEnemy(new AbstractEnemyField(
             spawnPosition, 
             BASE_HITBOX_ENEMY, 
             BASE_VELOCITY_ENEMY, 
             healt, 
             name, 
-            Optional.of(target)
-        );
+            Optional.of(target),
+            MID_LOOT
+        ));
         addMeleeWeaponTo(e);
         return e;
     }
@@ -113,14 +120,15 @@ public class EnemyFactoryImpl implements EnemyFactory {
      */
     @Override
     public Enemy rangedDoubleShotEnemy(final Vector2d spawnPosition, final int healt, final String name) {
-        final Enemy e = new RangedEnemy(
+        final Enemy e = new RangedEnemy(new AbstractEnemyField(
             spawnPosition, 
             BASE_HITBOX_ENEMY, 
             BASE_VELOCITY_ENEMY, 
             healt, 
             name, 
-            Optional.of(target)
-        );
+            Optional.of(target),
+            MID_LOOT
+        ));
         addDefaultWeaponTo(e);
         addDefaultWeaponTo(e);
         return e;
@@ -131,13 +139,15 @@ public class EnemyFactoryImpl implements EnemyFactory {
      */
     @Override
     public Enemy roamingEnemy(final Vector2d spawnPosition, final int healt, final String name) {
-        final Enemy e = new RoamingEnemy(
+        final Enemy e = new RoamingEnemy(new AbstractEnemyField(
             spawnPosition, 
             BASE_HITBOX_ENEMY, 
             BASE_VELOCITY_ENEMY, 
             healt, 
-            name
-        );
+            name, 
+            Optional.empty(), 
+            BIG_LOOT
+        ));
         addMeleeWeaponTo(e);
         return e;
     }
@@ -147,13 +157,15 @@ public class EnemyFactoryImpl implements EnemyFactory {
      */
     @Override
     public Enemy roamingLongLifeEnemy(final Vector2d spawnPosition, final int healt, final String name) {
-        final Enemy e = new RoamingEnemy(
+        final Enemy e = new RoamingEnemy(new AbstractEnemyField(
             spawnPosition, 
             BASE_HITBOX_ENEMY, 
             BASE_VELOCITY_ENEMY, 
             healt + healt / 2, 
-            name
-        );
+            name, 
+            Optional.empty(), 
+            BIG_LOOT
+        ));
         addMeleeWeaponTo(e);
         return e;
     }

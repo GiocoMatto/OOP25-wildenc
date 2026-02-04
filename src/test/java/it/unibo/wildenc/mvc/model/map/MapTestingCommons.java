@@ -10,6 +10,7 @@ import it.unibo.wildenc.mvc.model.Enemy;
 import it.unibo.wildenc.mvc.model.EnemyFactory;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Weapon;
+import it.unibo.wildenc.mvc.model.enemies.AbstractEnemy.AbstractEnemyField;
 import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMapObject;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
@@ -52,7 +53,7 @@ public final class MapTestingCommons {
         }
 
         public Enemy getAsCloseRangeEnemy(Set<Weapon> weapons, String name, Optional<MapObject> target) {
-            final Enemy e = new CloseRangeEnemy(pos, hitbox, speed, health, name, target);
+            final Enemy e = new CloseRangeEnemy(new AbstractEnemyField(pos, hitbox, speed, health, name, target, 1));
             for (final var w : weapons) {
                 e.addWeapons(w);
             }

@@ -15,9 +15,10 @@ import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     private final Optional<MapObject> target;
     private final String name;
+    private final int loot;
 
     /**
-     * Create a new general Enemey.
+     * Parameters for a general enemy.
      * 
      * @param spawnPosition The position of spawn.
      * @param hitbox The area of map where the player can hit the nemey.
@@ -25,18 +26,34 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
      * @param health The health of the enemy.
      * @param name The name of the enemy.
      * @param target The Optional Position of the player to hit.
+     * @param loot The value enemy realse at his death.
      */
-    public AbstractEnemy(
-        final Vector2dc spawnPosition, 
-        final double hitbox, 
-        final double movementSpeedfinal, 
-        final int health, 
-        final String name,
-        final Optional<MapObject> target
-    ) {
-        super(spawnPosition, hitbox, movementSpeedfinal, health, new HashSet<>());
-        this.name = name;
-        this.target = target;
+    public record AbstractEnemyField(
+        Vector2dc spawnPosition, 
+        double hitbox, 
+        double movementSpeedfinal, 
+        int health, 
+        String name, 
+        Optional<MapObject> target, 
+        int loot
+    ) { }
+
+    /**
+     * Create a new general Enemey.
+     * 
+     * @param abf the {@link AbstractEnemyField} used to initialize the enemy.
+     */
+    public AbstractEnemy(final AbstractEnemyField abf) {
+        super(
+            abf.spawnPosition, 
+            abf.hitbox, 
+            abf.movementSpeedfinal, 
+            abf.health, 
+            new HashSet<>()
+        );
+        this.name = abf.name;
+        this.target = abf.target;
+        this.loot = abf.loot;
     }
 
     /**
@@ -73,6 +90,14 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     @Override
     public boolean canTakeDamage() {
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getLoot() {
+        return this.loot;
     }
 
 }

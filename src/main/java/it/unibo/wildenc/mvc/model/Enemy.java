@@ -21,4 +21,11 @@ public interface Enemy extends Entity {
      */
     Optional<MapObject> getTarget();
 
+    /**
+     * The loot that enemy release at his death.
+     * 
+     * @return the loot.
+     */
+    int getLoot();
+
 }
