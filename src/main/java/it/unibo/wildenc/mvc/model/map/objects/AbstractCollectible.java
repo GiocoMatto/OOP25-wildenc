@@ -3,8 +3,6 @@ package it.unibo.wildenc.mvc.model.map.objects;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Collectible;
-import it.unibo.wildenc.mvc.model.Player;
-
 /**
  * Implementation for collectible items
  */
@@ -23,11 +21,17 @@ public abstract class AbstractCollectible extends AbstractMapObject implements C
         this.value = value;
     }
 
+    @Override
+    public int getValue() {
+        return this.value;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public int getValue() {
-        return this.value;
+    public boolean isAlive() {
+        //i collectibles sono vivi finchè non vengono rimossi dalla mappa a seguito di una collisione
+        return true;
     }
 }
