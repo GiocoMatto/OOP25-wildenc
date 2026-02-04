@@ -65,4 +65,9 @@ public class PlayerImpl extends AbstractEntity implements Player {
         throw new UnsupportedOperationException("Unimplemented method 'getName'");
     }
 
+    @Override
+    public void addExp(final int amount) {
+        this.experience = this.experience + amount;
+    }
+
 }
