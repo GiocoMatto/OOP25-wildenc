@@ -42,11 +42,4 @@ public interface Weapon {
      * @return a {@link WeaponStats} object containing all the weapon's characteristics.
      */
     WeaponStats getStats();
-
-    /**
-     * Setter method for the new position to hit.
-     * 
-     * @param newPosToHit the {@link Supplier} of the new position to hit.
-     */
-    void setPosToHit(Supplier<Vector2dc> newPosToHit);
 }

@@ -47,7 +47,7 @@ public class WeaponFactory {
         final Entity ownedBy,
         final Supplier<Vector2dc> posToHit 
     ) {
-        return new GenericWeapon(
+        return new PointerWeapon(
             "BasicWeapon",
             baseCooldown,
             baseBurst,
