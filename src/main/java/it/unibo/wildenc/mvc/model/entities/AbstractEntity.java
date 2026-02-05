@@ -115,4 +115,9 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
      */
     protected abstract Vector2dc alterDirection();
 
+    public void getExp(int exp) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getExp'");
+    }
+
 }

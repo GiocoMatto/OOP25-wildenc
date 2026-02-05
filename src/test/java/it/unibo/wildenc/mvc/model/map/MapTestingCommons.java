@@ -80,8 +80,12 @@ public final class MapTestingCommons {
 
         @Override
         public String getName() {
+<<<<<<< HEAD
             // TODO Auto-generated method stub
             throw new UnsupportedOperationException("Unimplemented method 'getName'");
+=======
+            throw new UnsupportedOperationException("Not needed for testing.");
+>>>>>>> master
         }
 
     }
@@ -120,10 +124,15 @@ public final class MapTestingCommons {
 
         @Override
         public String getName() {
+<<<<<<< HEAD
             // TODO Auto-generated method stub
             throw new UnsupportedOperationException("Unimplemented method 'getName'");
         }
 
+=======
+            throw new UnsupportedOperationException("Not needed for testing.");
+        }
+>>>>>>> master
     }
 
     /**
@@ -241,11 +250,12 @@ public final class MapTestingCommons {
         private double baseVelocity;
         private double baseTTL;
         private int baseBurst;
-        private Function<Vector2dc, Supplier<Vector2d>> posToHit;
+        private int baseProjAtOnce;
+        private Function<Vector2dc, Supplier<Vector2dc>> posToHit;
 
         TestWeapon(final double baseCooldown, final double baseDamage, final double hbRadius, 
             final double baseVelocity, final double baseTTL, final int baseBurst, 
-            final Function<Vector2dc, Supplier<Vector2d>> posToHit) {
+            final Function<Vector2dc, Supplier<Vector2dc>> posToHit) {
             this.baseCooldown = baseCooldown;
             this.baseDamage = baseDamage;
             this.hbRadius = hbRadius;
@@ -262,6 +272,7 @@ public final class MapTestingCommons {
                 hbRadius,
                 baseVelocity,
                 baseTTL,
+                baseProjAtOnce,
                 baseBurst,
                 owner,
                 posToHit.apply(target)

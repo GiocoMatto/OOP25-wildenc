@@ -1,61 +1,61 @@
 package it.unibo.wildenc.mvc.model;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
 
+import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
+import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
+
 /**
- * Map of the game, it includes all core logic to update all the entities on it.
+ * Main game model logics, it provides infos outside of the model
  */
-public interface GameMap {
-
+public interface Game {
+    
     /**
-     * Get the player.
+     * Update every living object on this Map.
      * 
-     * @return the {@link Player}.
-     */
-    Player getPlayer();
-
-    /**
-     * Get all objects on this Map.
-     * 
-     * @return A {@link List} of all {@link MapObject}s on this Map.
-     */
-    List<MapObject> getAllObjects();
-
-    /**
-     * Adds all objects to this Map.
-     */
-    void addAllObjects(final Collection<? extends MapObject> mObjs);
-
-    /**
-     * Update every living object on this Map including collisions.
-     * 
-     * @param deltaTime how much to update in time;
+     * @param deltaTime how much to update in nanoseconds;
      * @param playerDirection the player-chosen direction as a {@link Vector2dc}.
      */
     void updateEntities(long deltaTime, Vector2dc playerDirection);
 
     /**
-     * Spawn enemies on the map.
-     */
-    void spawnEnemies();
-
-    /**
-     * Set the enemy spawn logic.
-     * 
-     * @param spawnLogic a {@link EnemySpawner} logic.
-     */
-    void setEnemySpawnLogic(EnemySpawner spawnLogic);
-
-<<<<<<< HEAD
-    /**
      * Whether the game is ended.
      * 
      * @return true if the game ended, false otherwise.
      */
-    boolean gameEnded();
+    boolean isGameEnded();
+
+    /**
+     * Notify which weapon was chosen.
+     * 
+     * @param wc chosen weapon.
+     */
+    void choosenWeapon(WeaponChoice wc);
+
+    /**
+     * Get the weapons to chose from when the player levels up.
+     * 
+     * @return A Set containing the weapons to choose from.
+     */
+    Set<WeaponChoice> weaponToChooseFrom();
+
+    /**
+     * Whether the player has levelled up.
+     * 
+     * @return true if the player has levelled up, false if not.
+     */
+    boolean hasPlayerLevelledUp();
+
+    /**
+     * Gets the game statistics such as kills, time.
+     * 
+     * @return a map with the statistics.
+     */
+    Map<String, Integer> getGameStatistics();
 
     /**
      * Constant default player types.
@@ -64,14 +64,16 @@ public interface GameMap {
         Charmender(10, 5, 100, (wf, p) -> {
             // FIXME: understand how to pass the Vector2d Supplier. It should be the mouse position.
             p.addWeapon(wf.getDefaultWeapon(
-                10, 
-                10, 
-                2,
-                20,
+                10.0, 
+                10.0, 
+                2.0,
+                2.0,
                 100,
                 1,
+                1,
                 p,
-                () -> new Vector2d(0, 0))); 
+                () -> new Vector2d(0, 0)
+            )); 
         }),
         Bulbasaur(20, 30, 200, (wf, p) -> {
             // p.addWeapon(wf.getMeleeWeapon(7, 5, p));
@@ -107,7 +109,7 @@ public interface GameMap {
         public record PlayerStats(int speed, double hitbox, int health,
             BiConsumer<WeaponFactory, Player> addDefaultWeapon) { }
     }
-
-=======
->>>>>>> master
+    
+    public record WeaponChoice(String name) {
+    }
 }
