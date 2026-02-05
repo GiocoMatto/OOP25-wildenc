@@ -11,14 +11,15 @@ import org.joml.Vector2d;
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.model.Entity;
-import it.unibo.wildenc.mvc.model.GameMap;
+import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.MapObject;
-import it.unibo.wildenc.mvc.model.GameMap.PlayerType;
+import it.unibo.wildenc.mvc.model.game.GameImpl;
+import it.unibo.wildenc.mvc.model.Game.PlayerType;
 import it.unibo.wildenc.mvc.model.map.GameMapImpl;
 import it.unibo.wildenc.mvc.view.api.GameView;
 
 public class EngineImpl implements Engine{
-    private final GameMap gm = new GameMapImpl(PlayerType.Charmender);
+    private final Game gm = new GameImpl(PlayerType.Charmender);
     private final List<GameView> views;
     private final GameLoop loop = new GameLoop();
 
