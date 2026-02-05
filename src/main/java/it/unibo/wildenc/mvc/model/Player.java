@@ -15,11 +15,16 @@ public interface Player extends Entity {
     void levelUp();
 
     /**
-     * Adds experience points to the player.
-     * * @param exp 
-     * the amount of experience to gain
+     * Get player's current exp (resets on level up).
      */
-    void getExp(int exp);
+    int getExp();
+
+    /**
+     * Whether the player can level up.
+     * 
+     * @return true if the player can level up, false otherwise.
+     */
+    boolean canLevelUp();
 
     /**
      * Sets the movement direction of the player.
