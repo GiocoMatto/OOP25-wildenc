@@ -19,6 +19,10 @@ public interface Engine {
 
     void startGameLoop();
 
+    void menu();
+
+    void shop();
+
     void Pokedex();
 
     void close();

@@ -106,8 +106,9 @@ public class EngineImpl implements Engine{
                     /**
                      * if (model.levelUp() {
                      *  setPause(true);
-                     *  view.levelUp();
-                     * }*/
+                     *  view.levelUp(model.getLevelUp());
+                     * }
+                    */
                     /*
                     * if (model.end()) {
                     *  view.end(model.getStatistic());
@@ -129,6 +130,16 @@ public class EngineImpl implements Engine{
             }
         }
 
+    }
+
+    @Override
+    public void menu() {
+        //view.menu();
+    }
+
+    @Override
+    public void shop() {
+        //view.shop();
     }
 
 }
