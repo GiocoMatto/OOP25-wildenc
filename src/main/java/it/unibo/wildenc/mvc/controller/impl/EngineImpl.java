@@ -1,10 +1,13 @@
 package it.unibo.wildenc.mvc.controller.impl;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.joml.Vector2d;
 import it.unibo.wildenc.mvc.controller.api.Engine;
@@ -23,7 +26,8 @@ import it.unibo.wildenc.mvc.view.api.GameView;
  * {@inheritDoc}.
  */
 public class EngineImpl implements Engine {
-    private final LinkedBlockingQueue<MovementInput> movements = new LinkedBlockingQueue<>();
+    //Set per i movimenti attivi, non piu queue
+    private final Set<MovementInput> activeMovements = Collections.synchronizedSet(new HashSet<>());
     private final SavedDataHandler dataHandler = new SavedDataHandlerImpl();
     private final List<GameView> views = new LinkedList<>();
     private final GameLoop loop = new GameLoop();
@@ -64,8 +68,12 @@ public class EngineImpl implements Engine {
      * {@inheritDoc}
      */
     @Override
-    public void processInput(final MovementInput movement) {
-        this.movements.add(movement);
+    public void processInput(final MovementInput movement, final boolean isPressed) {
+        if (isPressed) {
+            activeMovements.add(movement);
+        } else {
+            activeMovements.remove(movement);
+        }
     }
 
     /**
@@ -162,8 +170,18 @@ public class EngineImpl implements Engine {
                     final long now = System.nanoTime();
                     final long dt = now - lastTime;
                     lastTime = now;
-                    final var move = movements.poll();
-                    model.updateEntities(dt, (move != null) ? move.getVector() : new Vector2d(0, 0));
+                    final Vector2d movementVector;
+
+                    if (activeMovements.isEmpty()) {
+                        //se nessun tasto è premuto il giocatore non si muove
+                        movementVector = new Vector2d(0, 0);
+                    } else {
+                        //se ci sono tasti, l'InputHandler ne fa la somma
+                        movementVector = new Vector2d(ih.handleMovement(activeMovements));
+                    }
+                    //passo il nuovo vettore calcolato
+                    model.updateEntities(dt, movementVector);
+
                     if (model.hasPlayerLevelledUp()) {
                         setPause(true);
                         final var levelUpChoise = model.weaponToChooseFrom();

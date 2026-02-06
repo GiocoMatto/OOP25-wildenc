@@ -1,11 +1,14 @@
 package it.unibo.wildenc.mvc.view.impl;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+
 import java.util.Set;
 import it.unibo.wildenc.mvc.controller.api.Engine;
+import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
+import java.util.Map;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.geometry.Pos;
@@ -29,6 +32,13 @@ public class GameViewImpl implements GameView {
     private final Canvas canvas = new Canvas(1600, 900);
     private Collection<MapObjViewData> backupColl = List.of();
     private boolean gameStarted = false;
+    //mappa associa wasd ai comandi MovementInput
+    private final Map<KeyCode, MovementInput> keyToInputMap = Map.of(
+        KeyCode.W, MovementInput.GO_UP,
+        KeyCode.A, MovementInput.GO_LEFT,
+        KeyCode.S, MovementInput.GO_DOWN,
+        KeyCode.D, MovementInput.GO_RIGHT
+    );
 
     public GameViewImpl() {
         renderer = new ViewRendererImpl();        
@@ -58,9 +68,27 @@ public class GameViewImpl implements GameView {
         canvas.heightProperty().bind(root.heightProperty());
 
         root.getChildren().add(canvas);
-        gameStage.setScene(new Scene(root, 1600, 900));
+
+        final Scene scene = new Scene(root, 1600, 900);
+        //listener tasto premuto
+        scene.setOnKeyPressed(event -> {
+            if (keyToInputMap.containsKey(event.getCode())) {
+                eg.processInput(keyToInputMap.get(event.getCode()), true);
+            }
+        });
+        //listener tasto rilasciato
+        scene.setOnKeyReleased(event -> {
+            if (keyToInputMap.containsKey(event.getCode())) {
+                eg.processInput(keyToInputMap.get(event.getCode()), false);
+            }
+        });
+
+        gameStage.setScene(scene);
         gameStage.centerOnScreen();
         gameStage.show();
+        
+        root.requestFocus();
+        
     }
 
     /**
