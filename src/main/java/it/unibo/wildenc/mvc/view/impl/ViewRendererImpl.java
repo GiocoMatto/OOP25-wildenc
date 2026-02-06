@@ -73,7 +73,7 @@ public class ViewRendererImpl implements ViewRenderer {
     private void drawGrassTiles(GraphicsContext draw) {
         final double offsetX = -cameraX % SPRITE_SIZE;
         final double offsetY = -cameraY % SPRITE_SIZE;
-    
+
         for (double x = offsetX - SPRITE_SIZE; x < canvas.getWidth(); x += SPRITE_SIZE) {
             for (double y = offsetY - SPRITE_SIZE; y < canvas.getHeight(); y += SPRITE_SIZE) {
                 draw.drawImage(grassTile, x, y, SPRITE_SIZE, SPRITE_SIZE);

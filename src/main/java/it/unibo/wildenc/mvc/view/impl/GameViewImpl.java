@@ -3,7 +3,6 @@ package it.unibo.wildenc.mvc.view.impl;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.model.Game;

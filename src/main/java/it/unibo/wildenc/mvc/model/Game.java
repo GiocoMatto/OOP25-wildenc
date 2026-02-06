@@ -1,5 +1,6 @@
 package it.unibo.wildenc.mvc.model;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -10,10 +11,10 @@ import org.joml.Vector2dc;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
 /**
- * Main game model logics, it provides infos outside of the model
+ * Main game model logics, it provides infos outside of the model.
  */
 public interface Game {
-    
+
     /**
      * Update every living object on this Map.
      * 
@@ -58,10 +59,17 @@ public interface Game {
     Map<String, Integer> getGameStatistics();
 
     /**
+     * Gets all Map Objects (player included).
+     * 
+     * @return A {@link Collection} of all {@link MapObject}s inside the {@link GameMap} of the game.
+     */
+    Collection<MapObject> getAllMapObjects();
+
+    /**
      * Constant default player types.
      */
     enum PlayerType {
-        Charmender(10, 5, 100, (wf, p) -> {
+        CHARMANDER(10, 5, 100, (wf, p) -> {
             // FIXME: understand how to pass the Vector2d Supplier. It should be the mouse position.
             p.addWeapon(wf.getDefaultWeapon(
                 10.0, 
@@ -75,10 +83,10 @@ public interface Game {
                 () -> new Vector2d(0, 0)
             )); 
         }),
-        Bulbasaur(20, 30, 200, (wf, p) -> {
+        BULBASAUR(20, 30, 200, (wf, p) -> {
             // p.addWeapon(wf.getMeleeWeapon(7, 5, p));
         }),
-        Squirtle(10, 5, 90, (wf, p) -> {
+        SQUIRTLE(10, 5, 90, (wf, p) -> {
             // p.addWeapon(wf.getMeleeWeapon(8,4, p));
         });
 
@@ -109,7 +117,12 @@ public interface Game {
         public record PlayerStats(int speed, double hitbox, int health,
             BiConsumer<WeaponFactory, Player> addDefaultWeapon) { }
     }
-    
-    public record WeaponChoice(String name) {
+
+    /**
+     * Represents a weapon to choose from on level up.
+     * 
+     * @param name the name of the weapon.
+     */
+    record WeaponChoice(String name) {
     }
 }

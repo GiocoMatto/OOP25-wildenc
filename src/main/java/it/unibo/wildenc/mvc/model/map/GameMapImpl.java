@@ -59,8 +59,8 @@ public class GameMapImpl implements GameMap {
     @TestOnly
     GameMapImpl(final Player p, final EnemySpawner es, final Set<MapObject> initialObjs) {
         player = p;
-        setEnemySpawnLogic(es);
-        addAllObjects(initialObjs);
+        this.es = es;
+        mapObjects.addAll(initialObjs);
         setupLogger();
     }
 
@@ -82,6 +82,7 @@ public class GameMapImpl implements GameMap {
      * 
      * @param mObjs the objects to add.
      */
+    @Override
     public void addAllObjects(final Collection<? extends MapObject> mObjs) {
         mObjs.forEach(this::addObject);
     }
@@ -89,10 +90,8 @@ public class GameMapImpl implements GameMap {
     /**
      * Remove a {@link MapObject} from this Map.
      * 
-     * @param mObj 
-     *              the {@link MapObject} to remove
-     * @return
-     *              true if the {@link MapObject} was removed successfully
+     * @param mObj the {@link MapObject} to remove;
+     * @return true if the {@link MapObject} was removed successfully.
      */
     protected boolean removeObject(final MapObject mObj) {
         return mapObjects.remove(mObj);
@@ -143,14 +142,13 @@ public class GameMapImpl implements GameMap {
          * Check Collectibles
          */
         handleCollectibles(objToRemove);
-        /**
+        /*
          * Handle attacks
          */
         handleAttacks(deltaSeconds);
         // remove used objects
         mapObjects.removeAll(objToRemove);
     }
-
 
     private void handleCollectibles(final List<MapObject> objToRemove) {
         mapObjects.stream()
