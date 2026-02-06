@@ -9,6 +9,7 @@ import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.SavedData;
 import it.unibo.wildenc.mvc.controller.api.SavedDataHandler;
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
+import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.controller.api.InputHandler;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
@@ -168,14 +169,14 @@ public class EngineImpl implements Engine {
                         views.forEach(e -> e.lost(model.getGameStatistics()));
                         running = false;
                     }
-                    // view.updateSprites(model.getAllObjects().stream() //FIXME: and add getAllObjects().
+                    // final var mapObjs = model.getAllMapObjects().stream()
                     //     .map(e -> new MapObjViewData(
-                    //         "name", 
+                    //         e.getName(), 
                     //         e.getPosition().x(), 
-                    //         e.getPosition().y()
-                    //     ))
-                    //     .iterator()
-                    // );
+                    //         e.getPosition().y(),
+
+                    //     )).iterator();
+                    //views.forEach(e -> e.updateSprites(mapObjs));
                     Thread.sleep(SLEEP_TIME);
                 }
             } catch (final InterruptedException e) {
