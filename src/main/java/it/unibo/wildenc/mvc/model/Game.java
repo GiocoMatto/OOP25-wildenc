@@ -69,7 +69,7 @@ public interface Game {
      * Constant default player types.
      */
     enum PlayerType {
-        CHARMANDER(10, 15, 100, (wf, p) -> {
+        CHARMANDER(300, 15, 100, (wf, p) -> {
             // FIXME: understand how to pass the Vector2d Supplier. It should be the mouse position.
             p.addWeapon(wf.getDefaultWeapon(
                 3.0, 

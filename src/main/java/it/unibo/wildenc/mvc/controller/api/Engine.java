@@ -13,8 +13,9 @@ public interface Engine {
      * Accept che movement of the player.
      * 
      * @param movement the movemente of type {@link MovementInput}.
+     * @param isPressed true if a key is pressed, false if released
      */
-    void processInput(MovementInput movement);
+    void processInput(MovementInput movement, boolean isPressed);
 
     /**
      * Update the status of the gameLoop.
