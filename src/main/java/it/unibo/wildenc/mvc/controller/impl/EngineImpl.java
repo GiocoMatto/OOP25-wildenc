@@ -11,6 +11,7 @@ import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.controller.api.SavedData;
 import it.unibo.wildenc.mvc.controller.api.SavedDataHandler;
+import it.unibo.wildenc.mvc.controller.api.InputHandler;
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Game;
@@ -32,6 +33,7 @@ public class EngineImpl implements Engine {
     private volatile Game model;
     private Game.PlayerType playerType;
     private SavedData data;
+    private final InputHandler ih = new InputHandlerImpl();
 
     /**
      * The status of the game loop.
@@ -133,6 +135,16 @@ public class EngineImpl implements Engine {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void registerView(GameView gv) {
+        this.views.add(gv);
+        gv.start();
+        gv.setEngine(this);
+    }
+
+    /**
      * The game loop.
      */
     public final class GameLoop extends Thread {
@@ -195,12 +207,5 @@ public class EngineImpl implements Engine {
                 Thread.currentThread().interrupt();
             }
         }
-    }
-
-    @Override
-    public void registerView(GameView gv) {
-        this.views.add(gv);
-        gv.start();
-        gv.setEngine(this);
     }
 }

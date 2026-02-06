@@ -61,7 +61,12 @@ public interface Engine {
      * Close the game and save the data.
      */
     void close();
-    
+
+    /**
+     * Register the views.
+     * 
+     * @param gv view to register.
+     */
     void registerView(GameView gv);
 
 }

@@ -26,8 +26,10 @@ public interface GameMap {
 
     /**
      * Adds all objects to this Map.
+     * 
+     * @param mObjs objects to add to the map.
      */
-    void addAllObjects(final Collection<? extends MapObject> mObjs);
+    void addAllObjects(Collection<? extends MapObject> mObjs);
 
     /**
      * Update every living object on this Map including collisions.

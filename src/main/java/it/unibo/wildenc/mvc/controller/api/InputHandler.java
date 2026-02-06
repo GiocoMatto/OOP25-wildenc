@@ -9,10 +9,15 @@ import org.joml.Vector2dc;
  */
 public interface InputHandler {
 
+    interface Input {
+
+    }
+
+
     /**
      * Movement commands the Engine knows.
      */
-    public enum MovementInput {
+    public enum MovementInput implements Input {
         GO_UP(new Vector2d(0, 1)),
         GO_RIGHT(new Vector2d(1, 0)),
         GO_DOWN(new Vector2d(0, -1)),
@@ -32,7 +37,7 @@ public interface InputHandler {
     /**
      * Commands the Engine knows.
      */
-    public enum CommandInput {
+    public enum CommandInput implements Input {
         PAUSE,
         RESUME,
         QUIT;

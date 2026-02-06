@@ -1,12 +1,17 @@
 package it.unibo.wildenc.mvc.view.impl;
 
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.text.JTextComponent.KeyBinding;
+
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
-
+import it.unibo.wildenc.mvc.controller.api.InputHandler.CommandInput;
+import it.unibo.wildenc.mvc.controller.api.InputHandler.Input;
+import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.geometry.Pos;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;

@@ -18,27 +18,6 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     private final int loot;
 
     /**
-     * Parameters for a general enemy.
-     * 
-     * @param spawnPosition The position of spawn.
-     * @param hitbox The area of map where the player can hit the nemey.
-     * @param movementSpeedfinal the speed of movement of the enemy.
-     * @param health The health of the enemy.
-     * @param name The name of the enemy.
-     * @param target The Optional Position of the player to hit.
-     * @param loot The value enemy realse at his death.
-     */
-    public record AbstractEnemyField(
-        Vector2dc spawnPosition, 
-        double hitbox, 
-        double movementSpeedfinal, 
-        int health, 
-        String name, 
-        Optional<MapObject> target, 
-        int loot
-    ) { }
-
-    /**
      * Create a new general Enemey.
      * 
      * @param abf the {@link AbstractEnemyField} used to initialize the enemy.
@@ -99,5 +78,26 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     public int getLoot() {
         return this.loot;
     }
+
+    /**
+     * Parameters for a general enemy.
+     * 
+     * @param spawnPosition The position of spawn.
+     * @param hitbox The area of map where the player can hit the nemey.
+     * @param movementSpeedfinal the speed of movement of the enemy.
+     * @param health The health of the enemy.
+     * @param name The name of the enemy.
+     * @param target The Optional Position of the player to hit.
+     * @param loot The value enemy realse at his death.
+     */
+    public record AbstractEnemyField(
+        Vector2dc spawnPosition, 
+        double hitbox, 
+        double movementSpeedfinal, 
+        int health, 
+        String name, 
+        Optional<MapObject> target, 
+        int loot
+    ) { }
 
 }

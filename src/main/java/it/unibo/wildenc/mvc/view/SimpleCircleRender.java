@@ -14,7 +14,7 @@ public class SimpleCircleRender implements SpriteRender {
     private Canvas canvas;
 
     public SimpleCircleRender() {
-        
+
     }
 
     @Override
@@ -47,14 +47,14 @@ cc
             .findFirst()
             .orElse(Color.BLACK);
     }
-     
+
     public enum DrawInfos {
         PLAYER("player", Color.GREEN),
         ENEMY("enemy", Color.RED),
         PROJECTILE("projectile", Color.GRAY);
 
         private final Color color;
-        
+
         DrawInfos(String id, Color c) {
             color = c;
         }

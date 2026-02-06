@@ -24,7 +24,11 @@ public class EnemyFactoryImpl implements EnemyFactory {
     private static final double BASE_COOLDOWN_PROJECTILE = 3;
     private static final double BASE_DAMAGE_PROJECTILE = 25;
     private static final double BASE_HITBOX_PROJECTILE = 2;
+<<<<<<< HEAD
     private static final double BASE_VELOCITY_PROJECTILE = 3;
+=======
+    private static final double BASE_VELOCITY_PROJECTILE = 25 * 5;
+>>>>>>> fd215ffa92ad1253873f63d4923fb5f2489b959a
     private static final double BASE_TIME_TO_LIVE_PROJECTILE = 15;
     private static final int BASE_PROJ_AT_ONCE = 1;
     private static final int BASE_BURST_PROJECTILE = 5;
