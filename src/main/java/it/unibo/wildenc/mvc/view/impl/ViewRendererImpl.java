@@ -34,7 +34,7 @@ public class ViewRendererImpl implements ViewRenderer {
 
         draw.save();
         draw.scale(scale, scale);
-
+        
         drawGrassTiles(draw);
 
         updateCamera(

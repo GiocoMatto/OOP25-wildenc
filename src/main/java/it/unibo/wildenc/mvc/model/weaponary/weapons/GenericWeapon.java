@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
+
+import org.joml.Vector2dc;
 
 /**
  * Implementation of a generic {@link Weapon}. This will be used as a 
@@ -22,7 +25,7 @@ public class GenericWeapon implements Weapon {
 
     private final String weaponName;
     private final Function<WeaponStats, List<AttackContext>> attackInfoGenerator;
-    private final WeaponStats weaponStats;
+    protected final WeaponStats weaponStats;
     private double timeSinceLastAtk = Double.MAX_VALUE;
     private int currentBullet;
 
@@ -42,6 +45,7 @@ public class GenericWeapon implements Weapon {
         final double initialCooldown,
         final int initialBurst,
         final int initialProjAtOnce,
+        final Supplier<Vector2dc> posToHit,
         final ProjectileStats pStats,
         final BiConsumer<Integer, WeaponStats> upgradeLogics,
         final Function<WeaponStats, List<AttackContext>> attackInfoGenerator
@@ -51,6 +55,7 @@ public class GenericWeapon implements Weapon {
             pStats,
             initialBurst,
             initialProjAtOnce,
+            posToHit,
             upgradeLogics
         );
         this.attackInfoGenerator = attackInfoGenerator;
@@ -110,6 +115,6 @@ public class GenericWeapon implements Weapon {
      */
     @Override
     public String getName() {
-        return this.weaponName;
+        return "weapon:" + this.weaponName;
     }
 }

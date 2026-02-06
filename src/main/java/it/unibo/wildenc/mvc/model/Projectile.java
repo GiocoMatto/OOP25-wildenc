@@ -10,15 +10,7 @@ public interface Projectile extends Movable {
      * @return the damage of the projectile.
      */
     double getDamage();
-
-    /**
-     * Getter method for getting the projectile's ID. This will be useful to
-     * differentiate between different projectiles.
-     * 
-     * @return a {@link String} containing the ID of the projectile.
-     */
-    String getID();
-
+    
     /**
      * Method used to know if the projectile has lived more than its Time To Live.
      * 

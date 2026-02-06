@@ -35,17 +35,26 @@ public class SpriteManagerImpl implements SpriteManager {
 
     @Override
     public Sprite getSprite(int frameCount, MapObjViewData objData) {
-        if (objData.name().contains("Proj")) {
+        if (objData.name().contains("projectile") || objData.name().contains("collectible")) {
             return new Sprite(
-                this.loadedSpriteMap.get(objData.name().toLowerCase()),
+                this.loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1]),
                 0, 0
             );
+        } else {
+            if (loadedSpriteMap.containsKey(objData.name().toLowerCase().split(":")[1])) {
+                return new Sprite(
+                    loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1]),
+                    convertVersorToDominant(objData),
+                    ((frameCount / 24) % TOTAL_FRAMES) * SPRITE_SIZE
+                );
+            } else {
+                return new Sprite(
+                    loadedSpriteMap.get("missingno"),
+                    0, 0
+                );
+            }
         }
-        return new Sprite(
-            loadedSpriteMap.get(objData.name().toLowerCase().split(":")[0]),
-            convertVersorToDominant(objData),
-            ((frameCount / 24) % TOTAL_FRAMES) * SPRITE_SIZE
-        );
+
     }
 
     @Override
@@ -60,6 +69,10 @@ public class SpriteManagerImpl implements SpriteManager {
         if (data.name().contains("player")) {
             this.playerPosX = data.x();
             this.playerPosY = data.y();
+
+            if (Math.abs(dx) < 0.01 && Math.abs(dy) < 0.01) {
+                return 0;
+            }
         }
         
         if (Math.abs(dx) < 0.01 && Math.abs(dy) < 0.01) {

@@ -62,7 +62,7 @@ public class PlayerImpl extends AbstractEntity implements Player {
 
     @Override
     public String getName() {
-        return "player"; // FIXME: Change Player Name to something having sense.
+        return "player:player"; // FIXME: Add ID field to player and rename this to "player:" + this.playerid
     }
 
     @Override

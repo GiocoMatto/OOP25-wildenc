@@ -71,20 +71,20 @@ public interface Game {
     enum PlayerType {
         CHARMANDER(300, 15, 100, (wf, p) -> {
             // FIXME: understand how to pass the Vector2d Supplier. It should be the mouse position.
-            p.addWeapon(wf.getDefaultWeapon(
-                3.0, 
-                10.0, 
-                2.0,
-                2.0,
-                100,
+            p.addWeapon(wf.getDefaultPointerWeapon(
+                0.5, 
+                30.0, 
+                5.0,
+                100.0,
+                3,
                 1,
-                1,
+                5,
                 p,
                 () -> new Vector2d(1, 0)
             )); 
         }),
         BULBASAUR(20, 30, 200, (wf, p) -> {
-            p.addWeapon(wf.getDefaultWeapon(
+            p.addWeapon(wf.getDefaultPointerWeapon(
                 2,
                 30,
                 7,

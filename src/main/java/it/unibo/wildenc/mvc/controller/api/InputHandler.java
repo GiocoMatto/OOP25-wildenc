@@ -16,11 +16,12 @@ public interface InputHandler {
 
     /**
      * Movement commands the Engine knows.
+     * GO_UP decreases Y and GO_DOWN increases Y.
      */
     public enum MovementInput implements Input {
-        GO_UP(new Vector2d(0, 1)),
+        GO_UP(new Vector2d(0, -1)),
         GO_RIGHT(new Vector2d(1, 0)),
-        GO_DOWN(new Vector2d(0, -1)),
+        GO_DOWN(new Vector2d(0, 1)),
         GO_LEFT(new Vector2d(-1, 0));
 
         private final Vector2dc vect;

@@ -36,7 +36,7 @@ public class WeaponFactory {
      * @param posToHit the position which the projectiles have to follow
      * @return a {@link Weapon} with all the informations inserted.
      */
-    public Weapon getDefaultWeapon(
+    public Weapon getDefaultPointerWeapon(
         final double baseCooldown,
         final double baseDamage,
         final double hbRadius, 
@@ -45,21 +45,21 @@ public class WeaponFactory {
         final int baseProjAtOnce,
         final int baseBurst,
         final Entity ownedBy,
-        final Supplier<Vector2dc> posToHit 
+        final Supplier<Vector2dc> posToHit
     ) {
         return new PointerWeapon(
-            "BasicWeapon",
+            "BasicPointing",
             baseCooldown,
             baseBurst,
             baseProjAtOnce,
+            posToHit,
             new ProjectileStats(
                 baseDamage, 
                 hbRadius,
                 baseVelocity,
                 baseTTL,
-                "BasicProj",
+                "BasicPointing",
                 ownedBy,
-                posToHit,
                 (dt, atkInfo) -> {
                     final Vector2dc start = atkInfo.getLastPosition();
                     return new Vector2d(
@@ -82,7 +82,84 @@ public class WeaponFactory {
 
                     final Vector2dc origin = weaponStats.getProjStats().getOwner().getPosition();
                     final double velocity = weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY);
-                    final Vector2dc targetPos = weaponStats.getProjStats().getPositionToHit().get();
+                    final Vector2dc targetPos = weaponStats.getPosToHit().get();
+
+                    final Vector2d centralDirection = new Vector2d(targetPos).normalize();
+
+                    final List<AttackContext> projContext = new ArrayList<>();
+
+                    for (int i = 0; i < pelletNumber; i++) {
+                        final double currentAngle = (pelletNumber > 1) 
+                            ? - (totalArc / 2.0) + (i * (totalArc / (pelletNumber - 1))) 
+                            : 0;
+
+                        final double cos = Math.cos(currentAngle);
+                        final double sin = Math.sin(currentAngle);
+
+                        final double rotatedX = centralDirection.x() * cos - centralDirection.y() * sin;
+                        final double rotatedY = centralDirection.x() * sin + centralDirection.y() * cos;
+                        final Vector2d rotatedDir = new Vector2d(rotatedX, rotatedY);
+
+                        final Vector2d fakeTarget = new Vector2d(origin).add(rotatedDir);
+
+                        projContext.add(new AttackContext(
+                            origin, 
+                            velocity, 
+                            () -> fakeTarget
+                        ));
+                    }
+                    return projContext;
+                }
+        );
+    }
+
+    public Weapon getDefaultStaticPointWeapon(
+        final double baseCooldown,
+        final double baseDamage,
+        final double hbRadius, 
+        final double baseVelocity,
+        final double baseTTL,
+        final int baseProjAtOnce,
+        final int baseBurst,
+        final Entity ownedBy,
+        final Supplier<Vector2dc> posToHit
+    ) {
+        return new GenericWeapon(
+            "BasicWeapon",
+            baseCooldown,
+            baseBurst,
+            baseProjAtOnce,
+            posToHit,
+            new ProjectileStats(
+                baseDamage, 
+                hbRadius,
+                baseVelocity,
+                baseTTL,
+                "BasicWeapon",
+                ownedBy,
+                (dt, atkInfo) -> {
+                    final Vector2dc start = atkInfo.getLastPosition();
+                    return new Vector2d(
+                        start.x() + dt * atkInfo.getVelocity() * atkInfo.getDirectionVersor().x(),
+                        start.y() + dt * atkInfo.getVelocity() * atkInfo.getDirectionVersor().y()
+                    );
+                }),
+                (level, weaponStats) -> {
+                    weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, level * EXAMPLE_MULTIPLIER);
+                    weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, level);
+                    weaponStats.getProjStats().setMultiplier(
+                        ProjStatType.HITBOX, 
+                        weaponStats.getProjStats().getStatValue(ProjStatType.HITBOX) + level
+                    );
+                    weaponStats.setBurstSize(level);
+                },
+                weaponStats -> {
+                    final int pelletNumber = weaponStats.getProjectilesShotAtOnce();
+                    final double totalArc = Math.toRadians(45);
+
+                    final Vector2dc origin = weaponStats.getProjStats().getOwner().getPosition();
+                    final double velocity = weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY);
+                    final Vector2dc targetPos = weaponStats.getPosToHit().get();
 
                     final Vector2d centralDirection = new Vector2d(targetPos).sub(origin).normalize();
 

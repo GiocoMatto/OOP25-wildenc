@@ -19,14 +19,14 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
  */
 public class EnemyFactoryImpl implements EnemyFactory {
     /* Enemy */
-    private static final double BASE_HITBOX_ENEMY = 5;
+    private static final double BASE_HITBOX_ENEMY = 32;
     private static final double BASE_VELOCITY_ENEMY = 100;
     /* Projectile */
     private static final double BASE_COOLDOWN_PROJECTILE = 3;
     private static final double BASE_DAMAGE_PROJECTILE = 25;
     private static final double BASE_HITBOX_PROJECTILE = 2;
     private static final double BASE_VELOCITY_PROJECTILE = 25 * 5;
-    private static final double BASE_TIME_TO_LIVE_PROJECTILE = 15;
+    private static final double BASE_TIME_TO_LIVE_PROJECTILE = 3;
     private static final int BASE_PROJ_AT_ONCE = 1;
     private static final int BASE_BURST_PROJECTILE = 5;
     /* Collectible */
@@ -47,7 +47,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
     }
 
     private void addDefaultWeaponTo(final Enemy e) {
-        e.addWeapon(wf.getDefaultWeapon(
+        e.addWeapon(wf.getDefaultStaticPointWeapon(
             BASE_COOLDOWN_PROJECTILE,
             BASE_DAMAGE_PROJECTILE, 
             BASE_HITBOX_PROJECTILE, 
@@ -180,5 +180,4 @@ public class EnemyFactoryImpl implements EnemyFactory {
         addMeleeWeaponTo(e);
         return e;
     }
-
 }

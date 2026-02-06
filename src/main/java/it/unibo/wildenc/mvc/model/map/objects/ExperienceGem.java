@@ -17,6 +17,6 @@ public class ExperienceGem extends AbstractCollectible {
 
     @Override
     public String getName() {
-        return "experience";
+        return "collectible:experience";
     }
 }

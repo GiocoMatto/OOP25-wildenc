@@ -23,7 +23,6 @@ public class ProjectileStats {
     private final String projID;
     private final Entity projOwner;
     private final BiFunction<Double, AttackContext, Vector2d> projMovementFunction;
-    private final Supplier<Vector2dc> positionToFollow;
 
     /**
      * Constructor for the class. This will be passed to a Projectile when it will be generated,
@@ -35,8 +34,6 @@ public class ProjectileStats {
      * @param ttl the time of life of the Projectile, after which it's considered gone
      * @param id an identifier for the Projectile
      * @param ownedBy the {@link Entity} who generated this Projectile
-     * @param toFollow a {@link Supplier} of {@link Vector2dc} which represent a 
-     *      position which the Projectile has to follow
      * @param moveFunc the function that defines the Projectile's movement
      */
     public ProjectileStats(
@@ -46,7 +43,6 @@ public class ProjectileStats {
         final double ttl,
         final String id,
         final Entity ownedBy,
-        final Supplier<Vector2dc> toFollow,
         final BiFunction<Double, AttackContext, Vector2d> moveFunc
 
     ) {
@@ -56,7 +52,6 @@ public class ProjectileStats {
         this.timeToLive = ttl;
         this.projID = id;
         this.projOwner = ownedBy;
-        this.positionToFollow = toFollow;
         this.projMovementFunction = moveFunc;
     }
 
@@ -86,17 +81,6 @@ public class ProjectileStats {
      */
     public BiFunction<Double, AttackContext, Vector2d> getMovementFunction() {
         return this.projMovementFunction;
-    }
-
-    /**
-     * Getter method for returning the supplier that is currently giving
-     * the direction for the projectile to follow.
-     * 
-     * @return a {@link Supplier} of {@link Vector2dc} which 
-     *      contains the position which the projectile has to follow.
-     */
-    public Supplier<Vector2dc> getPositionToHit() {
-        return this.positionToFollow;
     }
 
     /**

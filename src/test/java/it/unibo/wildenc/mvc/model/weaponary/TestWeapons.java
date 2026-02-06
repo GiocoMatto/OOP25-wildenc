@@ -55,7 +55,7 @@ public class TestWeapons {
 
     @BeforeEach
     public void setup() {
-        this.myWeapon = weapFactory.getDefaultWeapon(
+        this.myWeapon = weapFactory.getDefaultPointerWeapon(
             TEST_COOLDOWN, 
             TEST_DAMAGE, 
             TEST_HITBOX, 

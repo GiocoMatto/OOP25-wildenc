@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.joml.Vector2d;
+import org.joml.Vector2dc;
+
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.controller.api.SavedData;
@@ -20,8 +22,9 @@ import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import it.unibo.wildenc.mvc.model.game.GameImpl;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerWeapon;
+import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
-
 /**
  * {@inheritDoc}.
  */
@@ -41,7 +44,7 @@ public class EngineImpl implements Engine {
     /**
      * The status of the game loop.
      */
-    public enum STATUS { RUNNING, PAUSE }
+    public enum STATUS {RUNNING, PAUSE}
 
     /**
      * Create a Engine.
@@ -191,6 +194,23 @@ public class EngineImpl implements Engine {
                         views.forEach(e -> e.lost(model.getGameStatistics()));
                         running = false;
                     }
+                    final Vector2dc currentMousePos = (views.stream()
+                        .filter(view -> view instanceof GamePointerView)
+                        .map(view -> (GamePointerView) view)
+                        .findFirst()
+                        .get()
+                        .getMousePointerInfo()
+                    );
+
+                    model.getAllMapObjects().stream()
+                        .filter(o -> o instanceof Entity)
+                        .map(e -> (Entity) e)
+                        .flatMap(e -> e.getWeapons().stream())
+                        .filter(w -> w instanceof PointerWeapon)
+                        .forEach(wp -> {
+                            ((PointerWeapon) wp).setPosToHit(() -> currentMousePos);
+                        });
+                    
                     final Collection<MapObjViewData> mapDataColl = model.getAllMapObjects().stream()
                         .map(mapObj -> {
                             if (mapObj instanceof Entity e) {

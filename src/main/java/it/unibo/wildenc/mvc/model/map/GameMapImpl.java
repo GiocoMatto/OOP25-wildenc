@@ -142,7 +142,7 @@ public class GameMapImpl implements GameMap {
      */
     @Override
     public void spawnEnemies(final double deltaSeconds) {
-        int enemyCount = (int) mapObjects.stream().filter(e -> e instanceof Enemy).count();
+        int enemyCount = (int) mapObjects.parallelStream().filter(e -> e instanceof Enemy).count();
         this.addAllObjects(es.spawn(player, enemyCount, deltaSeconds));
     }
 
@@ -163,7 +163,7 @@ public class GameMapImpl implements GameMap {
     }
 
     private void handleCollectibles(final Set<MapObject> objToRemove) {
-        mapObjects.stream()
+        mapObjects.parallelStream()
             .filter(e -> e instanceof Collectible)
             .map(e -> (Collectible) e)
             .filter(c -> CollisionLogic.areColliding(player, c))
@@ -174,18 +174,18 @@ public class GameMapImpl implements GameMap {
     }
 
     private void handleEnemyHits(final Set<MapObject> objToRemove) {
-        final List<Projectile> projectiles = getAllObjects().stream()
+        final List<Projectile> projectiles = getAllObjects().parallelStream()
             .filter(e -> e instanceof Projectile)
             .map(e -> (Projectile) e)
             .filter(p -> p.getOwner() instanceof Player)
             .toList();
-        final List<Enemy> enemies = getAllObjects().stream()
+        final List<Enemy> enemies = getAllObjects().parallelStream()
             .filter(e -> e instanceof Enemy)
             .map(e -> (Enemy) e)
             .toList();
-        projectiles.stream()
+        projectiles.parallelStream()
             .forEach(p -> {
-                enemies.stream()
+                enemies.parallelStream()
                     .filter(e -> CollisionLogic.areColliding(e, p))
                     .findFirst()
                     .ifPresent(e -> projectileHit(p, e, objToRemove));
@@ -193,7 +193,7 @@ public class GameMapImpl implements GameMap {
     }
 
     private void checkPlayerHits(final Set<MapObject> objToRemove) {
-        mapObjects.stream()
+        mapObjects.parallelStream()
             .filter(e -> e instanceof Projectile)
             .map(o -> (Projectile) o)
             .filter(p -> p.getOwner() instanceof Enemy) // check only Projectiles shot by enemies
@@ -202,7 +202,7 @@ public class GameMapImpl implements GameMap {
     }
 
     private void updateObjectPositions(final double deltaSeconds, final Set<MapObject> toRemove) {
-        mapObjects.stream()
+        mapObjects.parallelStream()
             .filter(e -> e instanceof Movable)
             .map(o -> (Movable) o)
             // .peek(this::log) // FIXME: temp just for debug phase
@@ -213,6 +213,7 @@ public class GameMapImpl implements GameMap {
                     toRemove.add(o);
                 }
             });
+        LOGGER.debug(mapObjects.size());
     }
 
     private void log(final Movable o) {
@@ -243,12 +244,12 @@ public class GameMapImpl implements GameMap {
     }
 
     private void handleAttacks(final double deltaSeconds) {
-        final List<MapObject> toAdd = new LinkedList<>();
-        Stream.concat(Stream.of(player), this.getAllObjects().stream())
+        final List<MapObject> toAdd = Collections.synchronizedList(new ArrayList<>());
+        Stream.concat(Stream.of(player), this.getAllObjects().parallelStream())
             .filter(e -> e instanceof Entity)
             .map(e -> (Entity) e)
             .forEach(e -> {
-                e.getWeapons().stream()
+                e.getWeapons().parallelStream()
                     .forEach(w -> {
                         toAdd.addAll(w.attack(deltaSeconds));
                     });

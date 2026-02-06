@@ -132,7 +132,7 @@ public class EnemySpawnerImpl implements EnemySpawner {
      */
     @Override
     public Set<Enemy> spawn(final Player p, final int enemyCount, final double tick) {
-        final int target = BASE_ENEMY + (int) Math.pow(p.getExp(), ENEMY_LOAD_FACTOR);
+        final int target = BASE_ENEMY + (int) Math.pow(p.getExp() / 1000, ENEMY_LOAD_FACTOR);
         final int n = Math.max(0, target - enemyCount);
         this.totalTime = (int) (this.totalTime + tick);
         final int life = START_LIFE + (int) (totalTime * LIFE_LOAD_FACTOR);

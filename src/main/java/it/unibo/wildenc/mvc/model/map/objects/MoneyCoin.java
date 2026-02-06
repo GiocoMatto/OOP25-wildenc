@@ -17,7 +17,7 @@ public class MoneyCoin extends AbstractCollectible {
 
     @Override
     public String getName() {
-        return "money";
+        return "collectible:coin";
     }
 }
 

@@ -268,7 +268,7 @@ public final class MapTestingCommons {
         }
 
         Weapon getAsWeapon(final Entity owner, final Vector2dc target) {
-            return new WeaponFactory().getDefaultWeapon(
+            return new WeaponFactory().getDefaultPointerWeapon(
                 baseCooldown,
                 baseDamage,
                 hbRadius,

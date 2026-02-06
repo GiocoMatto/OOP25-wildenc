@@ -17,7 +17,7 @@ public class WeaponStats {
     private int burstSize;
     private int currentLevel = 1;
     private int projectilesAtOnce;
-    private final ProjectileStats pStats;
+    private ProjectileStats pStats;
     private Supplier<Vector2dc> posToHit;
     private final BiConsumer<Integer, WeaponStats> upgradeLogics;
 
@@ -35,6 +35,7 @@ public class WeaponStats {
         final ProjectileStats projStats,
         final int initialBurst,
         final int initialProjQuantity,
+        final Supplier<Vector2dc> initialPosToHit,
         final BiConsumer<Integer, WeaponStats> upLogics
     ) {
         this.weaponCooldown = initialCooldown;
@@ -42,7 +43,7 @@ public class WeaponStats {
         this.burstSize = initialBurst;
         this.projectilesAtOnce = initialProjQuantity;
         this.upgradeLogics = upLogics;
-        this.posToHit = () -> new Vector2d(0, 0);
+        this.posToHit = initialPosToHit;
     }
 
     /**
@@ -71,7 +72,7 @@ public class WeaponStats {
     public int getCurrentBurstSize() {
         return this.burstSize;
     }
-
+    
     /**
      * Setter method for the burst size.
      * 

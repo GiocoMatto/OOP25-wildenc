@@ -27,7 +27,7 @@ public class InputHandlerImpl implements InputHandler {
         final Vector2d effectiveMovementVersor = new Vector2d(0, 0);
         movementCommands.stream()
             .forEach(movInput -> effectiveMovementVersor.add(new Vector2d(movInput.getVector())));
-        return effectiveMovementVersor.normalize();
+        return !effectiveMovementVersor.equals(new Vector2d(0, 0)) ? effectiveMovementVersor.normalize() : new Vector2d(0, 0);
     }
 
     @Override

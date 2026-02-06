@@ -44,7 +44,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
      */
     @Override
     public String getName() {
-        return this.name;
+        return "enemy:" + this.name;
     }
 
     /**

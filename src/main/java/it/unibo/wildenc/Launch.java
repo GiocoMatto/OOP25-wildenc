@@ -1,5 +1,4 @@
 package it.unibo.wildenc;
-
 import javafx.application.Application;
 
 public class Launch {

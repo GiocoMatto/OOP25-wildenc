@@ -5,11 +5,16 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import java.util.Set;
+
+import org.joml.Vector2d;
+import org.joml.Vector2dc;
+
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import java.util.Map;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.geometry.Pos;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
@@ -25,7 +30,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class GameViewImpl implements GameView {
+public class GameViewImpl implements GameView, GamePointerView {
     private Engine eg; // TODO: should be final?
     private final ViewRenderer renderer;
     private Stage gameStage = new Stage(StageStyle.DECORATED);
@@ -39,6 +44,8 @@ public class GameViewImpl implements GameView {
         KeyCode.S, MovementInput.GO_DOWN,
         KeyCode.D, MovementInput.GO_RIGHT
     );
+    private volatile double mouseX;
+    private volatile double mouseY;
 
     public GameViewImpl() {
         renderer = new ViewRendererImpl();        
@@ -66,6 +73,11 @@ public class GameViewImpl implements GameView {
         final VBox root = new VBox();
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
+
+        canvas.setOnMouseMoved(e -> {
+            mouseX = e.getSceneX() - (gameStage.getWidth() / 2);
+            mouseY = e.getSceneY() - (gameStage.getHeight() / 2);
+        });
 
         root.getChildren().add(canvas);
 
@@ -104,6 +116,11 @@ public class GameViewImpl implements GameView {
         this.backupColl = mObj;
         renderer.clean();
         renderer.renderAll(mObj);
+    }
+
+    @Override
+    public Vector2dc getMousePointerInfo() {
+        return new Vector2d(mouseX, mouseY);
     }
 
     /**
@@ -201,5 +218,4 @@ public class GameViewImpl implements GameView {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'shop'");
     }
-
 }

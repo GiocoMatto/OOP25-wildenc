@@ -21,34 +21,32 @@ import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 public class PointerWeapon extends GenericWeapon {
 
     public PointerWeapon(
-        String weaponName, 
-        double initialCooldown, 
-        int initialBurst, 
-        int initialProjAtOnce,
-        ProjectileStats pStats, 
-        BiConsumer<Integer, WeaponStats> upgradeLogics,
-        Function<WeaponStats, List<AttackContext>> attackInfoGenerator
+        final String weaponName, 
+        final double initialCooldown, 
+        final int initialBurst, 
+        final int initialProjAtOnce,
+        final Supplier<Vector2dc> initialPosToHit,
+        final ProjectileStats pStats,
+        final BiConsumer<Integer, WeaponStats> upgradeLogics,
+        final Function<WeaponStats, List<AttackContext>> attackInfoGenerator
     ) {
-        super(weaponName, initialCooldown, initialBurst, initialProjAtOnce, pStats, upgradeLogics, attackInfoGenerator);
+        super(
+            weaponName, 
+            initialCooldown, 
+            initialBurst, 
+            initialProjAtOnce, 
+            initialPosToHit,
+            pStats, 
+            upgradeLogics, 
+            attackInfoGenerator
+        );
     }
 
     /**
      * {@inheritDoc}
      */
     public void setPosToHit(final Supplier<Vector2dc> newPosToHit) {
-        this.getStats().setPosToHit(newPosToHit);
-    }
+        this.weaponStats.setPosToHit(newPosToHit);
 
-    /**
-     * Method for generating projectiles off an AttackContext list.
-     * Note that in this case, the following position is calculated
-     * based off the one which is updated in the weapon.
-     */
-    protected Set<Projectile> generateProjectiles(final List<AttackContext> contexts) {
-    contexts.stream()
-        .forEach(e -> e.setFollowing(this.getStats().getPosToHit()));
-    return contexts.stream()
-        .map(e -> new ConcreteProjectile(e, this.getStats().getProjStats()))
-        .collect(Collectors.toSet());
     }
 }

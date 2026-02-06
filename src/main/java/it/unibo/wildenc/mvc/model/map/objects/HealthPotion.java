@@ -17,7 +17,7 @@ public class HealthPotion extends AbstractCollectible {
 
     @Override
     public String getName() {
-        return "health_potion";
+        return "collectible:health_potion";
     }
 }
 

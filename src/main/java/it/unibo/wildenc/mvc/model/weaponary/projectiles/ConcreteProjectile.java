@@ -13,12 +13,10 @@ import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStat
  * as a schematic for modelling any projectile weapons can shoot.
  */
 public class ConcreteProjectile extends AbstractMovable implements Projectile {
-
-    private static final double MS_TO_S = 1000.0;
-
+    
     private final ProjectileStats projStats;
     private final AttackContext attackInformation;
-    private long lastMovement = System.currentTimeMillis();
+    private double timePassed;
 
     /**
      * Constructor of the class.
@@ -37,6 +35,7 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
             pStats.getStatValue(ProjStatType.VELOCITY)
         );
         this.projStats = pStats;
+        this.timePassed = 0;
         this.attackInformation = atkInfo;
     }
 
@@ -52,7 +51,7 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
             attackInformation
         ));
         this.attackInformation.updateLastPosition(getPosition());
-        lastMovement = System.currentTimeMillis();
+        this.timePassed += deltaTime;
     }
 
     /**
@@ -67,8 +66,8 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
      * {@inheritDoc}
      */
     @Override
-    public String getID() {
-        return this.projStats.getID();
+    public String getName() {
+        return "projectile:" + this.projStats.getID();
     }
 
     /**
@@ -76,7 +75,7 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
      */
     @Override
     public boolean isAlive() {
-        return (System.currentTimeMillis() - lastMovement) / MS_TO_S < this.projStats.getTTL();
+        return this.timePassed < this.projStats.getTTL();
     }
 
     /**
@@ -93,11 +92,6 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
     @Override
     public Entity getOwner() {
         return this.projStats.getOwner();
-    }
-
-    @Override
-    public String getName() {
-        return this.projStats.getID();
     }
 }
 
