@@ -10,37 +10,51 @@ import org.joml.Vector2dc;
  * Class for representing important information used in an attack.
  */
 public class AttackContext {
+
     private Vector2dc lastPosition;
     private Vector2dc atkVersorDirection;
-    private Supplier<Vector2d> toFollow;
+    private Supplier<Vector2dc> toFollow;
     private double velocity;
 
     /**
      * Constructor for the class.
-     * @param initialDirection the direction of the attack in degrees
-     * @param entityToFollow an {@link Optional} of a {@link Supplier} for a position to follow.
+     * 
+     * @param initialPosition the position where the Projectile will start.
+     * @param velocity the Projectile's velocity
+     * @param positionToFollow the position which the Projectile has to follow.
      */
     public AttackContext(
         final Vector2dc initialPosition,
         final double velocity,
-        Supplier<Vector2d> postionToFollow
+        final Supplier<Vector2dc> positionToFollow
     ) {
         this.lastPosition = initialPosition;
-        this.toFollow = postionToFollow;
+        this.toFollow = positionToFollow;
         this.velocity = velocity;
         this.atkVersorDirection = new Vector2d(this.toFollow.get()).sub(initialPosition).normalize();
     }
 
     /**
      * Getter method for the position the attack has to follow.
-     * @return the {@link Optional} of a {@link Supplier} for a position to follow. Could be empty.
+     * 
+     * @return a {@link Supplier} for a position to follow. Could be empty.
      */
-    public Supplier<Vector2d> getFollowing() {
+    public Supplier<Vector2dc> getFollowing() {
         return this.toFollow;
     }
 
     /**
+     * Setter method for the position the attack has to follow.
+     * 
+     * @param newFollow the new {@link Supplier} which gives the direction.
+     */
+    public void setFollowing(final Supplier<Vector2dc> newFollow) {
+        this.toFollow = newFollow;
+    }
+
+    /**
      * Getter method for the direction versor which the attack has to follow.
+     * 
      * @return a {@link Vector2d} representing the direction versor the attack has to follow.
      */
     public Vector2dc getDirectionVersor() {
@@ -49,6 +63,7 @@ public class AttackContext {
 
     /**
      * Getter method for the angle which the attack has to follow.
+     * 
      * @return the angle of the direction of the attack.
      */
     public double getActualAngle() {
@@ -57,6 +72,7 @@ public class AttackContext {
 
     /**
      * Getter method for returning the last reference point.
+     * 
      * @return the point contained in toFollow if present, if not the last position occupied by the Projectile.
      */
     public Vector2dc getLastPosition() {
@@ -65,6 +81,7 @@ public class AttackContext {
 
     /**
      * Method for updating the last occupied position by the Projectile.
+     * 
      * @param newPos the new position occupied by the Projectile.
      */
     public void updateLastPosition(final Vector2dc newPos) {
@@ -73,6 +90,7 @@ public class AttackContext {
 
     /**
      * Setter method for changing the angle of the direction of the attack.
+     * 
      * @param newDirection the new direction, in degrees, to be set.
      */
     public void setDirection(final double newDirection) {
@@ -85,6 +103,7 @@ public class AttackContext {
     /**
      * Setter method for setting the current velocity of the projectile.
      * This could be also an angular velocity.
+     * 
      * @param newVel the new velocity assumed by the projectile.
      */
     public void setVelocity(final double newVel) {
@@ -92,7 +111,8 @@ public class AttackContext {
     }
 
     /**
-     * Getter method for the velocity of the attack
+     * Getter method for the velocity of the attack.
+     * 
      * @return the velocity of the projectile.
      */
     public double getVelocity() {
@@ -101,6 +121,7 @@ public class AttackContext {
 
     /**
      * Method to create a protective copy of this class.
+     * 
      * @return a copy of this object.
      */
     public AttackContext protectiveCopy() {

@@ -1,9 +1,9 @@
 package it.unibo.wildenc.mvc.model.weaponary.weapons;
 
+import it.unibo.wildenc.mvc.model.Projectile;
 import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ConcreteProjectile;
-import it.unibo.wildenc.mvc.model.weaponary.projectiles.Projectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 
 import java.util.List;
@@ -20,73 +20,94 @@ public class GenericWeapon implements Weapon {
 
     private static final double BURST_DELAY = 0.2;
 
-    private WeaponStats weaponStats;
-    private int level = 0;
-    private double timeSinceLastAtk = Double.MAX_VALUE;
     private final String weaponName;
-    private int currentBullet = 0;
-    Function<ProjectileStats, List<AttackContext>> attackInfoGenerator;
+    private final Function<WeaponStats, List<AttackContext>> attackInfoGenerator;
+    private final WeaponStats weaponStats;
+    private double timeSinceLastAtk = Double.MAX_VALUE;
+    private int currentBullet;
 
+    /**
+     * Constructor for the class.
+     * 
+     * @param weaponName the name of the weapon.
+     * @param initialCooldown the initial cooldown of the weapon.
+     * @param initialBurst the initial quantity of Projectiles in a burst.
+     * @param initialProjAtOnce the initial quantity of Projectile shot in one attack.
+     * @param pStats the statistics of the Projectile this weapon will shoot.
+     * @param upgradeLogics the logics of upgrading for this weapon.
+     * @param attackInfoGenerator a {@link Function} specifing how the Projectiles should be shot.
+     */
     public GenericWeapon(
-        final double cooldown,
+        final String weaponName,
+        final double initialCooldown,
+        final int initialBurst,
+        final int initialProjAtOnce,
         final ProjectileStats pStats,
         final BiConsumer<Integer, WeaponStats> upgradeLogics,
-        final Function<ProjectileStats, List<AttackContext>> attackInfoGenerator,
-        final int initialBurst,
-        final String weaponName
+        final Function<WeaponStats, List<AttackContext>> attackInfoGenerator
     ) {
         this.weaponStats = new WeaponStats(
-            cooldown, pStats, initialBurst, upgradeLogics
+            initialCooldown,
+            pStats,
+            initialBurst,
+            initialProjAtOnce,
+            upgradeLogics
         );
         this.attackInfoGenerator = attackInfoGenerator;
         this.weaponName = weaponName;
     }
 
     /**
-     * {@inheritDocs}
+     * {@inheritDoc}
      */
     @Override
     public Set<Projectile> attack(final double deltaTime) {
         this.timeSinceLastAtk += deltaTime;
-        if(canBurst()) {
-            if(!isInCooldown()) {
+        if (canBurst()) {
+            if (!isInCooldown()) {
                 currentBullet = 0;
             }
             currentBullet++;
             timeSinceLastAtk = 0;
-            return generateProjectiles(this.attackInfoGenerator.apply(this.weaponStats.pStats()));
+            return generateProjectiles(this.attackInfoGenerator.apply(this.weaponStats));
         }
         return Set.of();
     }
 
     /**
-     * {@inheritDocs}
+     * {@inheritDoc}
      */
     @Override
     public void upgrade() {
-        this.weaponStats.upgradeLogics().accept(this.level, this.weaponStats);
+        this.weaponStats.levelUp();
     }
-    
-    // This method is used for testing purposes only.
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public WeaponStats getStats() {
         return this.weaponStats;
     }
 
     private boolean isInCooldown() {
-        return timeSinceLastAtk < this.weaponStats.weaponCooldown();
+        return timeSinceLastAtk < this.weaponStats.getCooldown();
     }
 
     private boolean canBurst() {
-        return !isInCooldown() ? true :
-            (currentBullet < this.weaponStats.burstSize() && timeSinceLastAtk >= BURST_DELAY);
+        return !isInCooldown() 
+            || (currentBullet < this.weaponStats.getCurrentBurstSize() && timeSinceLastAtk >= BURST_DELAY);
     }
 
-    private Set<Projectile> generateProjectiles(List<AttackContext> contexts) {
+    protected Set<Projectile> generateProjectiles(final List<AttackContext> contexts) {
         return contexts.stream()
-            .map(e -> new ConcreteProjectile(e, this.weaponStats.pStats()))
+            .map(e -> new ConcreteProjectile(e, this.weaponStats.getProjStats()))
             .collect(Collectors.toSet());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getName() {
         return this.weaponName;

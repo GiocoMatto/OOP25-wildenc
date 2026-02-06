@@ -2,9 +2,12 @@ package it.unibo.wildenc.mvc.model.enemies;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
-import it.unibo.wildenc.mvc.model.*;
+import it.unibo.wildenc.mvc.model.Collectible;
+import it.unibo.wildenc.mvc.model.Enemy;
+import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 
 /**
@@ -14,28 +17,24 @@ import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     private final Optional<MapObject> target;
     private final String name;
+    private final Set<Collectible> loot;
 
     /**
      * Create a new general Enemey.
-     * @param spawnPosition The position of spawn.
-     * @param hitbox The area of map where the player can hit the nemey.
-     * @param movementSpeedfinal the speed of movement of the enemy.
-     * @param health The health of the enemy.
-     * @param weapons The weapon that can hit the player.
-     * @param name The name of the enemy.
-     * @param target The Optional Position of the player to hit.
+     * 
+     * @param abf the {@link AbstractEnemyField} used to initialize the enemy.
      */
-    public AbstractEnemy(
-        final Vector2dc spawnPosition, 
-        final double hitbox, 
-        final double movementSpeedfinal, 
-        final int health, 
-        final String name,
-        final Optional<MapObject> target
-    ) {
-        super(spawnPosition, hitbox, movementSpeedfinal, health, new HashSet<>());
-        this.name = name;
-        this.target = target;
+    public AbstractEnemy(final AbstractEnemyField abf) {
+        super(
+            abf.spawnPosition, 
+            abf.hitbox, 
+            abf.movementSpeedfinal, 
+            abf.health, 
+            new HashSet<>()
+        );
+        this.name = abf.name;
+        this.target = abf.target;
+        this.loot = abf.loot;
     }
 
     /**
@@ -56,6 +55,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
 
     /**
      * Calculate the direction betwen two vectors.
+     * 
      * @param v1 Destinatino vector.
      * @param v2 Origin vector.
      * @return The vector.
@@ -72,5 +72,34 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     public boolean canTakeDamage() {
         return true;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<Collectible> getLoot() {
+        return this.loot;
+    }
+
+    /**
+     * Parameters for a general enemy.
+     * 
+     * @param spawnPosition The position of spawn.
+     * @param hitbox The area of map where the player can hit the nemey.
+     * @param movementSpeedfinal the speed of movement of the enemy.
+     * @param health The health of the enemy.
+     * @param name The name of the enemy.
+     * @param target The Optional Position of the player to hit.
+     * @param loot The value enemy realse at his death.
+     */
+    public record AbstractEnemyField(
+        Vector2dc spawnPosition, 
+        double hitbox, 
+        double movementSpeedfinal, 
+        int health, 
+        String name, 
+        Optional<MapObject> target, 
+        Set<Collectible> loot
+    ) { }
 
 }

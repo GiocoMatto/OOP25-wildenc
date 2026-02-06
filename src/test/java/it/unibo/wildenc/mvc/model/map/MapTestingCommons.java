@@ -13,9 +13,12 @@ import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.Weapon;
+import it.unibo.wildenc.mvc.model.enemies.AbstractEnemy.AbstractEnemyField;
 import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
+import it.unibo.wildenc.mvc.model.map.objects.AbstractCollectible;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMapObject;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
+import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
@@ -23,6 +26,9 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
  * Testing constants for the map.
  */
 public final class MapTestingCommons {
+    /* Collectible */
+    private static final double HITBOX_COLLECTIBLE = 5;
+    private static final int VALUE_COLLECTIBLE = 34;
 
     /**
      * 1 second in nanoseconds.
@@ -218,7 +224,15 @@ public final class MapTestingCommons {
          */
         public CloseRangeEnemy getAsCloseRangeEnemy(final Set<Weapon> weapons, final String name, 
             final Optional<MapObject> target) {
-            final CloseRangeEnemy e = new CloseRangeEnemy(pos, hitbox, speed, health, name, target);
+            final CloseRangeEnemy e = new CloseRangeEnemy(new AbstractEnemyField(
+                pos, 
+                hitbox, 
+                speed, 
+                health, 
+                name, 
+                target, 
+                Set.of(new ExperienceGem(pos, VALUE_COLLECTIBLE))));
+                
             for (final var w : weapons) {
                 e.addWeapon(w);
             }
@@ -238,11 +252,12 @@ public final class MapTestingCommons {
         private double baseVelocity;
         private double baseTTL;
         private int baseBurst;
-        private Function<Vector2dc, Supplier<Vector2d>> posToHit;
+        private int baseProjAtOnce;
+        private Function<Vector2dc, Supplier<Vector2dc>> posToHit;
 
         TestWeapon(final double baseCooldown, final double baseDamage, final double hbRadius, 
             final double baseVelocity, final double baseTTL, final int baseBurst, 
-            final Function<Vector2dc, Supplier<Vector2d>> posToHit) {
+            final Function<Vector2dc, Supplier<Vector2dc>> posToHit) {
             this.baseCooldown = baseCooldown;
             this.baseDamage = baseDamage;
             this.hbRadius = hbRadius;
@@ -259,6 +274,7 @@ public final class MapTestingCommons {
                 hbRadius,
                 baseVelocity,
                 baseTTL,
+                baseProjAtOnce,
                 baseBurst,
                 owner,
                 posToHit.apply(target)

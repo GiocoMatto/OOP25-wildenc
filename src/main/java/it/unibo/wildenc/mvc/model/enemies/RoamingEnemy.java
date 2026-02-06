@@ -1,6 +1,5 @@
 package it.unibo.wildenc.mvc.model.enemies;
 
-import java.util.Optional;
 import java.util.Random;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
@@ -17,35 +16,24 @@ public class RoamingEnemy extends AbstractEnemy {
     private final Random rand;
     private Vector2d actualTarget;
 
+    /**
+     * Create a new roaming Enemey.
+     * 
+     * @param abf the {@link AbstractEnemyField} used to initialize the enemy.
+     */
+    public RoamingEnemy(final AbstractEnemyField abf) {
+        super(abf);
+        this.rand = new Random();
+        updateDirection();
+        this.steps = 0;
+        this.startTime = System.currentTimeMillis();
+    }
+
     private void updateDirection() {
         this.actualTarget = new Vector2d(
             rand.nextInt() * STEP_FOR_CHANGE_DIRECTION + this.getPosition().x(), 
             rand.nextInt() * STEP_FOR_CHANGE_DIRECTION + this.getPosition().y()
         );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public RoamingEnemy(
-        final Vector2dc spawnPosition, 
-        final double hitbox, 
-        final double movementSpeedfinal, 
-        final int health,
-        final String name
-    ) {
-        super(
-            spawnPosition, 
-            hitbox, 
-            movementSpeedfinal, 
-            health, 
-            name,
-            Optional.empty()
-        );
-        this.rand = new Random();
-        updateDirection();
-        this.steps = 0;
-        this.startTime = System.currentTimeMillis();
     }
 
     /**

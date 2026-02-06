@@ -6,7 +6,7 @@ import it.unibo.wildenc.mvc.model.Player;
 
 public class ExperienceGem extends AbstractCollectible {
 
-    protected ExperienceGem(Vector2dc position, int value) {
+    public ExperienceGem(Vector2dc position, int value) {
         super(position, 5.0, value);
     }
 

@@ -1,0 +1,92 @@
+@startuml GameArchitecture
+
+' =========================
+'  Skin
+' =========================
+
+skinparam shadowing false
+skinparam roundcorner 5
+skinparam dpi 150
+
+skinparam DefaultFontName "Inter"
+skinparam DefaultFontSize 12
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #F9F9F9
+  BorderColor #BFBFBF
+  FontColor #333333
+}
+
+skinparam Arrow {
+  Color #9E9E9E
+  Thickness 1
+}
+
+hide circle
+hide empty members
+
+' =========================
+'  Classes
+' =========================
+
+' Subtitle for classes: 
+' \n<size:10><i>(from model)</i></size>
+class "Game\n<size:10><i>(from Model)</i></size>" {
+  +update(long time, Vector2D playerDirection) : void
+  +getEliminations() : List<String>
+  +getCoins() : int
+  +isGameEnded() : boolean
+  +isPlayerLevelUp() : boolean
+  +getWeaponChoice() : List<>
+}
+
+enum "PlayerType\n<size:10><i>(from Model)</i></size>" {
+
+}
+
+class "Engine\n<size:10><i>(from Controller)</i></size>" {
+  +startGameLoop() : void
+  
+}
+
+enum "Input\n<size:10><i>(from Controller)</i></size>" {
+
+}
+
+class "InputHandler\n<size:10><i>(from Controller)</i></size>" {
+  +handleCommand(Set<Input> d) : Vector2D
+  +handleAttackDirection(Point2D target) : Vector2D
+}
+
+class "DataHandler\n<size:10><i>(from Controller)</i></size>" {
+  +updateCoins() : void
+  +updatePokedex() : void
+  +getCoins() : int
+  +getPokedex() : Map<String, Integer>
+}
+
+class "GameView\n<size:10><i>(from View)</i></size>" <<Interface>> {
+  +updateSprites(Collection<Point2D> ...entities) : void
+  +getPointerTarget() : Point2D
+}
+
+class "UI\n<size:10><i>(from View)</i></size>" {
+
+}
+
+"Game\n<size:10><i>(from Model)</i></size>" --* "Engine\n<size:10><i>(from Controller)</i></size>"
+
+"PlayerType\n<size:10><i>(from Model)</i></size>" -down- "Game\n<size:10><i>(from Model)</i></size>"
+
+"Input\n<size:10><i>(from Controller)</i></size>" -left- "Engine\n<size:10><i>(from Controller)</i></size>"
+"Input\n<size:10><i>(from Controller)</i></size>" -up- "GameView\n<size:10><i>(from View)</i></size>"
+
+"InputHandler\n<size:10><i>(from Controller)</i></size>" -up-* "Engine\n<size:10><i>(from Controller)</i></size>"
+"DataHandler\n<size:10><i>(from Controller)</i></size>" -up-* "Engine\n<size:10><i>(from Controller)</i></size>"
+
+"GameView\n<size:10><i>(from View)</i></size>" --o "Engine\n<size:10><i>(from Controller)</i></size>"
+
+"UI\n<size:10><i>(from View)</i></size>" --|> "GameView\n<size:10><i>(from View)</i></size>"
+
+@enduml 

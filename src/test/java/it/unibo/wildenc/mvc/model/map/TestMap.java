@@ -6,7 +6,7 @@ import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.enemies.EnemySpawnerImpl;
 import it.unibo.wildenc.mvc.model.Enemy;
-
+import it.unibo.wildenc.mvc.model.map.GameMapImpl;
 import it.unibo.wildenc.mvc.model.map.MapTestingCommons.MapObjectTest;
 import it.unibo.wildenc.mvc.model.map.MapTestingCommons.MovableObjectTest;
 import it.unibo.wildenc.mvc.model.map.MapTestingCommons.TestDirections;
@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 public class TestMap {
 
     private GameMap getEmptyMapWithObjects(final Player player, final Set<MapObject> objs) {
-        return new GameMapImpl(player, (p, s) -> Set.of(), objs);
+        return new GameMapImpl(player, (p, s, t) -> Set.of(), objs);
     }
 
     private GameMap getMapWithEnemySpawner(final Player player) {
@@ -141,7 +141,7 @@ public class TestMap {
         final GameMap map = getMapWithEnemySpawner(getEmptyPlayer());
         final var initialSize = map.getAllObjects().size();
 
-        map.spawnEnemies();
+        map.spawnEnemies(TEST_TIME_SECONDS);
 
         assertTrue(map.getAllObjects().size() > initialSize, "No enemies were spawend.");
     }

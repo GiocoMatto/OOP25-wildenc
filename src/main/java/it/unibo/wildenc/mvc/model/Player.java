@@ -26,9 +26,21 @@ public interface Player extends Entity {
      */
     void addExp(int amount);
 
+    /**
+     * Adds money coins
+     * @param amount money to add
+     */
     void addMoney(int amount);
+
+    /**
+     * @return current money
+     */
     int getMoney();
 
+    /**
+     * 
+     * @param amount of heal to add
+     */
     void heal(int amount);
 
     /**
@@ -38,5 +50,11 @@ public interface Player extends Entity {
      * the new direction vector (as a {@link Vector2dc})
      */
     void setDirection(Vector2dc direction);
+
+    /**
+     * 
+     * @return 
+     */
+    boolean canLevelUp();
 
 }

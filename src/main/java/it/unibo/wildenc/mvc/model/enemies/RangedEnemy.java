@@ -1,9 +1,7 @@
 package it.unibo.wildenc.mvc.model.enemies;
 
-import java.util.Optional;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
-import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.map.CollisionLogic;
 
 /**
@@ -14,24 +12,12 @@ public class RangedEnemy extends AbstractEnemy {
     public static final int MIN_DISTANCE = 80;
 
     /**
-     * {@inheritDoc}
+     * Create a new ranged Enemey.
+     * 
+     * @param abf the {@link AbstractEnemyField} used to initialize the enemy.
      */
-    public RangedEnemy(
-        final Vector2dc spawnPosition, 
-        final double hitbox, 
-        final double movementSpeedfinal, 
-        final int health,
-        final String name,
-        final Optional<MapObject> target
-    ) {
-        super(
-            spawnPosition, 
-            hitbox, 
-            movementSpeedfinal, 
-            health, 
-            name,
-            target
-        );
+    public RangedEnemy(final AbstractEnemyField abf) {
+        super(abf);
     }
 
     /**
@@ -44,7 +30,7 @@ public class RangedEnemy extends AbstractEnemy {
         } else if (CollisionLogic.areInRange(this, getTarget().get(), MIN_DISTANCE)) {
             return direction(this.getPosition(), getTarget().get().getPosition()).normalize();
         }
-        return new Vector2d(0 ,0);
+        return new Vector2d(0, 0);
     }
 
 }
