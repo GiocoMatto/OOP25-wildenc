@@ -1,6 +1,7 @@
 package it.unibo.wildenc.mvc.model;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Enemy that attack a target.
@@ -26,6 +27,6 @@ public interface Enemy extends Entity {
      * 
      * @return the loot.
      */
-    int getLoot();
+    Set<Collectible> getLoot();
 
 }

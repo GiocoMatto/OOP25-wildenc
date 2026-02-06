@@ -2,8 +2,10 @@ package it.unibo.wildenc.mvc.model.enemies;
 
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
+import it.unibo.wildenc.mvc.model.Collectible;
 import it.unibo.wildenc.mvc.model.Enemy;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
@@ -15,7 +17,7 @@ import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     private final Optional<MapObject> target;
     private final String name;
-    private final int loot;
+    private final Set<Collectible> loot;
 
     /**
      * Create a new general Enemey.
@@ -75,7 +77,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
      * {@inheritDoc}
      */
     @Override
-    public int getLoot() {
+    public Set<Collectible> getLoot() {
         return this.loot;
     }
 
@@ -97,7 +99,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
         int health, 
         String name, 
         Optional<MapObject> target, 
-        int loot
+        Set<Collectible> loot
     ) { }
 
 }

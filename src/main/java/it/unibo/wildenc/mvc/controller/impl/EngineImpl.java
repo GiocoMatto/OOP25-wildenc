@@ -173,7 +173,7 @@ public class EngineImpl implements Engine {
                         views.forEach(e -> e.lost(model.getGameStatistics()));
                         running = false;
                     }
-                    Collection<MapObjViewData> mapDataColl = model.getAllMapObjects().stream()
+                    final Collection<MapObjViewData> mapDataColl = model.getAllMapObjects().stream()
                         .map(mapObj -> {
                             if (mapObj instanceof Entity e) {
                                 return new MapObjViewData(

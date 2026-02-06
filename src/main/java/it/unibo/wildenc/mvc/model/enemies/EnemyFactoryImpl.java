@@ -1,13 +1,15 @@
 package it.unibo.wildenc.mvc.model.enemies;
 
 import java.util.Optional;
-
+import java.util.Set;
 import org.joml.Vector2d;
-
+import org.joml.Vector2dc;
+import it.unibo.wildenc.mvc.model.Collectible;
 import it.unibo.wildenc.mvc.model.Enemy;
 import it.unibo.wildenc.mvc.model.EnemyFactory;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.enemies.AbstractEnemy.AbstractEnemyField;
+import it.unibo.wildenc.mvc.model.map.objects.AbstractCollectible;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
 /**
@@ -17,9 +19,6 @@ public class EnemyFactoryImpl implements EnemyFactory {
     /* Enemy */
     private static final double BASE_HITBOX_ENEMY = 5;
     private static final double BASE_VELOCITY_ENEMY = 100;
-    private static final int SMALL_LOOT = 15;
-    private static final int MID_LOOT = 40;
-    private static final int BIG_LOOT = 70;
     /* Projectile */
     private static final double BASE_COOLDOWN_PROJECTILE = 3;
     private static final double BASE_DAMAGE_PROJECTILE = 25;
@@ -28,6 +27,9 @@ public class EnemyFactoryImpl implements EnemyFactory {
     private static final double BASE_TIME_TO_LIVE_PROJECTILE = 15;
     private static final int BASE_PROJ_AT_ONCE = 1;
     private static final int BASE_BURST_PROJECTILE = 5;
+    /* Collectible */
+    private static final double HITBOX_COLLECTIBLE = 5;
+    private static final int VALUE_COLLECTIBLE = 34;
 
     private final WeaponFactory wf;
     private final MapObject target;
@@ -64,6 +66,24 @@ public class EnemyFactoryImpl implements EnemyFactory {
         // ));
     }
 
+    private Collectible experienceLoot(final Vector2dc pos) {
+        return new AbstractCollectible(pos, HITBOX_COLLECTIBLE, VALUE_COLLECTIBLE) {
+
+            @Override
+            public boolean isAlive() {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'isAlive'");
+            }
+
+            @Override
+            public String getName() {
+                // TODO Auto-generated method stub
+                throw new UnsupportedOperationException("Unimplemented method 'getName'");
+            }
+
+        };
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -76,7 +96,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
             healt, 
             name, 
             Optional.of(target),
-            SMALL_LOOT
+            Set.of(experienceLoot(spawnPosition))
         ));
         addMeleeWeaponTo(e);
         return e;
@@ -94,7 +114,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
             healt, 
             name, 
             Optional.of(target),
-            SMALL_LOOT
+            Set.of(experienceLoot(spawnPosition))
         ));
         addMeleeWeaponTo(e);
         return e;
@@ -112,7 +132,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
             healt, 
             name, 
             Optional.of(target),
-            MID_LOOT
+            Set.of(experienceLoot(spawnPosition))
         ));
         addMeleeWeaponTo(e);
         return e;
@@ -130,7 +150,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
             healt, 
             name, 
             Optional.of(target),
-            MID_LOOT
+            Set.of(experienceLoot(spawnPosition))
         ));
         addDefaultWeaponTo(e);
         addDefaultWeaponTo(e);
@@ -149,7 +169,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
             healt, 
             name, 
             Optional.empty(), 
-            BIG_LOOT
+            Set.of(experienceLoot(spawnPosition))
         ));
         addMeleeWeaponTo(e);
         return e;
@@ -167,7 +187,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
             healt + healt / 2, 
             name, 
             Optional.empty(), 
-            BIG_LOOT
+            Set.of(experienceLoot(spawnPosition))
         ));
         addMeleeWeaponTo(e);
         return e;
