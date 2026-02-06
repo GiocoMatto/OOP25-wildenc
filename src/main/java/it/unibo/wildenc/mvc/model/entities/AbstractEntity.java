@@ -34,7 +34,7 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
         final Vector2dc spawnPosition, 
         final double hitbox, 
         final double movementSpeed, 
-        final int health,
+        final double health,
         final Set<Weapon> weapons
     ) {
         super(spawnPosition, hitbox, movementSpeed);

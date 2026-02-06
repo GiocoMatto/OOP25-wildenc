@@ -231,7 +231,7 @@ public final class MapTestingCommons {
                 health, 
                 name, 
                 target, 
-                Set.of(new ExperienceGem(pos, VALUE_COLLECTIBLE))));
+                Set.of(m -> new ExperienceGem(m.getPosition(), VALUE_COLLECTIBLE))));
                 
             for (final var w : weapons) {
                 e.addWeapon(w);

@@ -19,7 +19,6 @@ import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
 import it.unibo.wildenc.mvc.model.enemies.RangedEnemy;
 import it.unibo.wildenc.mvc.model.enemies.RoamingEnemy;
 import it.unibo.wildenc.mvc.model.map.CollisionLogic;
-import it.unibo.wildenc.mvc.model.map.objects.AbstractCollectible;
 import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
 
 public class EnemyTest {
@@ -112,7 +111,7 @@ public class EnemyTest {
 
     @Test
     public void CloseRangeEnemyTest() {
-        this.enemy = new CloseRangeEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_1), Set.of(experienceLoot(SPAWN_POSITION))));
+        this.enemy = new CloseRangeEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_1), Set.of(e -> experienceLoot(e.getPosition()))));
         int count = 0;
         while (!CollisionLogic.areColliding(enemy, TARGET_1)) {
             enemy.updatePosition(DELTA_SECONDS);
@@ -124,7 +123,7 @@ public class EnemyTest {
     @Test
     public void RangedEnemyTest() {
         /* enemy is fare away the player */
-        this.enemy = new RangedEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_2), Set.of(experienceLoot(SPAWN_POSITION))));
+        this.enemy = new RangedEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_2), Set.of(e -> experienceLoot(e.getPosition()))));
         int count = 0;
         while (!CollisionLogic.areInRange(enemy, TARGET_2, RangedEnemy.MAX_DISTANCE)) {
             enemy.updatePosition(DELTA_SECONDS);
@@ -132,7 +131,7 @@ public class EnemyTest {
         }
         assertEquals(1, count);
         /* enemy is too much near the player */
-        this.enemy = new RangedEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_3), Set.of(experienceLoot(SPAWN_POSITION))));
+        this.enemy = new RangedEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_3), Set.of(e -> experienceLoot(e.getPosition()))));
         count = 0;
         while (CollisionLogic.areInRange(enemy, TARGET_3, RangedEnemy.MIN_DISTANCE)) {
             enemy.updatePosition(DELTA_SECONDS);
@@ -144,7 +143,7 @@ public class EnemyTest {
     @Test
     public void RoamingEnemyTest() {
         /* Try enemy is immortal for 5s */
-        this.enemy = new RoamingEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.empty(), Set.of(experienceLoot(SPAWN_POSITION))));
+        this.enemy = new RoamingEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.empty(), Set.of(e -> experienceLoot(e.getPosition()))));
         try {
             Thread.sleep(RoamingEnemy.TIME_SAFE);
             assertTrue(((Entity)enemy).canTakeDamage());

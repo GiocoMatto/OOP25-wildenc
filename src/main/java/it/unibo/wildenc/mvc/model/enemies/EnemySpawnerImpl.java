@@ -54,11 +54,11 @@ public class EnemySpawnerImpl implements EnemySpawner {
         ),
         REAL_LEGEND(
             new Range(90, 97), 
-            (ef, o, l) -> ef.closeRangeEnemy(o, l, pickRandom(ROAMING_ENEMY_NAMES))
+            (ef, o, l) -> ef.roamingEnemy(o, l, pickRandom(ROAMING_ENEMY_NAMES))
         ),
         SUPER_LEGEND(
             new Range(97, 100), 
-            (ef, o, l) -> ef.closeRangeEnemy(o, l, pickRandom(ROAMING_ENEMY_NAMES))
+            (ef, o, l) -> ef.roamingLongLifeEnemy(o, l, pickRandom(ROAMING_ENEMY_NAMES))
         );
 
         private final Range range;
