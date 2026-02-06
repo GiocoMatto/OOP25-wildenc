@@ -1,5 +1,6 @@
 package it.unibo.wildenc.mvc.model;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -56,6 +57,13 @@ public interface Game {
      * @return a map with the statistics.
      */
     Map<String, Integer> getGameStatistics();
+
+    /**
+     * Gets all Map Objects (player included).
+     * 
+     * @return A {@link Collection} of all {@link MapObject}s inside the {@link GameMap} of the game.
+     */
+    Collection<MapObject> getAllMapObjects();
 
     /**
      * Constant default player types.

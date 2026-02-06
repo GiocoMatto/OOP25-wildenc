@@ -1,13 +1,16 @@
 package it.unibo.wildenc.mvc.model.game;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.GameMap;
+import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.map.GameMapImpl;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
@@ -48,6 +51,11 @@ public class GameImpl implements Game {
         }
         // Spawn enemies into the map by its logic
         map.spawnEnemies(deltaTime); //FIXME: nano to seconds.
+    }
+
+    @Override
+    public Collection<MapObject> getAllMapObjects() {
+        return Stream.concat(Stream.of(map.getPlayer()), map.getAllObjects().stream()).toList();
     }
 
     /**
