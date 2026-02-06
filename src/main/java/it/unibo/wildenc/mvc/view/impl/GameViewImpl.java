@@ -1,12 +1,12 @@
 package it.unibo.wildenc.mvc.view.impl;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
-
+import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.geometry.Pos;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
@@ -15,11 +15,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -83,7 +80,7 @@ public class GameViewImpl implements GameView {
      * {@inheritDoc}
      */
     @Override
-    public void lost() {
+    public void lost(final Map<String, Integer> lostInfo) {
         // JOptionPane.showMessageDialog(frame, "You lost!");
         // System.exit(0);
     }
@@ -98,13 +95,13 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public String powerUp(final List<String> powerUps) {
+    public String powerUp(final Set<Game.WeaponChoice> powerUps) {
         final Stage powerUpStage = new Stage();
         powerUpStage.setTitle("Scegli un arma nuova o un Potenziamento");
         powerUpStage.initModality(Modality.APPLICATION_MODAL);
         powerUpStage.initOwner(this.gameStage);
         ListView<String> listView = new ListView<>();
-        listView.getItems().addAll(powerUps);
+        listView.getItems().addAll(powerUps.stream().map(e -> e.name()).toList());
         listView.getSelectionModel().selectFirst();
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -152,6 +149,18 @@ public class GameViewImpl implements GameView {
         });
         Scene scene = new Scene(listView, 500, 500);
         this.gameStage.setScene(scene);
+    }
+
+    @Override
+    public void menu() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'menu'");
+    }
+
+    @Override
+    public void shop() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'shop'");
     }
 
 }

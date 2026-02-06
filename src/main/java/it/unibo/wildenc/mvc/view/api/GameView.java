@@ -1,10 +1,11 @@
 package it.unibo.wildenc.mvc.view.api;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.model.Game;
 
 public interface GameView {
 
@@ -35,7 +36,7 @@ public interface GameView {
     /**
      * Display the loss screen.
      */
-    void lost();
+    void lost(Map<String, Integer> lostInfo);
 
     /**
      * Display the pause screen.
@@ -43,11 +44,21 @@ public interface GameView {
     void pause();
 
     /**
+     * Display the menu.
+     */
+    void menu();
+
+    /**
+     * Display the shop.
+     */
+    void shop();
+
+    /**
      * Display the list of power up.
      * @param powerUps List of power up.
      * @return the player chose.
      */
-    String powerUp(List<String> powerUps);
+    String powerUp(Set<Game.WeaponChoice> powerUps);
 
     /**
      * Display the list of pokemok killed.

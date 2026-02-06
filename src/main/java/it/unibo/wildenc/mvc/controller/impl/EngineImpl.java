@@ -1,6 +1,8 @@
 package it.unibo.wildenc.mvc.controller.impl;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import org.joml.Vector2d;
 import it.unibo.wildenc.mvc.controller.api.Engine;
@@ -8,9 +10,9 @@ import it.unibo.wildenc.mvc.controller.api.SavedData;
 import it.unibo.wildenc.mvc.controller.api.SavedDataHandler;
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import it.unibo.wildenc.mvc.model.game.GameImpl;
 import it.unibo.wildenc.mvc.view.api.GameView;
-import it.unibo.wildenc.mvc.view.impl.GameViewImpl;
 
 /**
  * {@inheritDoc}.
@@ -18,7 +20,7 @@ import it.unibo.wildenc.mvc.view.impl.GameViewImpl;
 public class EngineImpl implements Engine {
     private final LinkedBlockingQueue<MovementInput> movements = new LinkedBlockingQueue<>();
     private final SavedDataHandler dataHandler = new SavedDataHandlerImpl();
-    private final GameView view = new GameViewImpl();
+    private final List<GameView> views = new LinkedList<>();
     private final GameLoop loop = new GameLoop();
     private final Object pauseLock = new Object();
     private volatile STATUS gameStatus = STATUS.RUNNING;
@@ -40,8 +42,6 @@ public class EngineImpl implements Engine {
         } catch (final ClassNotFoundException | IOException e) {
             this.data = new SavedDataImpl();
         }
-        view.setEngine(this);
-        view.start();
     }
 
     /**
@@ -66,7 +66,7 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void onLeveUpChoise(final String choise) {
-        //model.aggiornastastisticheplayer;
+        this.model.choosenWeapon(new WeaponChoice(choise));
         setPause(false);
     }
 
@@ -94,7 +94,7 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void pokedex() {
-        view.pokedexView(data.getPokedex());
+        this.views.forEach(e -> e.pokedexView(data.getPokedex()));
     }
 
     /**
@@ -114,7 +114,7 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void menu() {
-        //view.menu();
+        this.views.forEach(e -> e.menu());
     }
 
     /**
@@ -122,7 +122,7 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void shop() {
-        //view.shop();
+        this.views.forEach(e -> e.shop());
     }
 
     /**
@@ -130,8 +130,9 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void registerView(final GameView gv) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'registerView'");
+        this.views.add(gv);
+        gv.setEngine(this);
+        gv.start();
     }
 
     /**
@@ -156,18 +157,15 @@ public class EngineImpl implements Engine {
                     lastTime = now;
                     final var move = movements.poll();
                     model.updateEntities(dt, (move != null) ? move.getVector() : new Vector2d(0, 0));
-                    /*
-                     * if (model.levelUp() {
-                     *  setPause(true);
-                     *  view.levelUp(model.getLevelUp());
-                     * }
-                    */
-                    /*
-                    * if (model.end()) {
-                    *  view.end(model.getStatistic());
-                    *  running = false;
-                    * }
-                    */
+                    if (model.hasPlayerLevelledUp()) {
+                        setPause(true);
+                        final var levelUpChoise = model.weaponToChooseFrom();
+                        views.forEach(e -> e.powerUp(levelUpChoise));
+                    }
+                    if (model.isGameEnded()) {
+                        views.forEach(e -> e.lost(model.getGameStatistics()));
+                        running = false;
+                    }
                     // view.updateSprites(model.getAllObjects().stream() //FIXME: and add getAllObjects().
                     //     .map(e -> new MapObjViewData(
                     //         "name", 
