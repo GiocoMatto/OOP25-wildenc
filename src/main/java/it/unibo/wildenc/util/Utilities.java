@@ -3,6 +3,9 @@ package it.unibo.wildenc.util;
 import java.util.List;
 import java.util.Random;
 
+import org.joml.Vector2d;
+import org.joml.Vector2dc;
+
 public class Utilities {
     private static final Random RAND = new Random();
 
@@ -10,4 +13,8 @@ public class Utilities {
         return values.get(RAND.nextInt(values.size()));
     }
 
+    public static Vector2dc normalizeVector(final Vector2dc toConvert) {
+        var norm = Utilities.normalizeVector(new Vector2d(toConvert));
+        return norm.isFinite() ? norm : new Vector2d(0, 0);
+    }
 }

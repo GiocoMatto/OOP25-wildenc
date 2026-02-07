@@ -12,6 +12,7 @@ import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;
+import it.unibo.wildenc.util.Utilities;
 
 /**
  * Factory class for generating different kinds of weapon.
@@ -84,7 +85,7 @@ public class WeaponFactory {
                     final double velocity = weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY);
                     final Vector2dc targetPos = weaponStats.getPosToHit().get();
 
-                    final Vector2d centralDirection = new Vector2d(targetPos).normalize();
+                    final Vector2d centralDirection = new Vector2d(Utilities.normalizeVector(new Vector2d(targetPos)));
 
                     final List<AttackContext> projContext = new ArrayList<>();
 
@@ -161,7 +162,7 @@ public class WeaponFactory {
                     final double velocity = weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY);
                     final Vector2dc targetPos = weaponStats.getPosToHit().get();
 
-                    final Vector2d centralDirection = new Vector2d(targetPos).sub(origin).normalize();
+                    final Vector2d centralDirection = new Vector2d(Utilities.normalizeVector(new Vector2d(targetPos).sub(origin)));
 
                     final List<AttackContext> projContext = new ArrayList<>();
 

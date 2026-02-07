@@ -5,6 +5,8 @@ import java.util.function.Supplier;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
+import it.unibo.wildenc.util.Utilities;
+
 /**
  * Class for representing important information used in an attack.
  */
@@ -30,7 +32,7 @@ public class AttackContext {
         this.lastPosition = initialPosition;
         this.toFollow = positionToFollow;
         this.velocity = velocity;
-        this.atkVersorDirection = new Vector2d(this.toFollow.get()).sub(initialPosition).normalize();
+        this.atkVersorDirection = Utilities.normalizeVector(new Vector2d(this.toFollow.get()).sub(initialPosition));
     }
 
     /**

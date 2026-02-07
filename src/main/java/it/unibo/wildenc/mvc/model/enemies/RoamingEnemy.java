@@ -4,6 +4,8 @@ import java.util.Random;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
+import it.unibo.wildenc.util.Utilities;
+
 /**
  * A enemy that run in random direction in the map and 
  * is immortal for some times by the spawn.
@@ -46,7 +48,7 @@ public class RoamingEnemy extends AbstractEnemy {
             this.steps = 0;
         }
         this.steps++;
-        return direction(actualTarget, this.getPosition()).normalize();
+        return Utilities.normalizeVector(direction(actualTarget, this.getPosition()));
     }
 
     /**

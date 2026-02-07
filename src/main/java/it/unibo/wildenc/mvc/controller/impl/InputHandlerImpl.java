@@ -6,6 +6,7 @@ import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.controller.api.InputHandler;
+import it.unibo.wildenc.util.Utilities;
 
 public class InputHandlerImpl implements InputHandler {
 
@@ -28,7 +29,7 @@ public class InputHandlerImpl implements InputHandler {
         final Vector2d effectiveMovementVersor = new Vector2d(0, 0);
         movementCommands.stream()
             .forEach(movInput -> effectiveMovementVersor.add(new Vector2d(movInput.getVector())));
-        var norm = effectiveMovementVersor.normalize();
+        var norm = Utilities.normalizeVector(effectiveMovementVersor);
         return norm.isFinite() ? norm : new Vector2d(0, 0);
     }
 
@@ -45,6 +46,6 @@ public class InputHandlerImpl implements InputHandler {
     public Vector2dc handleAttackDirection(Vector2dc target) {
         // TODO: Still to figure out what the view sends to this method.
         // It could be a Vector2d or not.
-       return new Vector2d(target).normalize();
+       return Utilities.normalizeVector(new Vector2d(target));
     }
 }
