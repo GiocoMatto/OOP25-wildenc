@@ -14,7 +14,7 @@ public class Utilities {
     }
 
     public static Vector2dc normalizeVector(final Vector2dc toConvert) {
-        var norm = Utilities.normalizeVector(new Vector2d(toConvert));
+        var norm = new Vector2d(toConvert).normalize();
         return norm.isFinite() ? norm : new Vector2d(0, 0);
     }
 }

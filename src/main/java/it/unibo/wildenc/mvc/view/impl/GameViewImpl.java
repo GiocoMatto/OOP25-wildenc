@@ -37,6 +37,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     private final Canvas canvas = new Canvas(1600, 900);
     private Collection<MapObjViewData> backupColl = List.of();
     private boolean gameStarted = false;
+
     //mappa associa wasd ai comandi MovementInput
     private final Map<KeyCode, MovementInput> keyToInputMap = Map.of(
         KeyCode.W, MovementInput.GO_UP,
@@ -71,6 +72,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         gameStage.setY(600);
 
         final VBox root = new VBox();
+        this.renderer.setContainer(root);
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
 

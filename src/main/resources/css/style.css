@@ -1,0 +1,7 @@
+.root {
+    -fx-background-color: #3e8e3e;
+    -fx-background-image: url("../sprites/grasstile.png");
+    -fx-background-repeat: repeat;
+    -fx-background-size: 64px 64px;
+    -fx-background-image-smoothing: false; 
+}
