@@ -24,6 +24,11 @@ public interface Engine {
     void removeInput(MovementInput movement);
 
     /**
+     * Remove all input.
+     */
+    void removeAllInput();
+
+    /**
      * Update the status of the gameLoop.
      * 
      * @param status True: running game Loop. False: stop game loop.

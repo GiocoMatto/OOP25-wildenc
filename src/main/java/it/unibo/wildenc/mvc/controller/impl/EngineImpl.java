@@ -24,6 +24,7 @@ import it.unibo.wildenc.mvc.model.game.GameImpl;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerWeapon;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
+
 /**
  * {@inheritDoc}.
  */
@@ -43,7 +44,7 @@ public class EngineImpl implements Engine {
     /**
      * The status of the game loop.
      */
-    public enum STATUS {RUNNING, PAUSE, END}
+    public enum STATUS { RUNNING, PAUSE, END }
 
     /**
      * Create a Engine.
@@ -74,13 +75,21 @@ public class EngineImpl implements Engine {
     public void addInput(final MovementInput movement) {
         activeMovements.add(movement);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void removeInput(MovementInput movement) {
+    public void removeInput(final MovementInput movement) {
         activeMovements.remove(movement);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removeAllInput() {
+        activeMovements.clear();
     }
 
     /**
@@ -162,11 +171,11 @@ public class EngineImpl implements Engine {
      * {@inheritDoc}
      */
     @Override
-    public void unregisterView(GameView gv) {
+    public void unregisterView(final GameView gv) {
         this.views.remove(gv);
         if (this.views.isEmpty()) {
             this.close();
-        }        
+        }
     }
 
     /**
@@ -199,13 +208,12 @@ public class EngineImpl implements Engine {
                         views.forEach(e -> e.lost(model.getGameStatistics()));
                         gameStatus = STATUS.END;
                     }
-                    final Vector2dc currentMousePos = (views.stream()
+                    final Vector2dc currentMousePos = views.stream()
                         .filter(view -> view instanceof GamePointerView)
                         .map(view -> (GamePointerView) view)
                         .findFirst()
-                        .orElse(() -> new Vector2d(0,0))
-                        .getMousePointerInfo()
-                    );
+                        .orElse(() -> new Vector2d(0, 0))
+                        .getMousePointerInfo();
                     model.getAllMapObjects().stream()
                         .filter(o -> o instanceof Entity)
                         .map(e -> (Entity) e)

@@ -91,10 +91,17 @@ public class GameViewImpl implements GameView, GamePointerView {
                 eg.addInput(keyToInputMap.get(event.getCode()));
             }
         });
+        
         //listener tasto rilasciato
         scene.setOnKeyReleased(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
                 eg.removeInput(keyToInputMap.get(event.getCode()));
+            }
+        });
+
+        gameStage.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                eg.removeAllInput();
             }
         });
 
