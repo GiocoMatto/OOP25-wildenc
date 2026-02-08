@@ -14,7 +14,7 @@ import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.map.GameMapImpl;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.ShurikenFactory;
 
 /**
  * Basic implementation of the Game.
@@ -111,7 +111,7 @@ public class GameImpl implements Game {
             playerStats.speed(),
             playerStats.health()
         );
-        playerStats.addDefaultWeapon().accept(new WeaponFactory(), actualPlayer);
+        // playerStats.addDefaultWeapon().accept(new ShurikenFactory(5), actualPlayer);
         return actualPlayer;
     }
 }

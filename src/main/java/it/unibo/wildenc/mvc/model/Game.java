@@ -9,6 +9,7 @@ import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.WepFaktro;
 
 /**
  * Main game model logics, it provides infos outside of the model.

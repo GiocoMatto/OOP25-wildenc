@@ -12,7 +12,6 @@ import it.unibo.wildenc.mvc.model.EnemyFactory;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.enemies.AbstractEnemy.AbstractEnemyField;
 import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
 /**
  * {@inheritDoc}.
@@ -33,7 +32,6 @@ public class EnemyFactoryImpl implements EnemyFactory {
     private static final double HITBOX_COLLECTIBLE = 5;
     private static final int VALUE_COLLECTIBLE = 34;
 
-    private final WeaponFactory wf;
     private final MapObject target;
 
     /**
@@ -43,11 +41,10 @@ public class EnemyFactoryImpl implements EnemyFactory {
      */
     public EnemyFactoryImpl(final MapObject target) {
         this.target = target;
-        this.wf = new WeaponFactory();
     }
 
     private void addDefaultWeaponTo(final Enemy e) {
-        e.addWeapon(wf.getDefaultStaticPointWeapon(
+        /*e.addWeapon(wf.getDefaultStaticPointWeapon(
             BASE_COOLDOWN_PROJECTILE,
             BASE_DAMAGE_PROJECTILE, 
             BASE_HITBOX_PROJECTILE, 
@@ -58,6 +55,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
             e,
             () -> new Vector2d(target.getPosition())
         ));
+        */
     }
 
     private void addMeleeWeaponTo(final Enemy e) {
