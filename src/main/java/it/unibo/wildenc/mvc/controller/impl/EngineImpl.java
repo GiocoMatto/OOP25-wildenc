@@ -229,6 +229,7 @@ public class EngineImpl implements Engine {
                                     mapObj.getName(), 
                                     mapObj.getPosition().x(), 
                                     mapObj.getPosition().y(), 
+                                    mapObj.getHitbox(),
                                     Optional.of(e.getDirection().x()), 
                                     Optional.of(e.getDirection().y())
                                 );
@@ -237,6 +238,7 @@ public class EngineImpl implements Engine {
                                     mapObj.getName(),
                                     mapObj.getPosition().x(),
                                     mapObj.getPosition().y(),
+                                    mapObj.getHitbox(),
                                     Optional.empty(), Optional.empty()
                                 );
                             }

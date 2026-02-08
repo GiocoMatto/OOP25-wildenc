@@ -44,13 +44,14 @@ public class ViewRendererImpl implements ViewRenderer {
                 .orElse(null)
         );
 
-        double bgX = -this.cameraX % SPRITE_SIZE;
-        double bgY = -this.cameraY % SPRITE_SIZE;
+        final double bgX = -this.cameraX % SPRITE_SIZE;
+        final double bgY = -this.cameraY % SPRITE_SIZE;
         backgroundContainer.setStyle("-fx-background-position: " + bgX + "px " + bgY + "px;");
 
         objectDatas.stream()
             .forEach(objectData -> {
                 Sprite currentSprite = spriteManager.getSprite(frameCount, objectData);
+
                 draw.drawImage(
                     currentSprite.spriteImage(), 
                     currentSprite.currentFrame(), 
@@ -60,6 +61,18 @@ public class ViewRendererImpl implements ViewRenderer {
                     objectData.y() - this.cameraY - (SPRITE_SIZE / 2), 
                     SPRITE_SIZE, SPRITE_SIZE
                 );
+
+                /* HITBOX VISUALIZATION
+                draw.setStroke(javafx.scene.paint.Color.LIME);
+                draw.setLineWidth(1);
+                double radius = objectData.hbRad();
+                draw.strokeOval(
+                    objectData.x() - this.cameraX - radius, 
+                    objectData.y() - this.cameraY - radius, 
+                    radius * 2, 
+                    radius * 2
+                );
+                */
         });
         draw.restore();
 

@@ -19,7 +19,7 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
  */
 public class EnemyFactoryImpl implements EnemyFactory {
     /* Enemy */
-    private static final double BASE_HITBOX_ENEMY = 32;
+    private static final double BASE_HITBOX_ENEMY = 10;
     private static final double BASE_VELOCITY_ENEMY = 100;
     /* Projectile */
     private static final double BASE_COOLDOWN_PROJECTILE = 3;
