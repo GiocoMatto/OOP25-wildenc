@@ -12,9 +12,11 @@ import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
  */
 public class PlayerImpl extends AbstractEntity implements Player {
 
-    // private final Vector2d inputDirection = new Vector2d(0, 0); //ultima direzione richiesta dall'utente
+    private static final int BASE_EXP_STEP = 100; //costante per il calcolo
+
     private int experience;
     private int level;
+    private int expToNextLevel;
     private int money;
 
     /**
@@ -30,6 +32,7 @@ public class PlayerImpl extends AbstractEntity implements Player {
         this.experience = 0;
         this.level = 1;
         this.money = 0;
+        this.expToNextLevel = this.level * BASE_EXP_STEP;
     }
 
     @Override
@@ -57,7 +60,25 @@ public class PlayerImpl extends AbstractEntity implements Player {
     @Override
     public void levelUp() {
         this.level++;
-        // TODO: Implementare logica di aumento statistiche o scelta weapon
+        this.expToNextLevel = this.level * BASE_EXP_STEP;
+
+        //aumenta vita massima al level up quando le armi sono maxate
+        //final double newMaxHP = this.getMaxHealth() + 20.0;
+        //this.setMaxHealth(newMaxHP);
+
+        //aumento velocità al level up quando le armi sono maxate
+        //final double newSpeed = this.getSpeed() * 1.03;
+        //this.setSpeed(newSpeed);
+
+        System.out.println("LEVEL UP, level: " + level);
+    }
+    
+    /**
+     * Method for exp bar in the View
+     * @return necessary exp to complete the level
+     */
+    public int getExpToNextLevel() {
+        return this.expToNextLevel;
     }
 
     @Override
@@ -73,6 +94,12 @@ public class PlayerImpl extends AbstractEntity implements Player {
     @Override
     public void addExp(final int amount) {
         this.experience = this.experience + amount;
+
+        while(this.experience >= this.expToNextLevel) {
+            //il player ottiene tanta exp e sale di più livelli in una botta
+            this.experience = this.experience - this.expToNextLevel; //l'eccesso rimane per il prossimo libello
+            levelUp();
+        }
     }
 
     @Override
