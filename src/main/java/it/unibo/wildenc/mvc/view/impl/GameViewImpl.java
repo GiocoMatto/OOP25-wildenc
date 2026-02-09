@@ -17,22 +17,27 @@ import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class GameViewImpl implements GameView, GamePointerView {
-    private Engine eg; // TODO: should be final?
+    private Engine engine; // TODO: should be final?
     private final ViewRenderer renderer;
     private Stage gameStage = new Stage(StageStyle.DECORATED);
     private final Canvas canvas = new Canvas(1600, 900);
@@ -52,6 +57,11 @@ public class GameViewImpl implements GameView, GamePointerView {
     public GameViewImpl() {
         renderer = new ViewRendererImpl();        
         renderer.setCanvas(canvas);
+        gameStage = new Stage();
+        gameStage.setTitle("Wild Encounter");
+        gameStage.setX(1600);
+        gameStage.setY(600);
+        gameStage.centerOnScreen();
     }
 
     /**
@@ -59,19 +69,19 @@ public class GameViewImpl implements GameView, GamePointerView {
      */
     @Override
     public void setEngine(Engine e) {
-        this.eg = e;
+        this.engine = e;
+    }
+
+    private void switchScene(final Scene scene) {
+        this.gameStage.setScene(scene);
+        this.gameStage.show();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void start() {
-        gameStage = new Stage();
-        gameStage.setTitle("Wild Encounter");
-        gameStage.setX(1600);
-        gameStage.setY(600);
-
+    public void game() {
         final VBox root = new VBox();
         this.renderer.setContainer(root);
         canvas.widthProperty().bind(root.widthProperty());
@@ -88,34 +98,35 @@ public class GameViewImpl implements GameView, GamePointerView {
         //listener tasto premuto
         scene.setOnKeyPressed(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
-                eg.addInput(keyToInputMap.get(event.getCode()));
+                engine.addInput(keyToInputMap.get(event.getCode()));
+            }
+            if (event.getCode().equals(KeyCode.ESCAPE)) {
+                engine.setPause(true);
+            }
+            if (event.getCode().equals(KeyCode.ENTER)) {
+                engine.setPause(false);
             }
         });
         
         //listener tasto rilasciato
         scene.setOnKeyReleased(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
-                eg.removeInput(keyToInputMap.get(event.getCode()));
+                engine.removeInput(keyToInputMap.get(event.getCode()));
             }
         });
 
         gameStage.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (!isNowFocused) {
-                eg.removeAllInput();
+                engine.removeAllInput();
             }
         });
 
         gameStage.setOnCloseRequest((e) -> {
-            eg.unregisterView(this);
+            engine.unregisterView(this);
             gameStage.close();
         });
-
-        gameStage.setScene(scene);
-        gameStage.centerOnScreen();
-        gameStage.show();
-        
         root.requestFocus();
-        
+        switchScene(scene);
     }
 
     /**
@@ -203,6 +214,8 @@ public class GameViewImpl implements GameView, GamePointerView {
 
     @Override
     public void pokedexView(Map<String, Integer> pokedexView) {
+        Button goToMenu = new Button("Torna al menù");
+        goToMenu.setOnAction(e -> engine.menu(engine.getPlayerTypeChoise()));
         ListView<Map.Entry<String, Integer>> listView = new ListView<>();
         listView.getItems().addAll(pokedexView.entrySet());
         listView.setCellFactory(lv -> new ListCell<>() {
@@ -220,14 +233,52 @@ public class GameViewImpl implements GameView, GamePointerView {
                 setGraphic(row);
             }
         });
-        Scene scene = new Scene(listView, 500, 500);
-        this.gameStage.setScene(scene);
+        VBox root = new VBox(goToMenu, listView);
+        Scene scene = new Scene(root, 500, 500);
+        switchScene(scene);
     }
 
     @Override
-    public void menu() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'menu'");
+    public void menu(final Game.PlayerType pt) {
+        final BorderPane root = new BorderPane();
+        root.setPadding(new Insets(15));
+        Label xp = new Label("XP");
+        Label level = new Label("LVL");
+        Label wc = new Label("WC");
+        HBox topBar = new HBox(20, xp, level, wc);
+        topBar.setAlignment(Pos.CENTER);
+        root.setTop(topBar);
+        Button boxBtn = new Button("POKEDEX");
+        boxBtn.setOnAction(e -> engine.pokedex());
+        Button shopBtn = new Button("SHOP");
+        boxBtn.setMaxWidth(Double.MAX_VALUE);
+        shopBtn.setMaxWidth(Double.MAX_VALUE);
+        VBox leftMenu = new VBox(10, boxBtn, shopBtn);
+        leftMenu.setPrefWidth(120);
+        root.setLeft(leftMenu);
+        Label avatar = new Label(pt.name());
+        avatar.setMinSize(120, 120);
+        avatar.setStyle("-fx-border-color: black");
+        HBox infoBar = new HBox(10);
+        infoBar.setStyle("-fx-background-color: #ff0000;");;
+        for (final var e : engine.getPlayerType()) {
+            final Button btnPoke = new Button(e.name());
+            btnPoke.setOnAction(btn -> {
+                engine.menu(e);
+            });
+            infoBar.getChildren().add(btnPoke);
+        }
+        infoBar.setAlignment(Pos.CENTER);
+        VBox centerBox = new VBox(15, avatar, infoBar);
+        centerBox.setAlignment(Pos.CENTER);
+        root.setCenter(centerBox);
+        Button playBtn = new Button("Gioca");
+        playBtn.setPrefHeight(50);
+        playBtn.setMaxWidth(Double.MAX_VALUE);
+        root.setBottom(playBtn);
+        playBtn.setOnAction(e -> engine.startGameLoop());
+
+        switchScene(new Scene(root));
     }
 
     @Override
@@ -235,4 +286,5 @@ public class GameViewImpl implements GameView, GamePointerView {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'shop'");
     }
+
 }

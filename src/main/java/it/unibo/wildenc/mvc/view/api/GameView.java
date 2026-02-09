@@ -12,7 +12,7 @@ public interface GameView {
     /**
      * Start the view.
      */
-    void start();
+    void game();
 
     /**
      * Set an Engine (Controller) for this view.
@@ -46,7 +46,7 @@ public interface GameView {
     /**
      * Display the menu.
      */
-    void menu();
+    void menu(Game.PlayerType pt);
 
     /**
      * Display the shop.
