@@ -16,7 +16,7 @@ import it.unibo.wildenc.mvc.model.Weapon;
  */
 public abstract class AbstractEntity extends AbstractMovable implements Entity {
 
-    private final double maxHealth;
+    private double maxHealth;
     private final Set<Weapon> weapons;
 
     private double currentHealth;
@@ -121,6 +121,22 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
      */
     protected void setHealth(final double health) {
         this.currentHealth = health;
+    }
+
+    /**
+     * setter for speed (used for Level)
+     * @param speed the new speed
+     */
+    protected void setSpeed(final double speed) {
+        this.speed = speed;
+    }
+
+    /**
+     * setter for maxHealth (used for level up)
+     * @param maxHealth the new max health
+     */
+    protected void setMaxHealth(final double maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
 }
