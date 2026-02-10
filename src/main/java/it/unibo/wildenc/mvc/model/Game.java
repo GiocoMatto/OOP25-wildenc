@@ -83,7 +83,7 @@ public interface Game {
                 () -> new Vector2d(1, 0)
             )); 
         }),
-        BULBASAUR(20, 30, 200, (wf, p) -> {
+        BULBASAUR(570, 30, 200, (wf, p) -> {
             p.addWeapon(wf.getDefaultPointerWeapon(
                 2,
                 30,
@@ -96,7 +96,7 @@ public interface Game {
                 () -> new Vector2d(0, 0)
             ));
         }),
-        SQUIRTLE(10, 5, 90, (wf, p) -> {
+        SQUIRTLE(1000, 5, 90, (wf, p) -> {
             // p.addWeapon(wf.getMeleeWeapon(8,4, p));
         });
 

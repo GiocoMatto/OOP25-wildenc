@@ -19,6 +19,7 @@ import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,14 +28,22 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -45,6 +54,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     private final Canvas canvas = new Canvas(1600, 900);
     private Collection<MapObjViewData> backupColl = List.of();
     private boolean gameStarted = false;
+    private Rectangle2D rec = Screen.getPrimary().getVisualBounds();
 
     //mappa associa wasd ai comandi MovementInput
     private final Map<KeyCode, MovementInput> keyToInputMap = Map.of(
@@ -64,8 +74,8 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void start(final Game.PlayerType pt) {
         gameStage = new Stage();
         gameStage.setTitle("Wild Encounter");
-        gameStage.setHeight(900);
-        gameStage.setWidth(1600);
+        gameStage.setHeight(rec.getHeight() * 0.85);
+        gameStage.setWidth(rec.getWidth() * 0.85);
         //ngine.menu(Game.PlayerType.CHARMANDER);
         Scene scene = new Scene(new StackPane());
         gameStage.setScene(scene);
@@ -252,6 +262,16 @@ public class GameViewImpl implements GameView, GamePointerView {
 
     @Override
     public Parent menu(final Game.PlayerType pt) {
+        StackPane root = new StackPane();
+        VBox box = new VBox();
+        root.getChildren().add(box);
+        box.setPadding(new Insets(10));
+        box.setStyle("-fx-background-color: lightblue;");
+        box.setAlignment(Pos.CENTER);
+        box.setMaxHeight(rec.getHeight() * 0.6);
+        box.setMaxWidth(rec.getWidth() * 0.35);
+        box.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
+        box.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
         /* top bar statistic */
         Label xp = new Label("XP");
         Label level = new Label("LVL");
@@ -264,7 +284,8 @@ public class GameViewImpl implements GameView, GamePointerView {
         avatar.setStyle("-fx-border-color: black");
         HBox infoBar = new HBox(10);
         infoBar.setAlignment(Pos.CENTER);
-        infoBar.setStyle("-fx-background-color: #ff0000;");
+        infoBar.setPadding(new Insets(30));
+        infoBar.setStyle("-fx-background-color: #AEC6CF;");
         for (final var e : engine.getPlayerType()) {
             final Button btnPoke = new Button(e.name());
             btnPoke.setOnAction(btn -> {
@@ -274,25 +295,41 @@ public class GameViewImpl implements GameView, GamePointerView {
         }
         Button playBtn = new Button("Gioca");
         playBtn.setPrefHeight(50);
-        playBtn.setMaxWidth(300);
         playBtn.setOnAction(e -> engine.startGameLoop());
         VBox centerBox = new VBox(15, avatar, infoBar, playBtn);
         centerBox.setAlignment(Pos.CENTER);
-        centerBox.setFillWidth(true);
         /* oter buttons */
         Button boxBtn = new Button("POKEDEX");
         boxBtn.setOnAction(e -> engine.pokedex());
         Button shopBtn = new Button("SHOP");
         HBox downMenu = new HBox(10, boxBtn, shopBtn);
-        downMenu.setAlignment(Pos.CENTER);
-        downMenu.setMaxWidth(300);
         boxBtn.setMaxWidth(Double.MAX_VALUE);
         shopBtn.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(boxBtn, Priority.ALWAYS);
         HBox.setHgrow(shopBtn, Priority.ALWAYS);
-        VBox root = new VBox(10, topBar, centerBox, downMenu);
-        root.setAlignment(Pos.CENTER);
-        root.setFillWidth(true);
+        playBtn.setMaxWidth(Double.MAX_VALUE);
+        Image img = new Image(getClass().getResource("/sprites/background.jpg").toExternalForm(), 300, 300, true, true);
+        BackgroundImage bgImg = new BackgroundImage(
+            img, 
+            BackgroundRepeat.NO_REPEAT, 
+            BackgroundRepeat.NO_REPEAT, 
+            BackgroundPosition.CENTER, 
+            new BackgroundSize(
+                BackgroundSize.AUTO, 
+                BackgroundSize.AUTO, 
+                false, 
+                false, 
+                true, 
+                true
+            )
+        );
+        root.setBackground(new Background(bgImg));
+        Region spacer1 = new Region();
+        Region spacer2 = new Region();
+        VBox.setVgrow(spacer1, Priority.ALWAYS);
+        VBox.setVgrow(spacer2, Priority.ALWAYS);
+        centerBox.setFillWidth(true);
+        box.getChildren().addAll(topBar, spacer1, centerBox, spacer2, downMenu);
         return root;
     }
 
