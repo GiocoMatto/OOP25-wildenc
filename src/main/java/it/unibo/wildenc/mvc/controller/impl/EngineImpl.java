@@ -134,6 +134,10 @@ public class EngineImpl implements Engine {
     @Override
     public void close() {
         try {
+            model.getGameStatistics()
+                .entrySet()
+                .stream()
+                .forEach(entry -> data.updatePokedex(entry.getKey(), entry.getValue()));
             this.dataHandler.saveData(data);
             gameStatus = STATUS.END;
         } catch (final IOException e) {
