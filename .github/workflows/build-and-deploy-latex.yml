@@ -1,18 +1,21 @@
-name: Build LaTeX and deploy on GitHub Releases
+name: Build Report + Project ShadowJar and deploy to GitHub Releases
 on:
   push:
     paths:
       - 'report/**'
     branches:
       - master
-    
 
 jobs:
   Setup-Compile-Deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
-      - uses: DanySK/compile-and-publish-all-latex@2.2.1
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      - name: Fetch tags
+        shell: bash
+        run: git fetch --tags -f
+      - name: Compile LaTeX
+        uses: DanySK/compile-latex-action@2.2.7
