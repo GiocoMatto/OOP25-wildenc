@@ -44,9 +44,14 @@ public class ViewRendererImpl implements ViewRenderer {
                 .orElse(null)
         );
 
-        final double bgX = -this.cameraX % SPRITE_SIZE;
-        final double bgY = -this.cameraY % SPRITE_SIZE;
-        backgroundContainer.setStyle("-fx-background-position: " + bgX + "px " + bgY + "px;");
+        final double bgX = (-this.cameraX % SPRITE_SIZE) * scale;
+        final double bgY = (-this.cameraY % SPRITE_SIZE) * scale;
+        double scaledTileSize = SPRITE_SIZE * scale;
+
+        backgroundContainer.setStyle(
+            "-fx-background-position: " + bgX + "px " + bgY + "px;" 
+            + "-fx-background-size: " + scaledTileSize + "px " + scaledTileSize + "px;"
+        );
 
         objectDatas.stream()
             .forEach(objectData -> {

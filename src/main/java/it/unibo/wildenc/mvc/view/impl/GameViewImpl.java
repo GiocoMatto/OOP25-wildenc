@@ -2,8 +2,10 @@ package it.unibo.wildenc.mvc.view.impl;
 
 import java.util.Collection;
 import java.util.List;
-
 import java.util.Set;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
@@ -18,6 +20,7 @@ import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
+
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
@@ -31,6 +34,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class GameViewImpl implements GameView, GamePointerView {
+
+    private static final int PROPORTION = 5;
+
     private Engine eg; // TODO: should be final?
     private final ViewRenderer renderer;
     private Stage gameStage = new Stage(StageStyle.DECORATED);
@@ -66,10 +72,12 @@ public class GameViewImpl implements GameView, GamePointerView {
      */
     @Override
     public void start() {
+        final Dimension screenInfo = Toolkit.getDefaultToolkit().getScreenSize();
+
         gameStage = new Stage();
         gameStage.setTitle("Wild Encounter");
-        gameStage.setX(1600);
-        gameStage.setY(600);
+        gameStage.setX((int) screenInfo.getWidth() / PROPORTION);
+        gameStage.setY((int) screenInfo.getHeight() / PROPORTION);
 
         final VBox root = new VBox();
         this.renderer.setContainer(root);
