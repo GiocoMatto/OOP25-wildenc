@@ -4,9 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 import java.util.function.Function;
-
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 import it.unibo.wildenc.mvc.model.Collectible;

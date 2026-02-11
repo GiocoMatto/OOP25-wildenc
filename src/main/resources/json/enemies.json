@@ -3,54 +3,63 @@
     "entityName": "Koffing",
     "hbRadius": 20,
     "maxHealth": 100.0,
-    "velocity": 56
+    "velocity": 56,
+    "rarity": "common"
   },
   "zubat": {
     "entityName": "Zubat",
     "hbRadius": 20,
     "maxHealth": 40.0,
-    "velocity": 56
+    "velocity": 56,
+    "rarity": "common"
   },
   "haunter": {
     "entityName": "Haunter",
     "hbRadius": 20,
     "maxHealth": 60.0,
-    "velocity": 56
+    "velocity": 56,
+    "rarity": "rare"
   },
   "croagunk": {
     "entityName": "Croagunk",
     "hbRadius": 20,
     "maxHealth": 85.0,
-    "velocity": 56
+    "velocity": 56,
+    "rarity": "rare"
   },
   "marowak": {
     "entityName": "Marowak",
     "hbRadius": 20,
     "maxHealth": 120.0,
-    "velocity": 56
+    "velocity": 56,
+    "rarity": "real_rare"
   },
   "shiftry": {
     "entityName": "Shiftry",
     "hbRadius": 20,
     "maxHealth": 110.0,
-    "velocity": 56
+    "velocity": 56,
+    "rarity": "real_rare"
   },
   "banette": {
     "entityName": "Banette",
     "hbRadius": 20,
     "maxHealth": 75.0,
-    "velocity": 56
+    "velocity": 56,
+    "rarity": "legend"
   },
   "exeggcute": {
     "entityName": "Exeggcute",
     "hbRadius": 20,
     "maxHealth": 50.0,
-    "velocity": 56
+    "velocity": 56,
+    "rarity": "real_legend"
   },
   "wingull": {
     "entityName": "Wingull",
     "hbRadius": 20,
     "maxHealth": 45.0,
-    "velocity": 56
+    "velocity": 56,
+    "rarity": "super_legend"
   }
 }

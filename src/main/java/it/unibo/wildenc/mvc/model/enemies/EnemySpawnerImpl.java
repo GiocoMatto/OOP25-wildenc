@@ -12,15 +12,14 @@ import it.unibo.wildenc.mvc.model.EnemyFactory;
 import it.unibo.wildenc.mvc.model.EnemySpawner;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
+
 import static it.unibo.wildenc.util.Utilities.pickRandom;
+import static it.unibo.wildenc.util.Utilities.randomNameForRarity;
 
 /**
  * Spawn enemy.
  */
 public class EnemySpawnerImpl implements EnemySpawner {
-    private static final List<String> CLOSE_RANGE_ENEMY_NAMES = List.of("koffing", "zubat", "haunter", "croagunk");
-    private static final List<String> RANGED_ENEMY_NAMES = List.of("marowak", "shiftry", "banette");
-    private static final List<String> ROAMING_ENEMY_NAMES = List.of("exeggcute", "wingull");
     private static final int DS_X = 300;
     private static final int DS_Y = 130;
     private static final int BASE_ENEMY = 10;
@@ -38,27 +37,27 @@ public class EnemySpawnerImpl implements EnemySpawner {
     public enum Group {
         COMMON(
             new Range(0, 40), 
-            (ef, o, l) -> ef.closeRangeEnemy(o, l, pickRandom(EnemySpawnerImpl.CLOSE_RANGE_ENEMY_NAMES))
+            (ef, o, l, r) -> ef.closeRangeEnemy(o, l, randomNameForRarity(r))
         ),
         RARE(
             new Range(40, 65), 
-            (ef, o, l) -> ef.closeRangeFastEnemy(o, l, pickRandom(CLOSE_RANGE_ENEMY_NAMES))
+            (ef, o, l, r) -> ef.closeRangeFastEnemy(o, l, randomNameForRarity(r))
         ),
         REAL_RARE(
             new Range(65, 80), 
-            (ef, o, l) -> ef.rangedEnemy(o, l, pickRandom(RANGED_ENEMY_NAMES))
+            (ef, o, l, r) -> ef.rangedEnemy(o, l, randomNameForRarity(r))
         ),
         LEGEND(
             new Range(80, 90), 
-            (ef, o, l) -> ef.rangedDoubleShotEnemy(o, l, pickRandom(RANGED_ENEMY_NAMES))
+            (ef, o, l, r) -> ef.rangedDoubleShotEnemy(o, l, randomNameForRarity(r))
         ),
         REAL_LEGEND(
             new Range(90, 97), 
-            (ef, o, l) -> ef.roamingEnemy(o, l, pickRandom(ROAMING_ENEMY_NAMES))
+            (ef, o, l, r) -> ef.roamingEnemy(o, l, randomNameForRarity(r))
         ),
         SUPER_LEGEND(
             new Range(97, 100), 
-            (ef, o, l) -> ef.roamingLongLifeEnemy(o, l, pickRandom(ROAMING_ENEMY_NAMES))
+            (ef, o, l, r) -> ef.roamingLongLifeEnemy(o, l, randomNameForRarity(r))
         );
 
         private final Range range;
@@ -88,11 +87,11 @@ public class EnemySpawnerImpl implements EnemySpawner {
          * @return the new enemy.
          */
         public Enemy create(final EnemyFactory ef, final Vector2d origin, final int life) {
-            return creator.create(ef, origin, life);
+            return creator.create(ef, origin, life, name());
         }
 
         private interface EnemyCreator {
-            Enemy create(EnemyFactory ef, Vector2d origin, int life);
+            Enemy create(EnemyFactory ef, Vector2d origin, int life, String rarity);
         }
 
         /**

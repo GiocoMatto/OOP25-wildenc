@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -63,6 +64,10 @@ public class StatLoader {
             instance = new StatLoader();
         }
         return instance;
+    }
+
+    public Collection<LoadedEntityStats> getAllEnemyData() {
+        return this.loadedEnemyConfigs.values();
     }
 
     public LoadedWeaponStats getLoadedWeaponStats(final String weaponName) {
@@ -170,10 +175,11 @@ public class StatLoader {
         String entityName,
         double hbRadius,
         double maxHealth,
-        double velocity
+        double velocity,
+        String rarity
     ) {
         public static LoadedEntityStats empty(final String entityName) {
-            return new LoadedEntityStats(entityName, 0, 0, 0);
+            return new LoadedEntityStats(entityName, 0, 0, 0, null);
         }
     }
 }
