@@ -16,7 +16,7 @@ on:
 
 jobs:
   build:
-    if: contains(github.repository, 'sample-javafx-project') && !github.event.repository.fork
+    if: contains(github.repository, 'wild-enc') && !github.event.repository.fork
     strategy:
       fail-fast: false
       matrix:
