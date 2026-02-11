@@ -112,7 +112,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     @Override
     public Parent game() {
         renderer.setCanvas(canvas);
-        final VBox root = new VBox();
+        final StackPane root = new StackPane();
         this.renderer.setContainer(root);
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
@@ -139,7 +139,7 @@ public class GameViewImpl implements GameView, GamePointerView {
                 engine.setPause(false);
             }
         });
-        
+
         //listener tasto rilasciato
         canvas.setOnKeyReleased(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
@@ -205,38 +205,54 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public String powerUp(final Set<Game.WeaponChoice> powerUps) {
-        final Stage powerUpStage = new Stage();
-        powerUpStage.setTitle("Scegli un arma nuova o un Potenziamento");
-        powerUpStage.initModality(Modality.APPLICATION_MODAL);
-        powerUpStage.initOwner(this.gameStage);
+    public void powerUp(final Set<Game.WeaponChoice> powerUps) {
+        StackPane root = (StackPane) gameStage.getScene().getRoot();
+
+        Label text = new Label("Scegli un arma nuova o un Potenziamento");
         ListView<String> listView = new ListView<>();
+        VBox box = new VBox(10, text, listView);
+        StackPane wrapper = new StackPane(box);
+        
+        Platform.runLater(() -> {
+            root.getChildren().add(wrapper);
+            wrapper.toFront();
+            listView.requestFocus();
+        });
+
+        //engine.setPause(true);
+
         listView.getItems().addAll(powerUps.stream().map(e -> e.name()).toList());
         listView.getSelectionModel().selectFirst();
+        
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                confirmSelection(powerUpStage, listView);
+                engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
+                //engine.setPause(false);
+                Platform.runLater(() -> root.getChildren().remove(wrapper));
             }
         });
-        listView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                confirmSelection(powerUpStage, listView);
-            }
-        });
-        VBox root = new VBox(listView);
-        Scene scene = new Scene(root, 250, 200);
-        powerUpStage.setScene(scene);
-        powerUpStage.showAndWait();
-        return listView.getSelectionModel().getSelectedItem();
+        // listView.setOnMouseClicked(event -> {
+        //     if (event.getClickCount() == 2) {
+        //         engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
+        //     }
+        // });
+        // box.setAlignment(Pos.CENTER);
+        // box.setPadding(new Insets(15));
+        box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+
+        wrapper.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        wrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
+        wrapper.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
+        //wrapper.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
     }
 
-    private void confirmSelection(final Stage stage, final ListView<String> listView) {
-        final String selected = listView.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            System.out.println("Hai scelto: " + selected);
-            stage.close();
-        }
-    }
+    // private void confirmSelection(final Stage stage, final ListView<String> listView) {
+    //     final String selected = listView.getSelectionModel().getSelectedItem();
+    //     if (selected != null) {
+    //         System.out.println("Hai scelto: " + selected);
+    //         stage.close();
+    //     }
+    // }
 
     @Override
     public Parent pokedexView(Map<String, Integer> pokedexView) {

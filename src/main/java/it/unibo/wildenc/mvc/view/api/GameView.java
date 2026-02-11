@@ -7,6 +7,7 @@ import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.model.Game;
 import javafx.scene.Parent;
+import javafx.scene.layout.StackPane;
 
 public interface GameView {
 
@@ -63,7 +64,7 @@ public interface GameView {
      * @param powerUps List of power up.
      * @return the player chose.
      */
-    String powerUp(Set<Game.WeaponChoice> powerUps);
+    void powerUp(Set<Game.WeaponChoice> powerUps);
 
     /**
      * Display the list of pokemok killed.
