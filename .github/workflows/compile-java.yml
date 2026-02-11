@@ -1,0 +1,10 @@
+name: Ensure Java compiles
+on: push
+
+Project-Compiles:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ensure project compiles
+        run: |
+          chmod +x ./gradlew
+          ./gradlew compileJava
