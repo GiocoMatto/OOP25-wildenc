@@ -83,10 +83,7 @@ public class PlayerImpl extends AbstractEntity implements Player {
         System.out.println("LEVEL UP, level: " + level);
     }
     
-    /**
-     * Method for exp bar in the View
-     * @return necessary exp to complete the level
-     */
+    @Override
     public int getExpToNextLevel() {
         return this.expToNextLevel;
     }
@@ -120,6 +117,11 @@ public class PlayerImpl extends AbstractEntity implements Player {
     public void heal(int amount) {
         double newHealth = Math.min(this.getMaxHealth(), this.getCurrentHealth() + amount);
         this.setHealth(newHealth);
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
     }
 
 }

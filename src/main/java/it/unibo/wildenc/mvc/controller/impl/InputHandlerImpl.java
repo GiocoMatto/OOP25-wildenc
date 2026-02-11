@@ -24,7 +24,7 @@ public class InputHandlerImpl implements InputHandler {
     }
 
     @Override
-    public Vector2dc handleMovement(Set<MovementInput> movementCommands) {
+    public synchronized Vector2dc handleMovement(Set<MovementInput> movementCommands) {
         System.out.println(movementCommands);
         final Vector2d effectiveMovementVersor = new Vector2d(0, 0);
         movementCommands.stream()
@@ -43,8 +43,6 @@ public class InputHandlerImpl implements InputHandler {
 
     @Override
     public Vector2dc handleAttackDirection(Vector2dc target) {
-        // TODO: Still to figure out what the view sends to this method.
-        // It could be a Vector2d or not.
        return Utilities.normalizeVector(target);
     }
 }
