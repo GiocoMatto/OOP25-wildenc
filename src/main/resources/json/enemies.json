@@ -1,15 +1,15 @@
 {
   "koffing": {
     "entityName": "Koffing",
-    "hbRadius": 20,
+    "hbRadius": 17,
     "maxHealth": 100.0,
-    "velocity": 2.5
+    "velocity": 20
   },
   "zubat": {
     "entityName": "Zubat",
-    "hbRadius": 20,
+    "hbRadius": 17,
     "maxHealth": 40.0,
-    "velocity": 6.0
+    "velocity": 20
   },
   "haunter": {
     "entityName": "Haunter",
@@ -19,19 +19,19 @@
   },
   "croagunk": {
     "entityName": "Croagunk",
-    "hbRadius": 20,
+    "hbRadius": 25,
     "maxHealth": 85.0,
     "velocity": 3.5
   },
   "marowak": {
     "entityName": "Marowak",
-    "hbRadius": 20,
+    "hbRadius": 25,
     "maxHealth": 120.0,
     "velocity": 3.0
   },
   "shiftry": {
     "entityName": "Shiftry",
-    "hbRadius": 20,
+    "hbRadius": 25,
     "maxHealth": 110.0,
     "velocity": 4.0
   },
@@ -43,13 +43,13 @@
   },
   "exeggcute": {
     "entityName": "Exeggcute",
-    "hbRadius": 20,
+    "hbRadius": 25,
     "maxHealth": 50.0,
     "velocity": 2.0
   },
   "wingull": {
     "entityName": "Wingull",
-    "hbRadius": 20,
+    "hbRadius": 15,
     "maxHealth": 45.0,
     "velocity": 7.0
   }

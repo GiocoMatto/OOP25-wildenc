@@ -48,6 +48,7 @@ public class ShurikenFactory implements WeaponFactory {
                 .owner(ownedBy)
                 .ttl(baseTTL)
                 .immortal(immortal)
+                .radius(hbRadius)
                 .physics(
                     (dt, atkInfo) -> circularMovement(baseBurst, atkInfo, ownedBy, distanceFromPlayer)
                 ).build(), 
