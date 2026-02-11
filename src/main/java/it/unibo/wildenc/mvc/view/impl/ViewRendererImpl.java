@@ -80,6 +80,7 @@ public class ViewRendererImpl implements ViewRenderer {
                     radius * 2
                 );
                  */
+                 
         });
         draw.restore();
 

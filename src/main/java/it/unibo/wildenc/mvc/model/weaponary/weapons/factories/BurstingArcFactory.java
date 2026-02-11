@@ -17,7 +17,7 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 import it.unibo.wildenc.util.Utilities;
 
-public class PointerFactory implements WeaponFactory {
+public class BurstingArcFactory implements WeaponFactory {
 
     @Override
     public Weapon createWeapon(

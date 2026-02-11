@@ -21,7 +21,6 @@ import javafx.scene.image.Image;
 public class SpriteManagerImpl implements SpriteManager {
 
     private static final int SPRITE_SIZE = 64;
-    private static final int TOTAL_FRAMES = 3;
     private static final int DOT_PNG_PREFIX_LENGHT = 4;
     private static final String SPRITES_LOCATION = "sprites";
 
