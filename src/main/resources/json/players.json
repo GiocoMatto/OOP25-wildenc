@@ -1,0 +1,8 @@
+{
+    "missingno": {
+        "entityName": "missingno",
+        "hbRadius": 10,
+        "maxHealth": 100.0,
+        "velocity": 2.5
+    }
+}

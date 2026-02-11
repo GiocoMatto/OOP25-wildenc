@@ -6,17 +6,16 @@ import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.enemies.EnemySpawnerImpl;
 import it.unibo.wildenc.mvc.model.Enemy;
-import it.unibo.wildenc.mvc.model.map.GameMapImpl;
-import it.unibo.wildenc.mvc.model.map.MapTestingCommons.MapObjectTest;
-import it.unibo.wildenc.mvc.model.map.MapTestingCommons.MovableObjectTest;
-import it.unibo.wildenc.mvc.model.map.MapTestingCommons.TestDirections;
-import it.unibo.wildenc.mvc.model.map.MapTestingCommons.TestObject;
-import it.unibo.wildenc.mvc.model.map.MapTestingCommons.TestWeapon;
+import it.unibo.wildenc.mvc.model.map.MapTestingConstants.MapObjectTest;
+import it.unibo.wildenc.mvc.model.map.MapTestingConstants.MovableObjectTest;
+import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestDirections;
+import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestObject;
+import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestWeapon;
 
-import static it.unibo.wildenc.mvc.model.map.MapTestingCommons.TEST_SIMULATION_TICKS;
-import static it.unibo.wildenc.mvc.model.map.MapTestingCommons.TEST_TIME_NANOSECONDS;
-import static it.unibo.wildenc.mvc.model.map.MapTestingCommons.TEST_TIME_SECONDS;
-import static it.unibo.wildenc.mvc.model.map.MapTestingCommons.calculateMovement;
+import static it.unibo.wildenc.mvc.model.map.MapTestingConstants.TEST_SIMULATION_TICKS;
+import static it.unibo.wildenc.mvc.model.map.MapTestingConstants.TEST_TIME_NANOSECONDS;
+import static it.unibo.wildenc.mvc.model.map.MapTestingConstants.TEST_TIME_SECONDS;
+import static it.unibo.wildenc.mvc.model.map.MapTestingConstants.calculateMovement;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -106,7 +105,7 @@ public class TestMap {
         final TestObject enemyConf = TestObject.EnemyObject;
         final Player p = getEmptyPlayer();
         final Enemy enemy = enemyConf.getAsCloseRangeEnemy(new LinkedHashSet<>(), "testEnemy", Optional.of(p));
-        final var weapon = TestWeapon.DEFAULT_WEAPON.getAsWeapon(enemy, p.getPosition());
+        final var weapon = TestWeapon.DEFAULT_WEAPON.getAsWeapon(enemy, () -> p.getPosition());
         final GameMap map = getEmptyMapWithObjects(p, Set.of(enemy));
         enemy.addWeapon(weapon);
 
@@ -122,7 +121,7 @@ public class TestMap {
     @Test
     void whenPlayerProjectileHitboxTouchesEnemyHitboxEnemyHealthShouldDecrease() {
         final TestObject enemyConf = TestObject.EnemyObject;
-        final Player p = getArmedPlayer(o -> TestWeapon.DEFAULT_WEAPON.getAsWeapon(o, enemyConf.getPos()));
+        final Player p = getArmedPlayer(o -> TestWeapon.DEFAULT_WEAPON.getAsWeapon(o, () -> enemyConf.getPos()));
         final Enemy enemy = enemyConf.getAsCloseRangeEnemy(new LinkedHashSet<>(), "testEnemy", Optional.of(p));
         final GameMap map = getEmptyMapWithObjects(p, Set.of(enemy));
 
@@ -144,5 +143,4 @@ public class TestMap {
 
         assertTrue(map.getAllObjects().size() > initialSize, "No enemies were spawend.");
     }
-
 }

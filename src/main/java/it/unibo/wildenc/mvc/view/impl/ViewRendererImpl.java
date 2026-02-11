@@ -15,6 +15,7 @@ import javafx.scene.layout.Region;
 public class ViewRendererImpl implements ViewRenderer {
 
     private static final int SPRITE_SIZE = 64;
+    private static final int SPRITE_PADDING = 2;
     private static final int INITIAL_CANVAS_WIDTH = 1600;
 
     private final SpriteManager spriteManager;
@@ -44,22 +45,42 @@ public class ViewRendererImpl implements ViewRenderer {
                 .orElse(null)
         );
 
-        double bgX = -this.cameraX % SPRITE_SIZE;
-        double bgY = -this.cameraY % SPRITE_SIZE;
-        backgroundContainer.setStyle("-fx-background-position: " + bgX + "px " + bgY + "px;");
+        final double bgX = (-this.cameraX % SPRITE_SIZE) * scale;
+        final double bgY = (-this.cameraY % SPRITE_SIZE) * scale;
+        double scaledTileSize = SPRITE_SIZE * scale;
+
+        backgroundContainer.setStyle(
+            "-fx-background-position: " + bgX + "px " + bgY + "px;" 
+            + "-fx-background-size: " + scaledTileSize + "px " + scaledTileSize + "px;"
+        );
 
         objectDatas.stream()
             .forEach(objectData -> {
-                Sprite currentSprite = spriteManager.getSprite(frameCount, objectData);
+                final Sprite currentSprite = spriteManager.getSprite(frameCount, objectData);
+                final double radius = objectData.hbRad();
+                final double renderSize = radius * 2 * SPRITE_PADDING;
+
                 draw.drawImage(
                     currentSprite.spriteImage(), 
                     currentSprite.currentFrame(), 
                     SPRITE_SIZE * currentSprite.rotationFrame(), 
                     SPRITE_SIZE, SPRITE_SIZE,
-                    objectData.x() - this.cameraX - (SPRITE_SIZE / 2), 
-                    objectData.y() - this.cameraY - (SPRITE_SIZE / 2), 
-                    SPRITE_SIZE, SPRITE_SIZE
+                    objectData.x() - this.cameraX - (renderSize / 2), 
+                    objectData.y() - this.cameraY - (renderSize / 2), 
+                    renderSize, 
+                    renderSize
                 );
+                /*
+                draw.setStroke(javafx.scene.paint.Color.LIME);
+                draw.setLineWidth(1);
+                draw.strokeOval(
+                    objectData.x() - this.cameraX - radius, 
+                    objectData.y() - this.cameraY - radius, 
+                    radius * 2, 
+                    radius * 2
+                );
+                 */
+                 
         });
         draw.restore();
 

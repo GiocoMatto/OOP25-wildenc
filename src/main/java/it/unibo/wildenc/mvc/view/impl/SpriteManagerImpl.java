@@ -2,6 +2,8 @@ package it.unibo.wildenc.mvc.view.impl;
 
 import java.io.FileInputStream;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,7 +21,6 @@ import javafx.scene.image.Image;
 public class SpriteManagerImpl implements SpriteManager {
 
     private static final int SPRITE_SIZE = 64;
-    private static final int TOTAL_FRAMES = 3;
     private static final int DOT_PNG_PREFIX_LENGHT = 4;
     private static final String SPRITES_LOCATION = "sprites";
 
@@ -42,10 +43,12 @@ public class SpriteManagerImpl implements SpriteManager {
             );
         } else {
             if (loadedSpriteMap.containsKey(objData.name().toLowerCase().split(":")[1])) {
+                final int totalFrames = (int) loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1])
+                    .getWidth() / SPRITE_SIZE;
                 return new Sprite(
                     loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1]),
                     convertVersorToDominant(objData),
-                    ((frameCount / 24) % TOTAL_FRAMES) * SPRITE_SIZE
+                    ((frameCount / 6) % totalFrames) * SPRITE_SIZE
                 );
             } else {
                 return new Sprite(
@@ -88,7 +91,10 @@ public class SpriteManagerImpl implements SpriteManager {
     }
 
     public void loadAllResources() {
+        // Getting the sprites + decoding the path into something readable to Java
+        // This prevents blank spaces in folders and files!
         URL resourceFolder = getClass().getClassLoader().getResource(SPRITES_LOCATION);
+        String decodedPath = URLDecoder.decode(resourceFolder.getPath(), StandardCharsets.UTF_8);
 
         if (resourceFolder.getProtocol().equals("file")) {
             try (Stream<Path> paths = Files.list(Paths.get(resourceFolder.toURI()))) {
@@ -102,7 +108,7 @@ public class SpriteManagerImpl implements SpriteManager {
             }
         } else if (resourceFolder.getProtocol().equals("jar")) {
             try {
-                String jarPath = resourceFolder.getPath().substring(5, resourceFolder.getPath().indexOf("!"));
+                String jarPath = decodedPath.substring(5, decodedPath.indexOf("!"));
                 try (ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath))) {
                     ZipEntry entry;
                     while ((entry = zip.getNextEntry()) != null) {

@@ -29,8 +29,7 @@ public class InputHandlerImpl implements InputHandler {
         final Vector2d effectiveMovementVersor = new Vector2d(0, 0);
         movementCommands.stream()
             .forEach(movInput -> effectiveMovementVersor.add(new Vector2d(movInput.getVector())));
-        var norm = Utilities.normalizeVector(effectiveMovementVersor);
-        return norm.isFinite() ? norm : new Vector2d(0, 0);
+        return Utilities.normalizeVector(effectiveMovementVersor);
     }
 
     @Override
@@ -46,6 +45,6 @@ public class InputHandlerImpl implements InputHandler {
     public Vector2dc handleAttackDirection(Vector2dc target) {
         // TODO: Still to figure out what the view sends to this method.
         // It could be a Vector2d or not.
-       return Utilities.normalizeVector(new Vector2d(target));
+       return Utilities.normalizeVector(target);
     }
 }

@@ -1,4 +1,4 @@
-package it.unibo.wildenc.mvc.model.map.objects;
+package it.unibo.wildenc.mvc.model.map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -6,11 +6,11 @@ import it.unibo.wildenc.mvc.model.MapObject;
 
 import org.junit.jupiter.api.Test;
 
-import static it.unibo.wildenc.mvc.model.map.MapTestingCommons.TEST_TIME_SECONDS;
-import static it.unibo.wildenc.mvc.model.map.MapTestingCommons.calculateMovement;
+import static it.unibo.wildenc.mvc.model.map.MapTestingConstants.TEST_TIME_SECONDS;
+import static it.unibo.wildenc.mvc.model.map.MapTestingConstants.calculateMovement;
 
-import it.unibo.wildenc.mvc.model.map.MapTestingCommons.TestDirections;
-import it.unibo.wildenc.mvc.model.map.MapTestingCommons.TestObject;
+import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestDirections;
+import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestObject;
 
 /**
  * Testing for the {@link MapObject}s.

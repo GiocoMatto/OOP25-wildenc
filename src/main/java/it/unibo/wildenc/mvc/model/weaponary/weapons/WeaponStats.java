@@ -3,7 +3,6 @@ package it.unibo.wildenc.mvc.model.weaponary.weapons;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
-import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;

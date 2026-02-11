@@ -1,17 +1,13 @@
 package it.unibo.wildenc.mvc.model.weaponary.weapons;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.joml.Vector2dc;
 
-import it.unibo.wildenc.mvc.model.Projectile;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
-import it.unibo.wildenc.mvc.model.weaponary.projectiles.ConcreteProjectile;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 
 /**
@@ -47,6 +43,5 @@ public class PointerWeapon extends GenericWeapon {
      */
     public void setPosToHit(final Supplier<Vector2dc> newPosToHit) {
         this.weaponStats.setPosToHit(newPosToHit);
-
     }
 }

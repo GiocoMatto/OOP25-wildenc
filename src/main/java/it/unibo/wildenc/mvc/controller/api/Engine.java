@@ -1,5 +1,8 @@
 package it.unibo.wildenc.mvc.controller.api;
 
+import java.util.List;
+import java.util.Set;
+
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.view.api.GameView;
@@ -8,6 +11,8 @@ import it.unibo.wildenc.mvc.view.api.GameView;
  * Responsible of handling the main GameLoop and communicate with Views and the Model.
  */
 public interface Engine {
+
+    void start(Game.PlayerType pt);
 
     /**
      * Accept the movement of the player to add.
@@ -43,13 +48,6 @@ public interface Engine {
     void onLeveUpChoise(String choise);
 
     /**
-     * Select the player type.
-     * 
-     * @param playerType the player type to game.
-     */
-    void chosePlayerType(Game.PlayerType playerType);
-
-    /**
      * Start the game loopl.
      */
     void startGameLoop();
@@ -57,7 +55,7 @@ public interface Engine {
     /**
      * Show the menu.
      */
-    void menu();
+    void menu(Game.PlayerType pt);
 
     /**
      * Show the shop.
@@ -88,4 +86,7 @@ public interface Engine {
      */
     void unregisterView(GameView gv);
 
+    List<Game.PlayerType> getPlayerType();
+    
+    Game.PlayerType getPlayerTypeChoise();
 }

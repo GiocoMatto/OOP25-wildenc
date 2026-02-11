@@ -20,23 +20,23 @@ import it.unibo.wildenc.mvc.model.Entity;
 
 import it.unibo.wildenc.mvc.model.Projectile;
 import it.unibo.wildenc.mvc.model.Weapon;
+import it.unibo.wildenc.mvc.model.dataloaders.StatLoader;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 
 public class TestWeapons {
-    
     private static final int TEST_COOLDOWN = 1;
-    private static final int TEST_DAMAGE = 1;
+    private static final int TEST_DAMAGE = 10;
     private static final int TEST_HITBOX = 1;
-    private static final int TEST_VELOCITY = 1;
-    private static final int TEST_TTL = 1;
-    private static final int TEST_BURST_SIZE = 1;
-    private static final int TEST_PROJ_AT_ONCE = 1;
+    private static final int TEST_VELOCITY = 2;
+    private static final int TEST_TTL = 99;
+    private static final int TEST_BURST_SIZE = 3;
+    private static final int TEST_PROJ_AT_ONCE = 3;
     private static final int TEST_MAX_HEALTH = 100;
     private static final int LEVEL_2 = 2;
     private static final Entity TEST_OWNER = new PlayerImpl(
+        "TestPlayer",
         new Vector2d(0, 0), 
         TEST_HITBOX,
         TEST_VELOCITY,
@@ -49,21 +49,14 @@ public class TestWeapons {
     private static final Logger LOGGER = LogManager.getLogger("Ciao!");
 
     private Weapon myWeapon;
-    private WeaponFactory weapFactory = new WeaponFactory();
     private Vector2dc positionToHit = new Vector2d(30, 0);
     private Set<Projectile> generatedProjectiles;
 
     @BeforeEach
     public void setup() {
-        this.myWeapon = weapFactory.getDefaultPointerWeapon(
-            TEST_COOLDOWN, 
-            TEST_DAMAGE, 
-            TEST_HITBOX, 
-            TEST_VELOCITY, 
-            TEST_TTL, 
-            TEST_PROJ_AT_ONCE,
-            TEST_BURST_SIZE, 
-            TEST_OWNER,
+        this.myWeapon = StatLoader.getInstance().getWeaponFactoryForWeapon(
+            "testingpistol", 
+            TEST_OWNER, 
             () -> positionToHit
         );
         this.generatedProjectiles = new LinkedHashSet<>();
@@ -81,6 +74,7 @@ public class TestWeapons {
         assertEquals(testWeaponStats.getCurrentBurstSize(), TEST_BURST_SIZE);
         assertEquals(testWeaponStats.getProjectilesShotAtOnce(), TEST_PROJ_AT_ONCE);
         assertEquals(testWeaponStats.getProjStats().getOwner(), TEST_OWNER);
+        assertFalse(testWeaponStats.getProjStats().isImmortal());
     }
 
     @Test
@@ -125,8 +119,8 @@ public class TestWeapons {
     public void testCorrectUpgrade() {
         this.myWeapon.upgrade();
         assertEquals(this.myWeapon.getStats().getLevel(), LEVEL_2);
-        assertEquals(this.myWeapon.getStats().getProjStats().getStatValue(ProjStatType.DAMAGE), LEVEL_2 * 5);
-        assertEquals(this.myWeapon.getStats().getProjStats().getStatValue(ProjStatType.VELOCITY), LEVEL_2);
+        assertEquals(this.myWeapon.getStats().getProjStats().getStatValue(ProjStatType.DAMAGE), LEVEL_2 * TEST_DAMAGE);
+        assertEquals(this.myWeapon.getStats().getProjStats().getStatValue(ProjStatType.VELOCITY), LEVEL_2 * TEST_VELOCITY);
         assertEquals(this.myWeapon.getStats().getProjStats().getStatValue(ProjStatType.HITBOX), TEST_HITBOX + LEVEL_2);
         assertEquals(this.myWeapon.getStats().getCurrentBurstSize(), LEVEL_2);
     }
@@ -151,6 +145,7 @@ public class TestWeapons {
                 .peek(proj -> LOGGER.info("X: " + proj.getPosition().x() + " Y: " + proj.getPosition().y()))
                 .forEach(proj -> proj.updatePosition(TEST_TICK));
         }
+     
     }
 }
 

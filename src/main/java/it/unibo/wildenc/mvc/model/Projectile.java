@@ -24,4 +24,13 @@ public interface Projectile extends Movable {
      * @return the {@link Entity} who generated the Projectile.
      */
     Entity getOwner();
+
+    /**
+     * Method for knowing if a specific projectile is immortal.
+     * An immortal projectile won't be destroyed on collision.
+     * 
+     * @return true if the projectile is immortal, false otherwise.
+     */
+    boolean isImmortal();
 }
+

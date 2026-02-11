@@ -4,10 +4,8 @@ import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 import org.joml.Vector2d;
-import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
@@ -22,6 +20,7 @@ public class ProjectileStats {
     private final double timeToLive;
     private final String projID;
     private final Entity projOwner;
+    private final boolean immortal;
     private final BiFunction<Double, AttackContext, Vector2d> projMovementFunction;
 
     /**
@@ -33,6 +32,7 @@ public class ProjectileStats {
      * @param baseVelocity the base movement velocity of the Projectile (could be angular in case of orbitals)
      * @param ttl the time of life of the Projectile, after which it's considered gone
      * @param id an identifier for the Projectile
+     * @param areProjImmortal specifies if projectiles are destroyed on collision
      * @param ownedBy the {@link Entity} who generated this Projectile
      * @param moveFunc the function that defines the Projectile's movement
      */
@@ -42,6 +42,7 @@ public class ProjectileStats {
         final double baseVelocity,
         final double ttl,
         final String id,
+        final boolean areProjImmortal,
         final Entity ownedBy,
         final BiFunction<Double, AttackContext, Vector2d> moveFunc
 
@@ -52,6 +53,7 @@ public class ProjectileStats {
         this.timeToLive = ttl;
         this.projID = id;
         this.projOwner = ownedBy;
+        this.immortal = areProjImmortal;
         this.projMovementFunction = moveFunc;
     }
 
@@ -116,6 +118,15 @@ public class ProjectileStats {
     }
 
     /**
+     * Method for knowing a projectile is immortal.
+     * 
+     * @return true if the projectile is immortal, false otherwise. 
+     */
+    public boolean isImmortal() {
+        return this.immortal;
+    }
+
+    /**
      * Setter method for changing the multiplier of a specific statistic
      * of the projectile. This will be highly used when upgrading a Weapon.
      * If the stat wasn't found, no change will be made.
@@ -127,6 +138,10 @@ public class ProjectileStats {
         projStats.stream()
             .filter(e -> e.getType() == statType)
             .findFirst().get().setMult(newMult);
+    }
+
+    public static ProjStatsBuilder getBuilder() {
+        return new ProjStatsBuilder();
     }
 
     /**
@@ -204,6 +219,67 @@ public class ProjectileStats {
          */
         private double getValue() {
             return this.baseValue * currentMultiplier;
+        }
+    }
+
+    public static class ProjStatsBuilder {
+        private double damage;
+        private double hbRadius;
+        private double velocity;
+        private double ttl;
+        private String id;
+        private boolean immortal;
+        private Entity owner;
+        private BiFunction<Double, AttackContext, Vector2d> moveFunc;
+
+        private ProjStatsBuilder() {}
+
+        public ProjStatsBuilder damage(final double dmg) {
+            this.damage = dmg;
+            return this;
+        }
+
+        public ProjStatsBuilder radius(final double rad) {
+            this.hbRadius = rad;
+            return this;
+        }
+
+        public ProjStatsBuilder velocity(final double vel) {
+            this.velocity = vel;
+            return this;
+        }
+
+        public ProjStatsBuilder ttl(final double ttl) {
+            this.ttl = ttl;
+            return this;
+        }
+
+        public ProjStatsBuilder id(final String id) {
+            this.id = id;
+            return this;
+        }
+
+        public ProjStatsBuilder immortal(final boolean immortal) {
+            this.immortal = immortal;
+            return this;
+        }
+
+        public ProjStatsBuilder owner(final Entity owned) {
+            this.owner = owned;
+            return this;
+        }
+
+        public ProjStatsBuilder physics(final BiFunction<Double, AttackContext, Vector2d> mov) {
+            this.moveFunc = mov;
+            return this;
+        }
+
+        public ProjectileStats build() {
+            if (this.id == null) {
+                this.id = "noid";
+            }
+
+            return new ProjectileStats(damage, hbRadius, velocity, ttl, id, immortal, owner, moveFunc);
         }
     }
 }

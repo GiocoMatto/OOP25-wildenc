@@ -2,7 +2,6 @@ package it.unibo.wildenc.mvc.model.map;
 
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.joml.Vector2d;
@@ -13,21 +12,22 @@ import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.Weapon;
+
 import it.unibo.wildenc.mvc.model.enemies.AbstractEnemy.AbstractEnemyField;
 import it.unibo.wildenc.mvc.model.enemies.CloseRangeEnemy;
-import it.unibo.wildenc.mvc.model.map.objects.AbstractCollectible;
+
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMapObject;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
 import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
+
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.factories.FixedFactory;
 
 /**
  * Testing constants for the map.
  */
-public final class MapTestingCommons {
+public final class MapTestingConstants {
     /* Collectible */
-    private static final double HITBOX_COLLECTIBLE = 5;
     private static final int VALUE_COLLECTIBLE = 34;
 
     /**
@@ -43,7 +43,7 @@ public final class MapTestingCommons {
      */
     public static final int TEST_SIMULATION_TICKS = 20;
 
-    private MapTestingCommons() { }
+    private MapTestingConstants() { }
 
     /**
      * Utility function for calculating linear movement.
@@ -135,6 +135,7 @@ public final class MapTestingCommons {
     public enum TestObject {
         StaticObject(0, 10, 5, 0, 0),
         MovableObject(0, 10, 5, 1, 0),
+        MovableObject2(10, 10, 5, 1, 0),
         PlayerObject(0, 0, 5, 1, 100),
         EnemyObject(0, 30, 5, 1, 100);
 
@@ -211,7 +212,7 @@ public final class MapTestingCommons {
          * @return a {@link PlayerImpl}.
          */
         public PlayerImpl getAsPlayer() {
-            return new PlayerImpl(pos, hitbox, speed, health);
+            return new PlayerImpl("Test", pos, hitbox, speed, health);
         }
 
         /**
@@ -231,7 +232,7 @@ public final class MapTestingCommons {
                 health, 
                 name, 
                 target, 
-                Set.of(m -> new ExperienceGem(m.getPosition(), VALUE_COLLECTIBLE))));
+                Set.of(m -> Optional.of(new ExperienceGem(m.getPosition(), VALUE_COLLECTIBLE)))));
                 
             for (final var w : weapons) {
                 e.addWeapon(w);
@@ -244,7 +245,7 @@ public final class MapTestingCommons {
      * Some default weapons for testing purposes.
      */
     public enum TestWeapon {
-        DEFAULT_WEAPON(5, 10, 2, 2, 99, 1, 1, e -> () -> new Vector2d(e));
+        DEFAULT_WEAPON(21, 10, 2, 2, 99, 1, 1);
 
         private double baseCooldown;
         private double baseDamage;
@@ -253,32 +254,32 @@ public final class MapTestingCommons {
         private double baseTTL;
         private int baseBurst;
         private int baseProjAtOnce;
-        private Function<Vector2dc, Supplier<Vector2dc>> posToHit;
 
         TestWeapon(final double baseCooldown, final double baseDamage, final double hbRadius, 
-            final double baseVelocity, final double baseTTL, final int baseBurst, final int baseProjAtOnce, 
-            final Function<Vector2dc, Supplier<Vector2dc>> posToHit) {
+            final double baseVelocity, final double baseTTL, final int baseBurst, final int baseProjAtOnce) {
             this.baseCooldown = baseCooldown;
             this.baseDamage = baseDamage;
             this.hbRadius = hbRadius;
             this.baseVelocity = baseVelocity;
             this.baseTTL = baseTTL;
             this.baseBurst = baseBurst;
-            this.posToHit = posToHit;
             this.baseProjAtOnce = baseProjAtOnce;
         }
-
-        Weapon getAsWeapon(final Entity owner, final Vector2dc target) {
-            return new WeaponFactory().getDefaultStaticPointWeapon(
-                baseCooldown,
-                baseDamage,
+        
+        Weapon getAsWeapon(final Entity owner, final Supplier<Vector2dc> target) {
+            
+            return new FixedFactory().createWeapon(
+                "testWeapon", 
+                baseCooldown, 
+                baseDamage, 
                 hbRadius,
                 baseVelocity,
                 baseTTL,
                 baseProjAtOnce,
                 baseBurst,
                 owner,
-                posToHit.apply(target)
+                false,
+                target
             );
         }
     }

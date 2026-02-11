@@ -46,6 +46,11 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:$log4jVersion")
     implementation("org.apache.logging.log4j:log4j-core:$log4jVersion")
     
+    // Jackson: used for reading json files.
+    val jacksonVersion = "2.21.0"
+    implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+
 
     // JavaFX: comment out if you do not need them
     val javaFxVersion = "23.0.2"

@@ -30,7 +30,7 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
         final ProjectileStats pStats
     ) {
         super(
-            pStats.getOwner().getPosition(), 
+            atkInfo.getLastPosition(), 
             pStats.getStatValue(ProjStatType.HITBOX),
             pStats.getStatValue(ProjStatType.VELOCITY)
         );
@@ -92,6 +92,14 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
     @Override
     public Entity getOwner() {
         return this.projStats.getOwner();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isImmortal() {
+        return this.projStats.isImmortal();
     }
 }
 

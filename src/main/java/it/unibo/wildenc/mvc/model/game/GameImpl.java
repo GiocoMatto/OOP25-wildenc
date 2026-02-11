@@ -1,26 +1,31 @@
 package it.unibo.wildenc.mvc.model.game;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
+import it.unibo.wildenc.mvc.model.dataloaders.StatLoader;
 import it.unibo.wildenc.mvc.model.map.GameMapImpl;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
 /**
  * Basic implementation of the Game.
  */
 public class GameImpl implements Game {
 
+    private static final int WEAPON_CHOICE_NUM = 3;
+    private static final StatLoader STATLOADER = StatLoader.getInstance();
     private final GameMap map;
     private final Player player;
 
@@ -69,8 +74,22 @@ public class GameImpl implements Game {
      */
     @Override
     public void choosenWeapon(final WeaponChoice wc) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'choosenWeapon'");
+        if (player.getWeapons().stream()
+            .noneMatch(w -> w.getName().equals(wc.name()))
+        ) {
+            player.addWeapon(
+                STATLOADER.getWeaponFactoryForWeapon(
+                    wc.name(), 
+                    player, 
+                    () -> new Vector2d(0, 0))
+            );            
+        } else {
+            player.getWeapons().stream()
+                .filter(w -> w.getName().equals(wc.name()))
+                .findFirst()
+                .get()
+                .upgrade();
+        }
     }
 
     /**
@@ -78,8 +97,11 @@ public class GameImpl implements Game {
      */
     @Override
     public Set<WeaponChoice> weaponToChooseFrom() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'weaponToChooseFrom'");
+        return STATLOADER.getAllLoadedWeapons().stream()
+            .filter(ws -> ws.availableToPlayer())
+            .map(ws -> new WeaponChoice(ws.weaponName()))
+            .limit(WEAPON_CHOICE_NUM)
+            .collect(Collectors.toSet());
     }
 
     /**
@@ -99,19 +121,24 @@ public class GameImpl implements Game {
      */
     @Override
     public Map<String, Integer> getGameStatistics() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getGameStatistics'");
+        return Collections.unmodifiableMap(map.getMapBestiary());
     }
 
     private Player getPlayerByPlayerType(final PlayerType playerType) {
         final var playerStats = playerType.getPlayerStats();
         final Player actualPlayer = new PlayerImpl(
+            playerType.name().toLowerCase(),
             new Vector2d(0, 0),
             playerStats.hitbox(),
             playerStats.speed(),
             playerStats.health()
         );
-        playerStats.addDefaultWeapon().accept(new WeaponFactory(), actualPlayer);
+        playerStats.addDefaultWeapon().accept(null, actualPlayer);;
         return actualPlayer;
+    }
+
+    @Override
+    public int getEarnedMoney() {
+        return player.getMoney();
     }
 }

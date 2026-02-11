@@ -3,14 +3,14 @@ package it.unibo.wildenc.mvc.model.player;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.wildenc.mvc.model.map.MapTestingCommons;
+import it.unibo.wildenc.mvc.model.map.MapTestingConstants;
 
 /**
  * Test class for {@link PlayerImpl}.
  */
 class PlayerTest {
 
-    private PlayerImpl player = MapTestingCommons.TestObject.PlayerObject.getAsPlayer();
+    private PlayerImpl player = MapTestingConstants.TestObject.PlayerObject.getAsPlayer();
 
     @Test
     void testInitialization() {

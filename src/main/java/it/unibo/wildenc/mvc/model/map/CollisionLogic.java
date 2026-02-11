@@ -19,7 +19,7 @@ public final class CollisionLogic {
     public static boolean areInRange(final MapObject m1, final MapObject m2, final double range) {
         final var vertexDistance = m1.getPosition().distanceSquared(m2.getPosition());
         final var hitboxes = Math.pow(m1.getHitbox() + m2.getHitbox() + range, 2);
-        return vertexDistance < hitboxes;
+        return vertexDistance <= hitboxes;
     }
 
     /**

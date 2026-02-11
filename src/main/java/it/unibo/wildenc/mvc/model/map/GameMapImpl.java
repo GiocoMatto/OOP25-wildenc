@@ -38,7 +38,7 @@ public class GameMapImpl implements GameMap {
     private static final double NANO_TO_SECOND_FACTOR = 1_000_000_000.0;
 
     private final Player player;
-    private final Map<String, Integer> currentMapBestiary = new LinkedHashMap<>();
+    private final Map<String, Integer> currentMapBestiary = Collections.synchronizedMap(new LinkedHashMap<>());
     private final List<MapObject> mapObjects = new ArrayList<>();
     private EnemySpawner es;
 
@@ -125,7 +125,7 @@ public class GameMapImpl implements GameMap {
         final double deltaSeconds = deltaTime / NANO_TO_SECOND_FACTOR;
         final Set<MapObject> objToRemove = new LinkedHashSet<>(); // FIXME: creating a set every tick may cause lag
         player.setDirection(playerDirection);
-        // log(player);
+        log(player);
         player.updatePosition(deltaSeconds);
         updateObjectPositions(deltaSeconds, objToRemove);
         checkPlayerHits(objToRemove);
@@ -204,7 +204,7 @@ public class GameMapImpl implements GameMap {
         mapObjects.parallelStream()
             .filter(e -> e instanceof Movable)
             .map(o -> (Movable) o)
-            // .peek(this::log) // FIXME: temp just for debug phase
+            .peek(this::log) // FIXME: temp just for debug phase
             .forEach(o -> {
                 o.updatePosition(deltaSeconds);
                 // cleanup dead objects like projectiles after TTL expiry
@@ -230,16 +230,22 @@ public class GameMapImpl implements GameMap {
             return;
         }
         e.takeDamage(p.getDamage());
-        toRemove.add(p);
+        if (!p.isImmortal()) {
+            toRemove.add(p);
+        }
         if (!e.isAlive()) {
             toRemove.add(e);
             if (e instanceof Enemy en) {
-                // FIXME: if an enemy drops multiple collectibles they should not be in the same exact place
                 addAllObjects(en.getLoot());
                 this.currentMapBestiary.merge(e.getName(), 1, Integer::sum);
             }
             LOGGER.debug("{} died!!!", e.getClass().getSimpleName());
         }
+    }
+
+    private void onEnemyDeath(Enemy e) {
+        addAllObjects(e.getLoot());
+        this.currentMapBestiary.merge(e.getName(), 1, Integer::sum);
     }
 
     private void handleAttacks(final double deltaSeconds) {

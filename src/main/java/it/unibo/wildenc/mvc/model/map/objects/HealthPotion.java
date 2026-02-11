@@ -6,8 +6,8 @@ import it.unibo.wildenc.mvc.model.Player;
 
 public class HealthPotion extends AbstractCollectible {
 
-    protected HealthPotion(Vector2dc position, int value) {
-        super(position, 5.0, value);
+    public HealthPotion(Vector2dc position, int value) {
+        super(position, 20, value);
     }
 
     @Override
@@ -17,7 +17,7 @@ public class HealthPotion extends AbstractCollectible {
 
     @Override
     public String getName() {
-        return "collectible:health_potion";
+        return "collectible:health";
     }
 }
 
