@@ -67,15 +67,22 @@ public interface Game {
     Collection<MapObject> getAllMapObjects();
 
     /**
+     * Gets earned money in this game.
+     * 
+     * @return earned money.
+     */
+    int getEarnedMoney();
+
+    /**
      * Constant default player types.
      */
     enum PlayerType {
-        CHARMANDER(300, 15, 100, (wf, p) -> {
-            p.addWeapon(StatLoader.getInstance().getWeaponFactoryForWeapon("shuriken", p, () -> new Vector2d(0, 0)));
+        CHARMANDER(300, 20, 100, (wf, p) -> {
+            p.addWeapon(StatLoader.getInstance().getWeaponFactoryForWeapon("melee", p, () -> new Vector2d(0, 0)));
         }),
         BULBASAUR(20, 30, 200, (wf, p) -> {
         }),
-        SQUIRTLE(10, 5, 90, (wf, p) -> {
+        SQUIRTLE(1000, 5, 90, (wf, p) -> {
             // p.addWeapon(wf.getMeleeWeapon(8,4, p));
         });
 

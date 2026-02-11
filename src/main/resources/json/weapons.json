@@ -1,34 +1,36 @@
 {
   "shuriken": {
     "weaponName": "ShurikenOrbit",
-    "factoryType": "it.unibo.wildenc.mvc.model.weaponary.weapons.ShurikenFactory",
+    "factoryType": "it.unibo.wildenc.mvc.model.weaponary.weapons.factories.ShurikenFactory",
     "baseCooldown": 10.0,
     "baseDamage": 75.0,
-    "hbRadius": 0.5,
+    "hbRadius": 20,
     "baseVelocity": 0.1,
     "baseTTL": 3.0,
     "baseProjAtOnce": 5,
     "baseBurst": 1,
     "immortal": true,
+    "availableToPlayer": true,
     "special": { 
-        "fromPlayer": 100
+        "fromPlayer": 75
     }
   },
-  "pistol": {
-    "weaponName": "BasicPointing",
-    "factoryType": "it.unibo.wildenc.mvc.model.weaponary.weapons.PointerFactory",
+  "ember": {
+    "weaponName": "Ember",
+    "factoryType": "it.unibo.wildenc.mvc.model.weaponary.weapons.factories.BurstingArcFactory",
     "baseCooldown": 3.0,
-    "baseDamage": 10.0,
-    "hbRadius": 1,
-    "baseVelocity": 100.0,
+    "baseDamage": 25.0,
+    "hbRadius": 5,
+    "baseVelocity": 200.0,
     "baseTTL": 7.0,
     "baseProjAtOnce": 3,
     "baseBurst": 3,
+    "availableToPlayer": true,
     "immortal": false
   },
   "testingpistol": {
     "weaponName": "TestingPistol",
-    "factoryType": "it.unibo.wildenc.mvc.model.weaponary.weapons.FixedFactory",
+    "factoryType": "it.unibo.wildenc.mvc.model.weaponary.weapons.factories.FixedFactory",
     "baseCooldown": 1.0,
     "baseDamage": 10.0,
     "hbRadius": 1,
@@ -36,6 +38,33 @@
     "baseTTL": 99.0,
     "baseProjAtOnce": 3,
     "baseBurst": 3,
+    "availableToPlayer": false,
     "immortal": false
+  },
+   "spikes": {
+    "weaponName": "Spikes",
+    "factoryType": "it.unibo.wildenc.mvc.model.weaponary.weapons.factories.RandomPatternFactory",
+    "baseCooldown": 5.0,
+    "baseDamage": 100.0,
+    "hbRadius": 30,
+    "baseVelocity": 0,
+    "baseTTL": 2.5,
+    "baseProjAtOnce": 1,
+    "baseBurst": 5,
+    "availableToPlayer": true,
+    "immortal": true
+  },
+  "melee": {
+    "weaponName": "melee",
+    "factoryType": "it.unibo.wildenc.mvc.model.weaponary.weapons.factories.PointingMeleeFactory",
+    "baseCooldown": 1.0,
+    "baseDamage": 50.0,
+    "hbRadius": 25,
+    "baseVelocity": 0,
+    "baseTTL": 0.1,
+    "baseProjAtOnce": 1,
+    "baseBurst": 1,
+    "availableToPlayer": true,
+    "immortal": true
   }
 }

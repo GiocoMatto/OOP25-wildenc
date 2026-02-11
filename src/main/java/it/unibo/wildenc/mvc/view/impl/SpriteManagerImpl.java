@@ -21,7 +21,6 @@ import javafx.scene.image.Image;
 public class SpriteManagerImpl implements SpriteManager {
 
     private static final int SPRITE_SIZE = 64;
-    private static final int TOTAL_FRAMES = 3;
     private static final int DOT_PNG_PREFIX_LENGHT = 4;
     private static final String SPRITES_LOCATION = "sprites";
 
@@ -44,10 +43,12 @@ public class SpriteManagerImpl implements SpriteManager {
             );
         } else {
             if (loadedSpriteMap.containsKey(objData.name().toLowerCase().split(":")[1])) {
+                final int totalFrames = (int) loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1])
+                    .getWidth() / SPRITE_SIZE;
                 return new Sprite(
                     loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1]),
                     convertVersorToDominant(objData),
-                    ((frameCount / 24) % TOTAL_FRAMES) * SPRITE_SIZE
+                    ((frameCount / 6) % totalFrames) * SPRITE_SIZE
                 );
             } else {
                 return new Sprite(

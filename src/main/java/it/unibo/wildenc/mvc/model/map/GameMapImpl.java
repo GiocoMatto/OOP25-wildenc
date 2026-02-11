@@ -236,7 +236,6 @@ public class GameMapImpl implements GameMap {
         if (!e.isAlive()) {
             toRemove.add(e);
             if (e instanceof Enemy en) {
-                // FIXME: if an enemy drops multiple collectibles they should not be in the same exact place
                 addAllObjects(en.getLoot());
                 this.currentMapBestiary.merge(e.getName(), 1, Integer::sum);
             }

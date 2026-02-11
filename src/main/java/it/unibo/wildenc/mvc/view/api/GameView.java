@@ -6,13 +6,19 @@ import java.util.Set;
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.model.Game;
+import javafx.scene.Parent;
+import javafx.scene.layout.StackPane;
 
 public interface GameView {
+
+    void switchRoot(Parent root);
+
+    void start(Game.PlayerType pt);
 
     /**
      * Start the view.
      */
-    void start();
+    Parent game();
 
     /**
      * Set an Engine (Controller) for this view.
@@ -46,7 +52,7 @@ public interface GameView {
     /**
      * Display the menu.
      */
-    void menu();
+    Parent menu(Game.PlayerType pt);
 
     /**
      * Display the shop.
@@ -58,12 +64,14 @@ public interface GameView {
      * @param powerUps List of power up.
      * @return the player chose.
      */
-    String powerUp(Set<Game.WeaponChoice> powerUps);
+    void openPowerUp(Set<Game.WeaponChoice> powerUps);
+
+    void closePowerUp();
 
     /**
      * Display the list of pokemok killed.
      * 
      * @param pokedexView the pokemon killed.
      */
-    void pokedexView(Map<String, Integer> pokedexView);
+    Parent pokedexView(Map<String, Integer> pokedexView);
 }

@@ -79,6 +79,6 @@ public interface InputHandler {
      * @param target pointer position
      * @return pointer position translated as a {@link Vector2dc}.
      */
-    Vector2dc handleAttackDirection(Vector2dc target); // FIXME: non è un vettore: capire cosa manda la view
+    Vector2dc handleAttackDirection(Vector2dc target);
 
 }
