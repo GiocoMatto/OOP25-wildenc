@@ -13,6 +13,7 @@ import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 public class PlayerImpl extends AbstractEntity implements Player {
 
     // private final Vector2d inputDirection = new Vector2d(0, 0); //ultima direzione richiesta dall'utente
+    private String playerName;
     private int experience;
     private int level;
     private int money;
@@ -24,9 +25,16 @@ public class PlayerImpl extends AbstractEntity implements Player {
      * @param speed     Movement speed
      * @param maxHealth Maximum health
      */
-    public PlayerImpl(final Vector2dc startPos, final double hitbox, final double speed, final int maxHealth) {
+    public PlayerImpl(
+        final String name,
+        final Vector2dc startPos, 
+        final double hitbox, 
+        final double speed, 
+        final int maxHealth
+    ) {
         // inizializzazione con valori iniziali
         super(startPos, hitbox, speed, maxHealth, new LinkedHashSet<>());
+        this.playerName = name;
         this.experience = 0;
         this.level = 1;
         this.money = 0;
@@ -62,7 +70,7 @@ public class PlayerImpl extends AbstractEntity implements Player {
 
     @Override
     public String getName() {
-        return "player:player"; // FIXME: Add ID field to player and rename this to "player:" + this.playerid
+        return "player:" + this.playerName;
     }
 
     @Override

@@ -108,6 +108,7 @@ public class EngineImpl implements Engine {
     public void onLeveUpChoise(final String choise) {
         this.model.choosenWeapon(new WeaponChoice(choise));
         setPause(false);
+        this.views.forEach(e -> e.closePowerUp());
     }
 
     /**
@@ -126,8 +127,8 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void pokedex() {
-        // this.views.forEach(e -> e.pokedexView(data.getPokedex()));
-        this.views.forEach(e -> e.switchRoot(e.pokedexView(Map.of("caio", 1, "caio1", 3, "caio2", 0, "caio3", 9))));
+        this.views.forEach(e -> e.switchRoot(e.pokedexView(data.getPokedex())));
+        //this.views.forEach(e -> e.switchRoot(e.pokedexView(Map.of("caio", 1, "caio1", 3, "caio2", 0, "caio3", 9))));
     }
 
     /**
@@ -135,8 +136,8 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void close() {
-        saveAllData();
         gameStatus = STATUS.END;
+        saveAllData();
     }
 
     /**
@@ -208,10 +209,9 @@ public class EngineImpl implements Engine {
                     lastTime = now;
                     //passo il nuovo vettore calcolato
                     model.updateEntities(dt, ih.handleMovement(activeMovements));
-                    if (model.hasPlayerLevelledUp()) {
+                    if (/*model.hasPlayerLevelledUp()*/ true) {
                         setPause(true);
-                        final var levelUpChoise = model.weaponToChooseFrom();
-                        views.forEach(e -> e.powerUp(levelUpChoise));
+                        views.forEach(e -> e.openPowerUp(model.weaponToChooseFrom()));
                     }
                     if (model.isGameEnded()) {
                         saveAllData();

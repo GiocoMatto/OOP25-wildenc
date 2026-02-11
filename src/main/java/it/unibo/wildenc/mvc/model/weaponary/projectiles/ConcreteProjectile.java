@@ -30,7 +30,7 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
         final ProjectileStats pStats
     ) {
         super(
-            pStats.getOwner().getPosition(), 
+            atkInfo.getLastPosition(), 
             pStats.getStatValue(ProjStatType.HITBOX),
             pStats.getStatValue(ProjStatType.VELOCITY)
         );

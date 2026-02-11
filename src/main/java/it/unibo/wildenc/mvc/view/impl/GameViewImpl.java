@@ -37,9 +37,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -114,7 +112,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     @Override
     public Parent game() {
         renderer.setCanvas(canvas);
-        final VBox root = new VBox();
+        final StackPane root = new StackPane();
         this.renderer.setContainer(root);
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
@@ -141,7 +139,7 @@ public class GameViewImpl implements GameView, GamePointerView {
                 engine.setPause(false);
             }
         });
-        
+
         //listener tasto rilasciato
         canvas.setOnKeyReleased(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
@@ -207,38 +205,47 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public String powerUp(final Set<Game.WeaponChoice> powerUps) {
-        final Stage powerUpStage = new Stage();
-        powerUpStage.setTitle("Scegli un arma nuova o un Potenziamento");
-        powerUpStage.initModality(Modality.APPLICATION_MODAL);
-        powerUpStage.initOwner(this.gameStage);
+    public void openPowerUp(final Set<Game.WeaponChoice> powerUps) {
+        StackPane root = (StackPane) gameStage.getScene().getRoot();
+
+        Label text = new Label("Scegli un arma nuova o un Potenziamento");
         ListView<String> listView = new ListView<>();
+        VBox box = new VBox(10, text, listView);
+        StackPane wrapper = new StackPane(box);
+        
+        Platform.runLater(() -> {
+            root.getChildren().add(wrapper);
+            wrapper.toFront();
+            listView.requestFocus();
+        });
+
         listView.getItems().addAll(powerUps.stream().map(e -> e.name()).toList());
         listView.getSelectionModel().selectFirst();
+        
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                confirmSelection(powerUpStage, listView);
+                engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
             }
         });
-        listView.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                confirmSelection(powerUpStage, listView);
-            }
-        });
-        VBox root = new VBox(listView);
-        Scene scene = new Scene(root, 250, 200);
-        powerUpStage.setScene(scene);
-        powerUpStage.showAndWait();
-        return listView.getSelectionModel().getSelectedItem();
+        // listView.setOnMouseClicked(event -> {
+        //     if (event.getClickCount() == 2) {
+        //         engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
+        //     }
+        // });
+        box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+
+        wrapper.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        wrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
+        wrapper.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
     }
 
-    private void confirmSelection(final Stage stage, final ListView<String> listView) {
-        final String selected = listView.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            System.out.println("Hai scelto: " + selected);
-            stage.close();
-        }
-    }
+    // private void confirmSelection(final Stage stage, final ListView<String> listView) {
+    //     final String selected = listView.getSelectionModel().getSelectedItem();
+    //     if (selected != null) {
+    //         System.out.println("Hai scelto: " + selected);
+    //         stage.close();
+    //     }
+    // }
 
     @Override
     public Parent pokedexView(Map<String, Integer> pokedexView) {
@@ -254,7 +261,7 @@ public class GameViewImpl implements GameView, GamePointerView {
                     setGraphic(null);
                     return;
                 }
-                Label img = new Label("Immagine: " + entry.getKey());
+                Label img = new Label("Immagine: " + entry.getKey().split(":")[1]);
                 Label kills = new Label("Uccisioni: " + entry.getValue());
                 HBox row = new HBox(15, img, kills);
                 row.setAlignment(Pos.CENTER_LEFT);
@@ -342,6 +349,12 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void shop() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'shop'");
+    }
+
+    @Override
+    public void closePowerUp() {
+        StackPane root = (StackPane) gameStage.getScene().getRoot();
+        Platform.runLater(() -> root.getChildren().remove(1));
     }
 
 }

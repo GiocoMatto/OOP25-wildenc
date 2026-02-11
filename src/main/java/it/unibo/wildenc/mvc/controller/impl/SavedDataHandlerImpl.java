@@ -12,6 +12,7 @@ import it.unibo.wildenc.mvc.controller.api.SavedData;
 import it.unibo.wildenc.mvc.controller.api.SavedDataHandler;
 
 public class SavedDataHandlerImpl implements SavedDataHandler{
+    private static final File DATA_LOCATION = new File("build", "saveData.wenc");
 
     /**
      * {@inheritDoc}
@@ -20,7 +21,7 @@ public class SavedDataHandlerImpl implements SavedDataHandler{
     public void saveData(SavedData data) throws FileNotFoundException, IOException {
         try (
             final ObjectOutputStream out = new ObjectOutputStream(
-                new FileOutputStream("build" + File.separator + "saveData.wenc")
+                new FileOutputStream(DATA_LOCATION)
             )
         ) {
             out.writeObject(data);
@@ -34,7 +35,7 @@ public class SavedDataHandlerImpl implements SavedDataHandler{
     public SavedData loadData() throws ClassNotFoundException, IOException {
         try (
             final ObjectInputStream in = new ObjectInputStream(
-                new FileInputStream("build" + File.separator + "savedData.wenc")
+                new FileInputStream(DATA_LOCATION)
             )
         ) {
             return (SavedData) in.readObject();

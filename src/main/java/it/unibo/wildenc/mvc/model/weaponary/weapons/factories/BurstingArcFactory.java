@@ -1,4 +1,4 @@
-package it.unibo.wildenc.mvc.model.weaponary.weapons;
+package it.unibo.wildenc.mvc.model.weaponary.weapons.factories;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +12,12 @@ import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerWeapon;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 import it.unibo.wildenc.util.Utilities;
 
-public class PointerFactory implements WeaponFactory {
+public class BurstingArcFactory implements WeaponFactory {
 
     @Override
     public Weapon createWeapon(
