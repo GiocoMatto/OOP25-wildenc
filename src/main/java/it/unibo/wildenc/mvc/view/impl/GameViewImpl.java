@@ -229,13 +229,21 @@ public class GameViewImpl implements GameView, GamePointerView {
             listView.requestFocus();
         });
 
-        listView.getItems().addAll(powerUps.stream().map(e -> e.name()).toList());
+        listView.getItems().addAll(powerUps.stream().map(e -> e.toString()).toList());
         listView.getSelectionModel().selectFirst();
         listView.setFixedCellSize(26);
         listView.setPrefHeight(powerUps.size() * 26 + 2);
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
+                engine.onLeveUpChoise(
+                    powerUps.stream()
+                        .filter(wc -> wc.toString().equals(
+                            listView.getSelectionModel().getSelectedItem()
+                        ))
+                        .findFirst()
+                        .get()
+                        .name()
+                );
             }
         });
         listView.setOnMouseClicked(event -> {

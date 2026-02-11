@@ -72,19 +72,23 @@ public class GameImpl implements Game {
      * {@inheritDoc}
      */
     @Override
-    public void choosenWeapon(final WeaponChoice wc) {
+    public void choosenWeapon(final String wc) {
         if (player.getWeapons().stream()
-            .noneMatch(w -> w.getName().equals(wc.name()))
+            .noneMatch(w -> wc.equalsIgnoreCase(
+                w.getName().split(":")[1]
+            ))
         ) {
             player.addWeapon(
                 STATLOADER.getWeaponFactoryForWeapon(
-                    wc.name(), 
+                    wc.toLowerCase(), 
                     player, 
                     () -> new Vector2d(0, 0))
             );            
         } else {
             player.getWeapons().stream()
-                .filter(w -> w.getName().equals(wc.name()))
+                .filter(w -> wc.equalsIgnoreCase(
+                    w.getName().split(":")[1]
+                ))
                 .findFirst()
                 .get()
                 .upgrade();
@@ -98,7 +102,24 @@ public class GameImpl implements Game {
     public Set<WeaponChoice> weaponToChooseFrom() {
         return STATLOADER.getAllLoadedWeapons().stream()
             .filter(ws -> ws.availableToPlayer())
-            .map(ws -> new WeaponChoice(ws.weaponName()))
+            .map(ws -> {
+                if (!doPlayerHasWeapon(ws.weaponName())) {
+                    return new WeaponChoice(
+                        ws.weaponName(),
+                        "New weapon!"
+                    );
+                } else {
+                    final int weaponLevel = player.getWeapons()
+                        .stream()
+                        .filter(w -> w.getName().split(":")[1].equalsIgnoreCase(ws.weaponName()))
+                        .findFirst()
+                        .get().getStats().getLevel();
+                    return new WeaponChoice(
+                        ws.weaponName(),
+                        "New level! [%d -> %d]".formatted(weaponLevel, weaponLevel + 1)
+                    );
+                }
+            })
             .limit(WEAPON_CHOICE_NUM)
             .collect(Collectors.toSet());
     }
@@ -134,6 +155,14 @@ public class GameImpl implements Game {
         );
         playerStats.addDefaultWeapon().accept(null, actualPlayer);;
         return actualPlayer;
+    }
+
+    private boolean doPlayerHasWeapon(final String weaponName) {
+        return !player.getWeapons().isEmpty() &&
+            !player.getWeapons().stream()
+                .noneMatch(w -> weaponName.equalsIgnoreCase(
+                    w.getName().split(":")[1]
+        ));
     }
 
     @Override
