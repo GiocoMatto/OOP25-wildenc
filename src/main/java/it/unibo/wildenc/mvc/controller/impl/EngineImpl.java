@@ -127,8 +127,8 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void pokedex() {
-        // this.views.forEach(e -> e.pokedexView(data.getPokedex()));
-        this.views.forEach(e -> e.switchRoot(e.pokedexView(Map.of("caio", 1, "caio1", 3, "caio2", 0, "caio3", 9))));
+        this.views.forEach(e -> e.switchRoot(e.pokedexView(data.getPokedex())));
+        //this.views.forEach(e -> e.switchRoot(e.pokedexView(Map.of("caio", 1, "caio1", 3, "caio2", 0, "caio3", 9))));
     }
 
     /**
@@ -136,8 +136,8 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void close() {
-        saveAllData();
         gameStatus = STATUS.END;
+        saveAllData();
     }
 
     /**

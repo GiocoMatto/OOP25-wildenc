@@ -261,7 +261,7 @@ public class GameViewImpl implements GameView, GamePointerView {
                     setGraphic(null);
                     return;
                 }
-                Label img = new Label("Immagine: " + entry.getKey());
+                Label img = new Label("Immagine: " + entry.getKey().split(":")[1]);
                 Label kills = new Label("Uccisioni: " + entry.getValue());
                 HBox row = new HBox(15, img, kills);
                 row.setAlignment(Pos.CENTER_LEFT);
