@@ -64,7 +64,9 @@ public interface GameView {
      * @param powerUps List of power up.
      * @return the player chose.
      */
-    void powerUp(Set<Game.WeaponChoice> powerUps);
+    void openPowerUp(Set<Game.WeaponChoice> powerUps);
+
+    void closePowerUp();
 
     /**
      * Display the list of pokemok killed.
