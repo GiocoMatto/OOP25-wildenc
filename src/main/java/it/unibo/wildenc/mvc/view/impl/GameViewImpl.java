@@ -205,7 +205,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public void powerUp(final Set<Game.WeaponChoice> powerUps) {
+    public void openPowerUp(final Set<Game.WeaponChoice> powerUps) {
         StackPane root = (StackPane) gameStage.getScene().getRoot();
 
         Label text = new Label("Scegli un arma nuova o un Potenziamento");
@@ -219,16 +219,12 @@ public class GameViewImpl implements GameView, GamePointerView {
             listView.requestFocus();
         });
 
-        //engine.setPause(true);
-
         listView.getItems().addAll(powerUps.stream().map(e -> e.name()).toList());
         listView.getSelectionModel().selectFirst();
         
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
-                //engine.setPause(false);
-                Platform.runLater(() -> root.getChildren().remove(wrapper));
             }
         });
         // listView.setOnMouseClicked(event -> {
@@ -236,14 +232,11 @@ public class GameViewImpl implements GameView, GamePointerView {
         //         engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
         //     }
         // });
-        // box.setAlignment(Pos.CENTER);
-        // box.setPadding(new Insets(15));
         box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
         wrapper.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         wrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
         wrapper.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
-        //wrapper.setMaxSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
     }
 
     // private void confirmSelection(final Stage stage, final ListView<String> listView) {
@@ -356,6 +349,12 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void shop() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'shop'");
+    }
+
+    @Override
+    public void closePowerUp() {
+        StackPane root = (StackPane) gameStage.getScene().getRoot();
+        Platform.runLater(() -> root.getChildren().remove(1));
     }
 
 }
