@@ -141,4 +141,9 @@ public class GameImpl implements Game {
     public int getEarnedMoney() {
         return player.getMoney();
     }
+
+    @Override
+    public Player getPlayer() {
+        return this.player;
+    }
 }

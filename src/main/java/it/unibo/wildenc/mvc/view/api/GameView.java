@@ -74,4 +74,11 @@ public interface GameView {
      * @param pokedexView the pokemon killed.
      */
     Parent pokedexView(Map<String, Integer> pokedexView);
+
+    /**
+     * Plays a sound effect
+     * @param soundName the name of the sound to play
+     */
+
+    void playSound(String soundName);
 }

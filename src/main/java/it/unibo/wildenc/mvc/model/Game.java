@@ -121,4 +121,10 @@ public interface Game {
      */
     record WeaponChoice(String name) {
     }
+
+    /**
+     * gets the player entity (used for sounds of collectibles)
+     * @return the player
+     */
+    Player getPlayer();
 }

@@ -58,6 +58,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     private Collection<MapObjViewData> backupColl = List.of();
     private boolean gameStarted = false;
     private Rectangle2D rec = Screen.getPrimary().getVisualBounds();
+    private final SoundManager soundManager;
 
     //mappa associa wasd ai comandi MovementInput
     private final Map<KeyCode, MovementInput> keyToInputMap = Map.of(
@@ -70,7 +71,8 @@ public class GameViewImpl implements GameView, GamePointerView {
     private volatile double mouseY;
 
     public GameViewImpl() {
-        renderer = new ViewRendererImpl();        
+        renderer = new ViewRendererImpl();    
+        this.soundManager = new SoundManager();    
     }
 
     @Override
@@ -83,6 +85,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         Scene scene = new Scene(new StackPane());
         gameStage.setScene(scene);
         gameStage.setOnCloseRequest((e) -> {
+            soundManager.stopMusic();
             engine.unregisterView(this);
             gameStage.close();
         });
@@ -152,6 +155,7 @@ public class GameViewImpl implements GameView, GamePointerView {
                 engine.removeAllInput();
             }
         });
+        soundManager.playMusic("theme.mp3");
         return root;
     }
 
@@ -355,6 +359,11 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void closePowerUp() {
         StackPane root = (StackPane) gameStage.getScene().getRoot();
         Platform.runLater(() -> root.getChildren().remove(1));
+    }
+
+    @Override
+    public void playSound(String soundName) {
+        soundManager.play(soundName);
     }
 
 }

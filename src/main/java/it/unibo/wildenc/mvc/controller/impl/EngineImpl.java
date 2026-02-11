@@ -107,6 +107,7 @@ public class EngineImpl implements Engine {
     @Override
     public void onLeveUpChoise(final String choise) {
         this.model.choosenWeapon(new WeaponChoice(choise));
+        this.views.forEach(v -> v.playSound("levelUp"));
         setPause(false);
         this.views.forEach(e -> e.closePowerUp());
     }
@@ -193,9 +194,18 @@ public class EngineImpl implements Engine {
     public final class GameLoop extends Thread {
         private static final long SLEEP_TIME = 20;
 
+        //variabili per i suoni
+        private long lastStepTime = 0; //per il ritmo dei passi
+        private int lastExp = 0;
+
         @Override
         public void run() {
             try {
+
+                if(model != null) {
+                    lastExp = model.getPlayer().getExp();
+                }
+
                 long lastTime = System.nanoTime();
                 while (STATUS.END != gameStatus) {
                     synchronized (pauseLock) {
@@ -209,6 +219,22 @@ public class EngineImpl implements Engine {
                     lastTime = now;
                     //passo il nuovo vettore calcolato
                     model.updateEntities(dt, ih.handleMovement(activeMovements));
+
+                    if (!activeMovements.isEmpty()) {
+                        // Suona ogni 350ms per simulare il passo
+                        if ((now - lastStepTime) / 1_000_000 > 350) {
+                            views.forEach(v -> v.playSound("walk"));
+                            lastStepTime = now;
+                        }
+                    }
+                    final int currentExp = model.getPlayer().getExp();
+
+                    if (currentExp != lastExp) {
+                        views.forEach(v -> v.playSound("collect"));
+                        // Aggiorniamo i valori per il prossimo giro
+                        lastExp = currentExp;
+                    }
+
                     if (model.hasPlayerLevelledUp()) {
                         setPause(true);
                         views.forEach(e -> e.openPowerUp(model.weaponToChooseFrom()));
