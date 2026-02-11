@@ -106,7 +106,7 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void onLeveUpChoise(final String choise) {
-        //this.model.choosenWeapon(new WeaponChoice(choise));
+        this.model.choosenWeapon(new WeaponChoice(choise));
         setPause(false);
         this.views.forEach(e -> e.closePowerUp());
     }
@@ -211,11 +211,7 @@ public class EngineImpl implements Engine {
                     model.updateEntities(dt, ih.handleMovement(activeMovements));
                     if (/*model.hasPlayerLevelledUp()*/ true) {
                         setPause(true);
-                        //final var levelUpChoise = model.weaponToChooseFrom();
-                        views.forEach(e -> e.openPowerUp(Set.of(
-                            new Game.WeaponChoice("pianinetor1"), 
-                            new Game.WeaponChoice("pianinetor2"), 
-                            new Game.WeaponChoice("pianinetor3"))));
+                        views.forEach(e -> e.openPowerUp(model.weaponToChooseFrom()));
                     }
                     if (model.isGameEnded()) {
                         saveAllData();
