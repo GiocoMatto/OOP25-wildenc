@@ -40,11 +40,6 @@ public interface GameView {
     void updateExpBar(int exp, int level, int neededExp);
 
     /**
-     * Display the win screen.
-     */
-    void won();
-
-    /**
      * Display the loss screen.
      */
     void lost(Map<String, Integer> lostInfo);

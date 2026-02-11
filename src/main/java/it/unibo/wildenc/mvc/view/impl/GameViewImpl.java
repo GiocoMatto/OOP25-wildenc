@@ -198,15 +198,6 @@ public class GameViewImpl implements GameView, GamePointerView {
      * {@inheritDoc}
      */
     @Override
-    public void won() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'won'");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void lost(final Map<String, Integer> lostInfo) {
         // JOptionPane.showMessageDialog(frame, "You lost!");
         // System.exit(0);
@@ -225,11 +216,13 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void openPowerUp(final Set<Game.WeaponChoice> powerUps) {
         StackPane root = (StackPane) gameStage.getScene().getRoot();
 
-        Label text = new Label("Scegli un arma nuova o un Potenziamento");
+        Label text = new Label("Sblocca arma o potenziamento:");
         ListView<String> listView = new ListView<>();
-        VBox box = new VBox(10, text, listView);
+        VBox box = new VBox(5, text, listView);
+        box.setAlignment(Pos.CENTER);
         powerUpWrapper = new StackPane(box);
-        
+        powerUpWrapper.setPadding(new Insets(15));
+        powerUpWrapper.setStyle("-fx-background-color: #AEC6CF;");
         Platform.runLater(() -> {
             root.getChildren().add(powerUpWrapper);
             powerUpWrapper.toFront();
@@ -238,31 +231,23 @@ public class GameViewImpl implements GameView, GamePointerView {
 
         listView.getItems().addAll(powerUps.stream().map(e -> e.name()).toList());
         listView.getSelectionModel().selectFirst();
-        
+        listView.setFixedCellSize(26);
+        listView.setPrefHeight(powerUps.size() * 26 + 2);
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
             }
         });
-        // listView.setOnMouseClicked(event -> {
-        //     if (event.getClickCount() == 2) {
-        //         engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
-        //     }
-        // });
-        box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        listView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
+            }
+        });
+        VBox.setVgrow(listView, Priority.ALWAYS);
 
         powerUpWrapper.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        powerUpWrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
-        powerUpWrapper.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
+        powerUpWrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.15));
     }
-
-    // private void confirmSelection(final Stage stage, final ListView<String> listView) {
-    //     final String selected = listView.getSelectionModel().getSelectedItem();
-    //     if (selected != null) {
-    //         System.out.println("Hai scelto: " + selected);
-    //         stage.close();
-    //     }
-    // }
 
     @Override
     public Parent pokedexView(Map<String, Integer> pokedexView) {
@@ -301,12 +286,6 @@ public class GameViewImpl implements GameView, GamePointerView {
         box.setMaxWidth(rec.getWidth() * 0.35);
         box.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
         box.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
-        /* top bar statistic */
-        Label xp = new Label("XP");
-        Label level = new Label("LVL");
-        Label wc = new Label("WC");
-        HBox topBar = new HBox(20, xp, level, wc);
-        topBar.setAlignment(Pos.CENTER);
         /* start game play */
         Label avatar = new Label(pt.name());
         avatar.setMinSize(120, 120);
@@ -330,14 +309,17 @@ public class GameViewImpl implements GameView, GamePointerView {
         /* oter buttons */
         Button boxBtn = new Button("POKEDEX");
         boxBtn.setOnAction(e -> engine.pokedex());
-        Button shopBtn = new Button("SHOP");
-        HBox downMenu = new HBox(10, boxBtn, shopBtn);
+        HBox downMenu = new HBox(boxBtn);
         boxBtn.setMaxWidth(Double.MAX_VALUE);
-        shopBtn.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(boxBtn, Priority.ALWAYS);
-        HBox.setHgrow(shopBtn, Priority.ALWAYS);
         playBtn.setMaxWidth(Double.MAX_VALUE);
-        Image img = new Image(getClass().getResource("/sprites/background.jpg").toExternalForm(), 300, 300, true, true);
+        Image img = new Image(
+            getClass().getResource("/sprites/background.jpg").toExternalForm(), 
+            300, 
+            300, 
+            true, 
+            true
+        );
         BackgroundImage bgImg = new BackgroundImage(
             img, 
             BackgroundRepeat.NO_REPEAT, 
@@ -358,7 +340,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         VBox.setVgrow(spacer1, Priority.ALWAYS);
         VBox.setVgrow(spacer2, Priority.ALWAYS);
         centerBox.setFillWidth(true);
-        box.getChildren().addAll(topBar, spacer1, centerBox, spacer2, downMenu);
+        box.getChildren().addAll(spacer1, centerBox, spacer2, downMenu);
         return root;
     }
 
