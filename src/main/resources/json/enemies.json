@@ -15,42 +15,42 @@
     "entityName": "Haunter",
     "hbRadius": 20,
     "maxHealth": 60.0,
-    "velocity": 4.5
+    "velocity": 56
   },
   "croagunk": {
     "entityName": "Croagunk",
     "hbRadius": 20,
     "maxHealth": 85.0,
-    "velocity": 3.5
+    "velocity": 56
   },
   "marowak": {
     "entityName": "Marowak",
     "hbRadius": 25,
     "maxHealth": 120.0,
-    "velocity": 3.0
+    "velocity": 56
   },
   "shiftry": {
     "entityName": "Shiftry",
     "hbRadius": 25,
     "maxHealth": 110.0,
-    "velocity": 4.0
+    "velocity": 56
   },
   "banette": {
     "entityName": "Banette",
     "hbRadius": 20,
     "maxHealth": 75.0,
-    "velocity": 3.8
+    "velocity": 56
   },
   "exeggcute": {
     "entityName": "Exeggcute",
     "hbRadius": 25,
     "maxHealth": 50.0,
-    "velocity": 2.0
+    "velocity": 56
   },
   "wingull": {
     "entityName": "Wingull",
     "hbRadius": 15,
     "maxHealth": 45.0,
-    "velocity": 7.0
+    "velocity": 56
   }
 }

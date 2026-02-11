@@ -67,9 +67,13 @@ public interface Game {
     Collection<MapObject> getAllMapObjects();
 
     /**
+<<<<<<< Updated upstream
      * Gets earned money in this game.
      * 
      * @return earned money.
+=======
+     * Gets the money earned in this game.
+>>>>>>> Stashed changes
      */
     int getEarnedMoney();
 

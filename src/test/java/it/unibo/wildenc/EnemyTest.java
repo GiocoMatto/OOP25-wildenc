@@ -105,8 +105,8 @@ public class EnemyTest {
     };
     private Enemy enemy;
 
-    private Collectible experienceLoot(final Vector2dc pos) {
-        return new ExperienceGem(pos, VALUE_COLLECTIBLE);
+    private Optional<Collectible> experienceLoot(final Vector2dc pos) {
+        return Optional.of(new ExperienceGem(pos, VALUE_COLLECTIBLE));
     }
 
     @Test

@@ -19,7 +19,7 @@ import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
     private final Optional<MapObject> target;
     private final String name;
-    private final Set<Function<MapObject, Collectible>> loot;
+    private final Set<Function<MapObject, Optional<Collectible>>> loot;
 
     /**
      * Create a new general Enemey.
@@ -80,7 +80,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
      */
     @Override
     public Set<Collectible> getLoot() {
-        return this.loot.stream().map(f -> f.apply(this)).collect(Collectors.toSet());
+        return this.loot.stream().map(f -> f.apply(this)).filter(o -> !o.isEmpty()).map(o -> o.get()).collect(Collectors.toSet());
     }
 
     /**
@@ -101,7 +101,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
         double health, 
         String name, 
         Optional<MapObject> target, 
-        Set<Function<MapObject, Collectible>> loot
+        Set<Function<MapObject, Optional<Collectible>>> loot
     ) { }
 
 }

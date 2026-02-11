@@ -1,6 +1,9 @@
 package it.unibo.wildenc.mvc.model.enemies;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -14,12 +17,15 @@ import it.unibo.wildenc.mvc.model.dataloaders.StatLoader;
 import it.unibo.wildenc.mvc.model.dataloaders.StatLoader.LoadedEntityStats;
 import it.unibo.wildenc.mvc.model.enemies.AbstractEnemy.AbstractEnemyField;
 import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
+import it.unibo.wildenc.mvc.model.map.objects.HealthPotion;
+import it.unibo.wildenc.mvc.model.map.objects.MoneyCoin;
 
 /**
  * {@inheritDoc}.
  */
 public class EnemyFactoryImpl implements EnemyFactory {
     private static final int VALUE_COLLECTIBLE = 34;
+    private static final int RANGE_PROBABILITY = 100;
 
     private final MapObject target;
     private final StatLoader statLoader = StatLoader.getInstance();
@@ -56,9 +62,26 @@ public class EnemyFactoryImpl implements EnemyFactory {
         // ));
     }
 
-    private Function<MapObject, Collectible> experienceLoot(final Vector2dc pos) {
-        return e -> new ExperienceGem(e.getPosition(), VALUE_COLLECTIBLE);
+    private Function<MapObject, Optional<Collectible>> experienceLoot(final Vector2dc pos) {
+        return e -> Optional.of(new ExperienceGem(e.getPosition(), VALUE_COLLECTIBLE));
     };
+
+    private Function<MapObject, Optional<Collectible>> coinLoot(final Vector2dc pos) {
+        return e -> Optional.of(new MoneyCoin(e.getPosition(), VALUE_COLLECTIBLE));
+    };
+
+    private Function<MapObject, Optional<Collectible>> healthLoot(final Vector2dc pos) {
+        return e -> Optional.of(new HealthPotion(e.getPosition(), VALUE_COLLECTIBLE));
+    };
+
+    private Function<MapObject, Optional<Collectible>> percentageLoot(final Function<MapObject, Optional<Collectible>> loot, double percent) {
+        return hasPercentageHit(percent) ? loot : e -> Optional.empty();
+    }
+
+    private boolean hasPercentageHit(double percent) {
+        Random r = new Random();
+        return r.nextInt(RANGE_PROBABILITY) <= percent * RANGE_PROBABILITY;
+    }
 
     /**
      * {@inheritDoc}
@@ -73,7 +96,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
             loadedEntityStats.maxHealth(), 
             name, 
             Optional.of(target),
-            Set.of(experienceLoot(spawnPosition))
+            new HashSet<>(List.of(experienceLoot(spawnPosition), percentageLoot(coinLoot(spawnPosition), 0.1)))
         ));
         addMeleeWeaponTo(e);
         return e;
@@ -92,7 +115,11 @@ public class EnemyFactoryImpl implements EnemyFactory {
             loadedEntityStats.maxHealth(), 
             name, 
             Optional.of(target),
-            Set.of(experienceLoot(spawnPosition))
+            new HashSet<>(List.of(
+                experienceLoot(spawnPosition), 
+                percentageLoot(coinLoot(spawnPosition), 0.2), 
+                percentageLoot(healthLoot(spawnPosition), 0.4)
+            ))
         ));
         addMeleeWeaponTo(e);
         return e;
@@ -111,7 +138,10 @@ public class EnemyFactoryImpl implements EnemyFactory {
             loadedEntityStats.maxHealth(), 
             name, 
             Optional.of(target),
-            Set.of(experienceLoot(spawnPosition))
+            new HashSet<>(List.of(
+                experienceLoot(spawnPosition), 
+                percentageLoot(healthLoot(spawnPosition), 0.5)
+            ))
         ));
         addMeleeWeaponTo(e);
         return e;
@@ -130,7 +160,10 @@ public class EnemyFactoryImpl implements EnemyFactory {
             loadedEntityStats.maxHealth(), 
             name, 
             Optional.of(target),
-            Set.of(experienceLoot(spawnPosition))
+            new HashSet<>(List.of(
+                experienceLoot(spawnPosition), 
+                healthLoot(spawnPosition)
+            ))
         ));
         addDefaultWeaponTo(e);
         addDefaultWeaponTo(e);
@@ -150,7 +183,10 @@ public class EnemyFactoryImpl implements EnemyFactory {
             loadedEntityStats.maxHealth(), 
             name, 
             Optional.empty(), 
-            Set.of(experienceLoot(spawnPosition))
+            new HashSet<>(List.of(
+                experienceLoot(spawnPosition), 
+                percentageLoot(healthLoot(spawnPosition), 0.05)
+            ))
         ));
         addMeleeWeaponTo(e);
         return e;
@@ -169,7 +205,11 @@ public class EnemyFactoryImpl implements EnemyFactory {
             loadedEntityStats.maxHealth() + loadedEntityStats.maxHealth() / 2, 
             name, 
             Optional.empty(), 
-            Set.of(experienceLoot(spawnPosition))
+            new HashSet<>(List.of(
+                experienceLoot(spawnPosition), 
+                percentageLoot(coinLoot(spawnPosition), 0.05),
+                percentageLoot(healthLoot(spawnPosition), 0.1)
+            ))
         ));
         addMeleeWeaponTo(e);
         return e;

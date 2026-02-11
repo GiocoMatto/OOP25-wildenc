@@ -232,7 +232,7 @@ public final class MapTestingConstants {
                 health, 
                 name, 
                 target, 
-                Set.of(m -> new ExperienceGem(m.getPosition(), VALUE_COLLECTIBLE))));
+                Set.of(m -> Optional.of(new ExperienceGem(m.getPosition(), VALUE_COLLECTIBLE)))));
                 
             for (final var w : weapons) {
                 e.addWeapon(w);

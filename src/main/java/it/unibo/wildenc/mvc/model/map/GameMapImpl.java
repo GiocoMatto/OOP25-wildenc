@@ -243,6 +243,11 @@ public class GameMapImpl implements GameMap {
         }
     }
 
+    private void onEnemyDeath(Enemy e) {
+        addAllObjects(e.getLoot());
+        this.currentMapBestiary.merge(e.getName(), 1, Integer::sum);
+    }
+
     private void handleAttacks(final double deltaSeconds) {
         final List<MapObject> toAdd = Collections.synchronizedList(new ArrayList<>());
         Stream.concat(Stream.of(player), this.getAllObjects().parallelStream())
