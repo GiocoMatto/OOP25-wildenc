@@ -24,11 +24,13 @@ public class InputHandlerImpl implements InputHandler {
     }
 
     @Override
-    public synchronized Vector2dc handleMovement(Set<MovementInput> movementCommands) {
+    public Vector2dc handleMovement(Set<MovementInput> movementCommands) {
         System.out.println(movementCommands);
         final Vector2d effectiveMovementVersor = new Vector2d(0, 0);
-        movementCommands.stream()
-            .forEach(movInput -> effectiveMovementVersor.add(new Vector2d(movInput.getVector())));
+        synchronized (movementCommands) {
+            movementCommands.stream()
+                .forEach(movInput -> effectiveMovementVersor.add(new Vector2d(movInput.getVector())));
+        }
         return Utilities.normalizeVector(effectiveMovementVersor);
     }
 

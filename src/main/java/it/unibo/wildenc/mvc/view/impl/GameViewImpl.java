@@ -121,17 +121,19 @@ public class GameViewImpl implements GameView, GamePointerView {
         canvas.heightProperty().bind(root.heightProperty());
         
         root.getChildren().add(canvas);
-
+        
         final BorderPane ui = new BorderPane();
         final HBox expBox = new HBox();
+        root.getChildren().add(ui);
+
+        ui.setPickOnBounds(false);
 
         expBox.getChildren().add(levelText);
         expBox.getChildren().add(experienceBar);
 
         ui.setTop(expBox);
         
-        root.getChildren().add(ui);
-        
+        canvas.setManaged(false); // canvas should be indipendent
         canvas.setFocusTraversable(true);
         canvas.requestFocus();
 
