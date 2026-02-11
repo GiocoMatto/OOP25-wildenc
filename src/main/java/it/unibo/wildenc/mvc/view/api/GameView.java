@@ -35,6 +35,11 @@ public interface GameView {
     void updateSprites(Collection<MapObjViewData> mObjs);
 
     /**
+     * Update experience bar and level during the game.
+     */
+    void updateExpBar(int exp, int level, int neededExp);
+
+    /**
      * Display the win screen.
      */
     void won();

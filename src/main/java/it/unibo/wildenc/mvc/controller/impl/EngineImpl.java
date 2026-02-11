@@ -3,12 +3,10 @@ package it.unibo.wildenc.mvc.controller.impl;
 import java.util.Collections;
 import java.util.HashSet;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.joml.Vector2d;
@@ -23,6 +21,7 @@ import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Game.PlayerType;
 import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
+import it.unibo.wildenc.mvc.model.Game.PlayerInfos;
 import it.unibo.wildenc.mvc.model.game.GameImpl;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerWeapon;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
@@ -209,6 +208,7 @@ public class EngineImpl implements Engine {
                     lastTime = now;
                     //passo il nuovo vettore calcolato
                     model.updateEntities(dt, ih.handleMovement(activeMovements));
+                    final PlayerInfos playerInfos = model.getPlayerInfos();
                     if (model.hasPlayerLevelledUp()) {
                         setPause(true);
                         views.forEach(e -> e.openPowerUp(model.weaponToChooseFrom()));
@@ -255,7 +255,10 @@ public class EngineImpl implements Engine {
                         })
                         .toList();
                     views.stream()
-                        .forEach(view -> view.updateSprites(mapDataColl));
+                        .forEach(view -> {
+                            view.updateSprites(mapDataColl);
+                            view.updateExpBar(playerInfos.experience(), playerInfos.level(), playerInfos.neededExp());
+                        });
                     Thread.sleep(SLEEP_TIME);
                 }
             } catch (final InterruptedException e) {
@@ -271,7 +274,7 @@ public class EngineImpl implements Engine {
                 .entrySet()
                 .stream()
                 .forEach(entry -> data.updatePokedex(entry.getKey(), entry.getValue()));
-            data.updateCoins(model.getEarnedMoney());
+            data.updateCoins(model.getPlayerInfos().coins());
             dataHandler.saveData(data);
         } catch (final IOException e) { 
             /*

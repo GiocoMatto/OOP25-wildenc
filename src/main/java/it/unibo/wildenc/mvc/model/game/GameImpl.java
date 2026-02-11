@@ -11,7 +11,6 @@ import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Game;
-import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
@@ -167,7 +166,8 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public int getEarnedMoney() {
-        return player.getMoney();
+    public PlayerInfos getPlayerInfos() {
+        return new PlayerInfos(player.getExp(), player.getLevel(), player.getExpToNextLevel(), player.getMoney());
     }
+
 }

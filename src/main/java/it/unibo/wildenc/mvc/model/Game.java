@@ -71,7 +71,7 @@ public interface Game {
      * 
      * @return earned money.
      */
-    int getEarnedMoney();
+    PlayerInfos getPlayerInfos();
 
     /**
      * Constant default player types.
@@ -126,5 +126,16 @@ public interface Game {
         public final String toString() {
             return this.name() + " | " + this.lvlUpDescription();
         }
+    }
+
+    /**
+     * Player infos that could be needed outside.
+     * 
+     * @param experience player's experience;
+     * @param level player's level;
+     * @param neededExp experience that player needs to level up;
+     * @param coins player's earned coins in this game.
+     */
+    record PlayerInfos(int experience, int level, int neededExp, int coins) {
     }
 }

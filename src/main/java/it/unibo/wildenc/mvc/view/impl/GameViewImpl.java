@@ -4,9 +4,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
@@ -30,6 +27,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
@@ -37,12 +35,13 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -50,11 +49,12 @@ import javafx.stage.StageStyle;
 public class GameViewImpl implements GameView, GamePointerView {
     private Engine engine; // TODO: should be final?
 
-    private static final int PROPORTION = 5;
-
     private final ViewRenderer renderer;
-    private Stage gameStage = new Stage(StageStyle.DECORATED);
     private final Canvas canvas = new Canvas(1600, 900);
+    private final ProgressBar experienceBar = new ProgressBar(0);
+    private final Text levelText = new Text("LV 1");
+    private StackPane powerUpWrapper = new StackPane();
+    private Stage gameStage = new Stage(StageStyle.DECORATED);
     private Collection<MapObjViewData> backupColl = List.of();
     private boolean gameStarted = false;
     private Rectangle2D rec = Screen.getPrimary().getVisualBounds();
@@ -79,6 +79,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         gameStage.setTitle("Wild Encounter");
         gameStage.setHeight(rec.getHeight() * 0.85);
         gameStage.setWidth(rec.getWidth() * 0.85);
+        experienceBar.setPrefWidth(rec.getWidth() * 0.5);
         //ngine.menu(Game.PlayerType.CHARMANDER);
         Scene scene = new Scene(new StackPane());
         gameStage.setScene(scene);
@@ -111,23 +112,39 @@ public class GameViewImpl implements GameView, GamePointerView {
      */
     @Override
     public Parent game() {
+        /* defining layout */
         renderer.setCanvas(canvas);
         final StackPane root = new StackPane();
+        
         this.renderer.setContainer(root);
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
+        
+        root.getChildren().add(canvas);
+        
+        final BorderPane ui = new BorderPane();
+        final HBox expBox = new HBox();
+        root.getChildren().add(ui);
 
+        ui.setPickOnBounds(false);
+
+        expBox.getChildren().add(levelText);
+        expBox.getChildren().add(experienceBar);
+
+        ui.setTop(expBox);
+        
+        canvas.setManaged(false); // canvas should be indipendent
+        canvas.setFocusTraversable(true);
+        canvas.requestFocus();
+
+        /*
+         * Action listeners 
+         */
         canvas.setOnMouseMoved(e -> {
             mouseX = e.getSceneX() - (gameStage.getWidth() / 2);
             mouseY = e.getSceneY() - (gameStage.getHeight() / 2);
         });
-
-        root.getChildren().add(canvas);
-
-        //final Scene scene = new Scene(root, 1600, 900);
-        //listener tasto premuto
-        canvas.setFocusTraversable(true);
-        canvas.requestFocus();
+        
         canvas.setOnKeyPressed(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
                 engine.addInput(keyToInputMap.get(event.getCode()));
@@ -211,11 +228,11 @@ public class GameViewImpl implements GameView, GamePointerView {
         Label text = new Label("Scegli un'arma nuova o un Potenziamento");
         ListView<String> listView = new ListView<>();
         VBox box = new VBox(10, text, listView);
-        StackPane wrapper = new StackPane(box);
+        powerUpWrapper = new StackPane(box);
         
         Platform.runLater(() -> {
-            root.getChildren().add(wrapper);
-            wrapper.toFront();
+            root.getChildren().add(powerUpWrapper);
+            powerUpWrapper.toFront();
             listView.requestFocus();
         });
 
@@ -242,9 +259,9 @@ public class GameViewImpl implements GameView, GamePointerView {
         // });
         box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
-        wrapper.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        wrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
-        wrapper.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
+        powerUpWrapper.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        powerUpWrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
+        powerUpWrapper.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
     }
 
     // private void confirmSelection(final Stage stage, final ListView<String> listView) {
@@ -362,7 +379,18 @@ public class GameViewImpl implements GameView, GamePointerView {
     @Override
     public void closePowerUp() {
         StackPane root = (StackPane) gameStage.getScene().getRoot();
-        Platform.runLater(() -> root.getChildren().remove(1));
+        Platform.runLater(() -> root.getChildren().remove(powerUpWrapper));
+    }
+
+    @Override
+    public void updateExpBar(int exp, int level, int neededExp) {
+        experienceBar.setProgress((double) exp / (double) neededExp);
+        levelText.setText("LV "
+            .concat(Integer.toString(level))
+            .concat(" xp ")
+            .concat(Integer.toString(exp))
+            .concat(" / ")
+            .concat(Integer.toString(neededExp)));
     }
 
 }

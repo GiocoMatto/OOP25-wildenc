@@ -16,9 +16,24 @@ public interface Player extends Entity {
 
     /**
      * Gets the current experience points.
+     * 
      * @return the current experience
      */
     int getExp();
+
+    /**
+     * Gets the current player level.
+     * 
+     * @return the current player level.
+     */
+    int getLevel();
+
+    /**
+     * Method for exp bar in the View.
+     * 
+     * @return necessary exp to complete the level
+     */
+    int getExpToNextLevel();
 
     /**
      * Adds experience points to the player.
@@ -52,8 +67,9 @@ public interface Player extends Entity {
     void setDirection(Vector2dc direction);
 
     /**
+     * Whether the player can level up.
      * 
-     * @return 
+     * @return true if the player can level up, false otherwise.
      */
     boolean canLevelUp();
 
