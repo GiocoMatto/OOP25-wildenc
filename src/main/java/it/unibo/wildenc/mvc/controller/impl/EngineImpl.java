@@ -3,14 +3,16 @@ package it.unibo.wildenc.mvc.controller.impl;
 import java.util.Collections;
 import java.util.HashSet;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
-
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.controller.api.SavedData;
@@ -19,6 +21,7 @@ import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.controller.api.InputHandler;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.Game.PlayerType;
 import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import it.unibo.wildenc.mvc.model.game.GameImpl;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerWeapon;
@@ -46,6 +49,12 @@ public class EngineImpl implements Engine {
      */
     public enum STATUS { RUNNING, PAUSE, END }
 
+    @Override
+    public void start(final Game.PlayerType pt) {
+        playerType = pt;
+        this.views.forEach(e -> e.start(pt));
+    }
+
     /**
      * Create a Engine.
      */
@@ -62,8 +71,8 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void startGameLoop() {
-        chosePlayerType(Game.PlayerType.CHARMANDER);
         model = new GameImpl(playerType);
+        this.views.forEach(v -> v.switchRoot(v.game()));
         this.loop.setDaemon(true);
         this.loop.start();
     }
@@ -116,16 +125,9 @@ public class EngineImpl implements Engine {
      * {@inheritDoc}
      */
     @Override
-    public void chosePlayerType(final Game.PlayerType pt) {
-        this.playerType = pt;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void pokedex() {
-        this.views.forEach(e -> e.pokedexView(data.getPokedex()));
+        // this.views.forEach(e -> e.pokedexView(data.getPokedex()));
+        this.views.forEach(e -> e.switchRoot(e.pokedexView(Map.of("caio", 1, "caio1", 3, "caio2", 0, "caio3", 9))));
     }
 
     /**
@@ -133,20 +135,17 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void close() {
-        try {
-            this.dataHandler.saveData(data);
-            gameStatus = STATUS.END;
-        } catch (final IOException e) {
-            System.out.println(e.getMessage());
-        }
+        saveAllData();
+        gameStatus = STATUS.END;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void menu() {
-        this.views.forEach(e -> e.menu());
+    public void menu(final Game.PlayerType pt) {
+        this.playerType = pt;
+        this.views.forEach(e -> e.switchRoot(e.menu(pt)));
     }
 
     /**
@@ -164,7 +163,6 @@ public class EngineImpl implements Engine {
     public void registerView(final GameView gv) {
         this.views.add(gv);
         gv.setEngine(this);
-        gv.start();
     }
 
     /**
@@ -178,6 +176,16 @@ public class EngineImpl implements Engine {
         }
     }
 
+    @Override
+    public List<Game.PlayerType> getPlayerType() {
+        return Arrays.stream(Game.PlayerType.values()).toList();
+    }
+
+    @Override
+    public PlayerType getPlayerTypeChoise() {
+        return this.playerType;
+    }
+
     /**
      * The game loop.
      */
@@ -188,10 +196,11 @@ public class EngineImpl implements Engine {
         public void run() {
             try {
                 long lastTime = System.nanoTime();
-                while (STATUS.RUNNING == gameStatus) {
+                while (STATUS.END != gameStatus) {
                     synchronized (pauseLock) {
                         while (gameStatus == STATUS.PAUSE) {
                             pauseLock.wait();
+                            lastTime = System.nanoTime();
                         }
                     }
                     final long now = System.nanoTime();
@@ -205,6 +214,7 @@ public class EngineImpl implements Engine {
                         views.forEach(e -> e.powerUp(levelUpChoise));
                     }
                     if (model.isGameEnded()) {
+                        saveAllData();
                         views.forEach(e -> e.lost(model.getGameStatistics()));
                         gameStatus = STATUS.END;
                     }
@@ -255,4 +265,19 @@ public class EngineImpl implements Engine {
         }
     }
 
+    private void saveAllData() {
+        try {
+            model.getGameStatistics()
+                .entrySet()
+                .stream()
+                .forEach(entry -> data.updatePokedex(entry.getKey(), entry.getValue()));
+            data.updateCoins(model.getEarnedMoney());
+            dataHandler.saveData(data);
+        } catch (final IOException e) { 
+            /*
+                If got any exception while saving,
+                no data will be saved instead.
+            */
+        }
+    }
 }

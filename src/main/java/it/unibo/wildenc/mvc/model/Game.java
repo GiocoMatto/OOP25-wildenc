@@ -67,6 +67,13 @@ public interface Game {
     Collection<MapObject> getAllMapObjects();
 
     /**
+     * Gets earned money in this game.
+     * 
+     * @return earned money.
+     */
+    int getEarnedMoney();
+
+    /**
      * Constant default player types.
      */
     enum PlayerType {
@@ -75,7 +82,7 @@ public interface Game {
         }),
         BULBASAUR(20, 30, 200, (wf, p) -> {
         }),
-        SQUIRTLE(10, 5, 90, (wf, p) -> {
+        SQUIRTLE(1000, 5, 90, (wf, p) -> {
             // p.addWeapon(wf.getMeleeWeapon(8,4, p));
         });
 

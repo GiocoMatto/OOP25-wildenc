@@ -1,6 +1,7 @@
 package it.unibo.wildenc;
 
 import it.unibo.wildenc.mvc.controller.impl.EngineImpl;
+import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.view.impl.GameViewImpl;
 import it.unibo.wildenc.mvc.controller.api.Engine;
 
@@ -13,7 +14,8 @@ public class EntryPoint extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         e.registerView(new GameViewImpl());
-        e.startGameLoop();
+        //e.registerView(new GameViewImpl());
+        e.start(Game.PlayerType.CHARMANDER);
     }
 
 }

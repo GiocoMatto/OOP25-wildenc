@@ -113,4 +113,9 @@ public class GameImpl implements Game {
         playerStats.addDefaultWeapon().accept(null, actualPlayer);;
         return actualPlayer;
     }
+
+    @Override
+    public int getEarnedMoney() {
+        return player.getMoney();
+    }
 }
