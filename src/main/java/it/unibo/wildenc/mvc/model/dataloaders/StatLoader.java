@@ -4,9 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Weapon;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.FixedFactory;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.factories.BurstingArcFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -94,6 +93,10 @@ public class StatLoader {
         }
     }
 
+    public Collection<LoadedWeaponStats> getAllLoadedWeapons() {
+        return this.loadedWeaponConfigs.values();
+    }
+
     public Weapon getWeaponFactoryForWeapon(
         final String weaponName, 
         Entity ownedBy, 
@@ -125,7 +128,7 @@ public class StatLoader {
             );
         } catch (final Exception e) {
             weaponToGenStats = LoadedWeaponStats.empty(weaponName);
-            return (new PointerFactory()).createWeapon(
+            return (new BurstingArcFactory()).createWeapon(
                 weaponName,
                 0, 
                 0, 
@@ -152,6 +155,7 @@ public class StatLoader {
         int baseProjAtOnce,
         int baseBurst,
         boolean immortal,
+        boolean availableToPlayer,
         Map<String, Double> special
     ) {
         public static LoadedWeaponStats empty(final String weaponName) {
@@ -165,6 +169,7 @@ public class StatLoader {
                 0, 
                 0, 
                 0,
+                false,
                 false,
                 Map.of()
             );

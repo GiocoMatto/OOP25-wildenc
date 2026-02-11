@@ -81,8 +81,8 @@ public interface Game {
      * Constant default player types.
      */
     enum PlayerType {
-        CHARMANDER(300, 15, 100, (wf, p) -> {
-            p.addWeapon(StatLoader.getInstance().getWeaponFactoryForWeapon("shuriken", p, () -> new Vector2d(0, 0)));
+        CHARMANDER(300, 20, 100, (wf, p) -> {
+            p.addWeapon(StatLoader.getInstance().getWeaponFactoryForWeapon("melee", p, () -> new Vector2d(0, 0)));
         }),
         BULBASAUR(20, 30, 200, (wf, p) -> {
         }),

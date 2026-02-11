@@ -21,7 +21,7 @@ import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
 import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
 
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.FixedFactory;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.factories.FixedFactory;
 
 /**
  * Testing constants for the map.
@@ -212,7 +212,7 @@ public final class MapTestingConstants {
          * @return a {@link PlayerImpl}.
          */
         public PlayerImpl getAsPlayer() {
-            return new PlayerImpl(pos, hitbox, speed, health);
+            return new PlayerImpl("Test", pos, hitbox, speed, health);
         }
 
         /**
