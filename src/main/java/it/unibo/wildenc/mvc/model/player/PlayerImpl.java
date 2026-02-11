@@ -12,13 +12,10 @@ import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
  */
 public class PlayerImpl extends AbstractEntity implements Player {
 
-<<<<<<< HEAD
     private static final int BASE_EXP_STEP = 100; //costante per il calcolo
 
-=======
     // private final Vector2d inputDirection = new Vector2d(0, 0); //ultima direzione richiesta dall'utente
     private String playerName;
->>>>>>> master
     private int experience;
     private int level;
     private int expToNextLevel;
@@ -71,16 +68,17 @@ public class PlayerImpl extends AbstractEntity implements Player {
 
     @Override
     public void levelUp() {
+        this.experience = this.experience - this.expToNextLevel; //l'eccesso rimane per il prossimo libello
         this.level++;
         this.expToNextLevel = this.level * BASE_EXP_STEP;
 
         //aumenta vita massima al level up quando le armi sono maxate
-        //final double newMaxHP = this.getMaxHealth() + 20.0;
-        //this.setMaxHealth(newMaxHP);
+        final double newMaxHP = this.getMaxHealth() + 1.0;
+        this.setMaxHealth(newMaxHP);
 
         //aumento velocità al level up quando le armi sono maxate
-        //final double newSpeed = this.getSpeed() * 1.03;
-        //this.setSpeed(newSpeed);
+        final double newSpeed = this.getSpeed() * 1.005;
+        this.setSpeed(newSpeed);
 
         System.out.println("LEVEL UP, level: " + level);
     }
@@ -100,18 +98,12 @@ public class PlayerImpl extends AbstractEntity implements Player {
 
     @Override
     public boolean canLevelUp() {
-        return false;
+        return this.experience >= this.expToNextLevel;
     }
 
     @Override
     public void addExp(final int amount) {
         this.experience = this.experience + amount;
-
-        while(this.experience >= this.expToNextLevel) {
-            //il player ottiene tanta exp e sale di più livelli in una botta
-            this.experience = this.experience - this.expToNextLevel; //l'eccesso rimane per il prossimo libello
-            levelUp();
-        }
     }
 
     @Override

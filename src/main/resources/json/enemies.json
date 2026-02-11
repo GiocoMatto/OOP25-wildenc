@@ -3,13 +3,15 @@
     "entityName": "Koffing",
     "hbRadius": 17,
     "maxHealth": 100.0,
-    "velocity": 20
+    "velocity": 20,
+    "rarity": "common"
   },
   "zubat": {
     "entityName": "Zubat",
     "hbRadius": 17,
     "maxHealth": 40.0,
-    "velocity": 20
+    "velocity": 20,
+    "rarity": "common"
   },
   "haunter": {
     "entityName": "Haunter",

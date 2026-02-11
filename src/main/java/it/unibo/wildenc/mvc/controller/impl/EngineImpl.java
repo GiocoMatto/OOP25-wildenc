@@ -209,7 +209,7 @@ public class EngineImpl implements Engine {
                     lastTime = now;
                     //passo il nuovo vettore calcolato
                     model.updateEntities(dt, ih.handleMovement(activeMovements));
-                    if (/*model.hasPlayerLevelledUp()*/ true) {
+                    if (model.hasPlayerLevelledUp()) {
                         setPause(true);
                         views.forEach(e -> e.openPowerUp(model.weaponToChooseFrom()));
                     }
