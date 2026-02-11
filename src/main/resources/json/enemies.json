@@ -19,7 +19,7 @@
   },
   "croagunk": {
     "entityName": "Croagunk",
-    "hbRadius": 25,
+    "hbRadius": 20,
     "maxHealth": 85.0,
     "velocity": 3.5
   },

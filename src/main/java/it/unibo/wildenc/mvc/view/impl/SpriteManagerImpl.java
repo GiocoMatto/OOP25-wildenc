@@ -44,10 +44,12 @@ public class SpriteManagerImpl implements SpriteManager {
             );
         } else {
             if (loadedSpriteMap.containsKey(objData.name().toLowerCase().split(":")[1])) {
+                final int totalFrames = (int) loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1])
+                    .getWidth() / SPRITE_SIZE;
                 return new Sprite(
                     loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1]),
                     convertVersorToDominant(objData),
-                    ((frameCount / 24) % TOTAL_FRAMES) * SPRITE_SIZE
+                    ((frameCount / 6) % totalFrames) * SPRITE_SIZE
                 );
             } else {
                 return new Sprite(

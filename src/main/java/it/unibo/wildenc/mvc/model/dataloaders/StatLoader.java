@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Weapon;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.FixedFactory;
-import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.factories.FixedFactory;
+import it.unibo.wildenc.mvc.model.weaponary.weapons.factories.PointerFactory;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 

@@ -105,6 +105,7 @@ public class GameImpl implements Game {
     private Player getPlayerByPlayerType(final PlayerType playerType) {
         final var playerStats = playerType.getPlayerStats();
         final Player actualPlayer = new PlayerImpl(
+            playerType.name().toLowerCase(),
             new Vector2d(0, 0),
             playerStats.hitbox(),
             playerStats.speed(),

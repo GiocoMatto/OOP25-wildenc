@@ -36,6 +36,7 @@ public class TestWeapons {
     private static final int TEST_MAX_HEALTH = 100;
     private static final int LEVEL_2 = 2;
     private static final Entity TEST_OWNER = new PlayerImpl(
+        "TestPlayer",
         new Vector2d(0, 0), 
         TEST_HITBOX,
         TEST_VELOCITY,
