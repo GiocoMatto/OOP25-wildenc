@@ -11,7 +11,7 @@ import it.unibo.wildenc.util.Utilities;
  * is immortal for some times by the spawn.
  */
 public class RoamingEnemy extends AbstractEnemy {
-    public static final int STEP_FOR_CHANGE_DIRECTION = 11;
+    public static final int STEP_FOR_CHANGE_DIRECTION = 50;
     public static final long TIME_SAFE = 5000;
     private int steps;
     private long startTime;

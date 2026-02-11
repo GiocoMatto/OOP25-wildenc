@@ -208,7 +208,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void openPowerUp(final Set<Game.WeaponChoice> powerUps) {
         StackPane root = (StackPane) gameStage.getScene().getRoot();
 
-        Label text = new Label("Scegli un arma nuova o un Potenziamento");
+        Label text = new Label("Scegli un'arma nuova o un Potenziamento");
         ListView<String> listView = new ListView<>();
         VBox box = new VBox(10, text, listView);
         StackPane wrapper = new StackPane(box);
@@ -219,12 +219,20 @@ public class GameViewImpl implements GameView, GamePointerView {
             listView.requestFocus();
         });
 
-        listView.getItems().addAll(powerUps.stream().map(e -> e.name()).toList());
+        listView.getItems().addAll(powerUps.stream().map(e -> e.toString()).toList());
         listView.getSelectionModel().selectFirst();
         
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
+                engine.onLeveUpChoise(
+                    powerUps.stream()
+                        .filter(wc -> wc.toString().equals(
+                            listView.getSelectionModel().getSelectedItem()
+                        ))
+                        .findFirst()
+                        .get()
+                        .name()
+                );
             }
         });
         // listView.setOnMouseClicked(event -> {

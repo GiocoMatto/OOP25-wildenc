@@ -34,9 +34,9 @@ public interface Game {
     /**
      * Notify which weapon was chosen.
      * 
-     * @param wc chosen weapon.
+     * @param wc name of chosen weapon.
      */
-    void choosenWeapon(WeaponChoice wc);
+    void choosenWeapon(String wc);
 
     /**
      * Get the weapons to chose from when the player levels up.
@@ -118,7 +118,13 @@ public interface Game {
      * Represents a weapon to choose from on level up.
      * 
      * @param name the name of the weapon.
+     * @param lvlUpDescription a brief explanation on 
+     *      what clicking this specific upgrade does.
      */
-    record WeaponChoice(String name) {
+    record WeaponChoice(String name, String lvlUpDescription) {
+        @Override
+        public final String toString() {
+            return this.name() + " | " + this.lvlUpDescription();
+        }
     }
 }

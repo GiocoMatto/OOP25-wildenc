@@ -106,7 +106,7 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void onLeveUpChoise(final String choise) {
-        this.model.choosenWeapon(new WeaponChoice(choise));
+        this.model.choosenWeapon(choise);
         setPause(false);
         this.views.forEach(e -> e.closePowerUp());
     }

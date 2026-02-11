@@ -16,11 +16,11 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.GenericWeapon;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 
-public class ShurikenFactory implements WeaponFactory {
+public class TyphoonFactory implements WeaponFactory {
 
     private final double distanceFromPlayer;
 
-    public ShurikenFactory(final double fromPlayer) {
+    public TyphoonFactory(final double fromPlayer) {
         this.distanceFromPlayer = fromPlayer;
     }
 
@@ -55,7 +55,17 @@ public class ShurikenFactory implements WeaponFactory {
                 .physics(
                     (dt, atkInfo) -> circularMovement(baseBurst, atkInfo, ownedBy, distanceFromPlayer)
                 ).build(), 
-                null,
+                (lvl, weaponstats) -> {
+                    weaponstats.getProjStats().setMultiplier(ProjStatType.DAMAGE, 1 + Math.log(lvl));
+                    if(lvl % 2 == 0) {
+                        weaponstats.setCooldown(
+                            weaponstats.getCooldown() - lvl / 100
+                        );
+                    }
+                    if(lvl % 5 == 0) {
+                        weaponstats.increaseProjectilesShotAtOnce();
+                    }
+                },
                 wStats -> circularSpawn(wStats)
         );
     }

@@ -49,13 +49,16 @@ public class BurstingArcFactory implements WeaponFactory {
                 .id(weaponName)
                 .build(),
             (level, weaponStats) -> {
-                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, level);
-                weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, level);
-                weaponStats.getProjStats().setMultiplier(
-                    ProjStatType.HITBOX, 
-                    weaponStats.getProjStats().getStatValue(ProjStatType.HITBOX) + level
-                );
-                weaponStats.setBurstSize(level);
+                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, level / 2);
+                weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, level / 2);
+                if(level % 5 == 0) {
+                    weaponStats.increaseProjectilesShotAtOnce();
+                }
+                if(level % 7 == 0) {
+                    weaponStats.setBurstSize(
+                        weaponStats.getCurrentBurstSize() + 1
+                    );
+                }
             },
             weaponStats -> arcSpawn(weaponStats)
         );
