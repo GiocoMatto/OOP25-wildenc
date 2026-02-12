@@ -19,6 +19,7 @@ import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -35,6 +36,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -135,6 +137,8 @@ public class GameViewImpl implements GameView, GamePointerView {
         final HBox expBox = new HBox();
         root.getChildren().add(ui);
         ui.setPickOnBounds(false);
+        expBox.setAlignment(Pos.TOP_CENTER);
+        expBox.setPadding(new Insets(15));
         expBox.getChildren().add(levelText);
         expBox.getChildren().add(experienceBar);
         ui.setTop(expBox);
@@ -277,28 +281,12 @@ public class GameViewImpl implements GameView, GamePointerView {
         listView.setPrefHeight(powerUps.size() * 26 + 2);
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                engine.onLeveUpChoise(
-                    powerUps.stream()
-                        .filter(wc -> wc.toString().equals(
-                            listView.getSelectionModel().getSelectedItem()
-                        ))
-                        .findFirst()
-                        .get()
-                        .name()
-                );
+                levelupHandler(powerUps, listView);
             }
         });
         listView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                engine.onLeveUpChoise(
-                    powerUps.stream()
-                        .filter(wc -> wc.toString().equals(
-                            listView.getSelectionModel().getSelectedItem()
-                        ))
-                        .findFirst()
-                        .get()
-                        .name()
-                );
+                levelupHandler(powerUps, listView);
             }
         });
         VBox.setVgrow(listView, Priority.ALWAYS);
@@ -306,6 +294,18 @@ public class GameViewImpl implements GameView, GamePointerView {
         powerUpWrapper.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         powerUpWrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.15));
         powerUpWrapper.setMaxWidth(rec.getWidth() * 0.15);
+    }
+
+    private void levelupHandler(final Set<Game.WeaponChoice> powerUps, final ListView<String> listView) {
+        engine.onLeveUpChoise(
+            powerUps.stream()
+                .filter(wc -> wc.toString().equals(
+                    listView.getSelectionModel().getSelectedItem()
+                ))
+                .findFirst()
+                .get()
+                .name()
+        );
     }
 
     /**
