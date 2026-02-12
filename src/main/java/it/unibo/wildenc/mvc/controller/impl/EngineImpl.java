@@ -36,9 +36,9 @@ public class EngineImpl implements Engine {
     private final Set<MovementInput> activeMovements = Collections.synchronizedSet(new HashSet<>());
     private final SavedDataHandler dataHandler = new SavedDataHandlerImpl();
     private final List<GameView> views = new LinkedList<>();
-    private final GameLoop loop = new GameLoop();
+    private GameLoop loop;
     private final Object pauseLock = new Object();
-    private volatile STATUS gameStatus = STATUS.RUNNING;
+    private volatile STATUS gameStatus;
     private volatile Game model;
     private Game.PlayerType playerType;
     private SavedData data;
@@ -71,10 +71,12 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void startGameLoop() {
-        model = new GameImpl(playerType);
+        this.model = new GameImpl(playerType);
         this.views.forEach(v -> v.switchRoot(v.game()));
+        this.loop = new GameLoop();
         this.loop.setDaemon(true);
         this.loop.start();
+        this.gameStatus = STATUS.RUNNING;
     }
 
     /**
@@ -138,7 +140,6 @@ public class EngineImpl implements Engine {
     @Override
     public void close() {
         gameStatus = STATUS.END;
-        saveAllData();
     }
 
     /**

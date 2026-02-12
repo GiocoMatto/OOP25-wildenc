@@ -17,6 +17,7 @@ import java.util.Map;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -236,7 +237,7 @@ public class GameViewImpl implements GameView, GamePointerView {
 
             Button btnExit = new Button("Esci dal Gioco");
             btnExit.setStyle("-fx-font-size: 18px; -fx-padding: 10 20 10 20;");
-            btnExit.setOnAction(e -> System.exit(0));
+            btnExit.setOnAction(e -> Platform.exit());
 
             //aggiungo al root
             root.getChildren().addAll(title, statsBox, btnMenu, btnExit);
