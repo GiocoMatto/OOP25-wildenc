@@ -231,7 +231,6 @@ public class EngineImpl implements Engine {
 
                     if (currentExp != lastExp) {
                         views.forEach(v -> v.playSound("collect"));
-                        // Aggiorniamo i valori per il prossimo giro
                         lastExp = currentExp;
                     }
 

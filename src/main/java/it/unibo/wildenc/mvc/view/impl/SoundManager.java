@@ -44,7 +44,7 @@ public class SoundManager {
 
             // Impostazioni Musica
             backgroundMusic.setCycleCount(MediaPlayer.INDEFINITE); // Loop infinito
-            backgroundMusic.setVolume(0.1); // Volume al 40%
+            backgroundMusic.setVolume(0.1); // Volume al 10%
             backgroundMusic.play();
         } catch (Exception e) {
             System.err.println("Errore avvio musica: " + e.getMessage());

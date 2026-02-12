@@ -195,8 +195,55 @@ public class GameViewImpl implements GameView, GamePointerView {
      */
     @Override
     public void lost(final Map<String, Integer> lostInfo) {
-        // JOptionPane.showMessageDialog(frame, "You lost!");
-        // System.exit(0);
+        
+        Platform.runLater(() -> {
+            soundManager.stopMusic();
+            
+            VBox root = new VBox(20); //per il layout
+            root.setAlignment(Pos.CENTER);
+            root.setStyle("-fx-background-color: black;");
+
+            Label title = new Label("GAME OVER"); //testo
+            title.setStyle("-fx-text-fill: red; -fx-font-size: 60px; -fx-font-weight: bold; -fx-font-family: 'Arial';");
+
+            VBox statsBox = new VBox(5);
+            statsBox.setAlignment(Pos.CENTER);
+            Label subTitle = new Label("Statistiche Partita");
+            subTitle.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-underline: true;");
+            statsBox.getChildren().add(subTitle);
+
+            // Itera sulla mappa per creare le label
+            if (lostInfo != null && !lostInfo.isEmpty()) {
+                lostInfo.forEach((key, value) -> {
+                    String labelText = key + ": " + value;
+                    Label statLabel = new Label(labelText);
+                    statLabel.setStyle("-fx-text-fill: lightgray; -fx-font-size: 16px;");
+                    statsBox.getChildren().add(statLabel);
+                });
+            } else {
+                Label noStats = new Label("Nessuna statistica disponibile.");
+                noStats.setStyle("-fx-text-fill: gray;");
+                statsBox.getChildren().add(noStats);
+            }
+
+            //Pulsanti
+            Button btnMenu = new Button("Torna al Menu");
+            btnMenu.setStyle("-fx-font-size: 18px; -fx-padding: 10 20 10 20;");
+            btnMenu.setOnAction(e -> {
+                //riapre menu usando l'ultimo personaggio scelto
+                engine.menu(engine.getPlayerTypeChoise());
+            });
+
+            Button btnExit = new Button("Esci dal Gioco");
+            btnExit.setStyle("-fx-font-size: 18px; -fx-padding: 10 20 10 20;");
+            btnExit.setOnAction(e -> System.exit(0));
+
+            //aggiungo al root
+            root.getChildren().addAll(title, statsBox, btnMenu, btnExit);
+
+            switchRoot(root);
+
+        });
     }
 
     /**
@@ -365,5 +412,4 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void playSound(String soundName) {
         soundManager.play(soundName);
     }
-
 }
