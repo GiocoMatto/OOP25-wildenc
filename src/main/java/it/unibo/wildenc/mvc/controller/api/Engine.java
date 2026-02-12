@@ -1,7 +1,6 @@
 package it.unibo.wildenc.mvc.controller.api;
 
 import java.util.List;
-import java.util.Set;
 
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
@@ -12,6 +11,11 @@ import it.unibo.wildenc.mvc.view.api.GameView;
  */
 public interface Engine {
 
+    /**
+     * Starts the engine for a specific player type.
+     * 
+     * @param pt the selected player type.
+     */
     void start(Game.PlayerType pt);
 
     /**
@@ -54,6 +58,8 @@ public interface Engine {
 
     /**
      * Show the menu.
+     * 
+     * @param pt the player type.
      */
     void menu(Game.PlayerType pt);
 
@@ -86,7 +92,17 @@ public interface Engine {
      */
     void unregisterView(GameView gv);
 
+    /**
+     * Lists all of the available player types.
+     * 
+     * @return a {@link List} of available PlayerTypes.
+     */
     List<Game.PlayerType> getPlayerType();
-    
+
+    /**
+     * Returns the chosen player type.
+     * 
+     * @return the chosen player type.
+     */
     Game.PlayerType getPlayerTypeChoise();
 }

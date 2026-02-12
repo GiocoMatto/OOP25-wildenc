@@ -23,9 +23,10 @@ public class GenericWeapon implements Weapon {
 
     private static final double BURST_DELAY = 0.2;
 
+    private final WeaponStats weaponStats;
+
     private final String weaponName;
     private final Function<WeaponStats, List<AttackContext>> attackInfoGenerator;
-    protected final WeaponStats weaponStats;
     private double timeSinceLastAtk = Double.MAX_VALUE;
     private int currentBullet;
 
@@ -36,6 +37,7 @@ public class GenericWeapon implements Weapon {
      * @param initialCooldown the initial cooldown of the weapon.
      * @param initialBurst the initial quantity of Projectiles in a burst.
      * @param initialProjAtOnce the initial quantity of Projectile shot in one attack.
+     * @param posToHit the position which the weapon is aiming at
      * @param pStats the statistics of the Projectile this weapon will shoot.
      * @param upgradeLogics the logics of upgrading for this weapon.
      * @param attackInfoGenerator a {@link Function} specifing how the Projectiles should be shot.
@@ -101,9 +103,15 @@ public class GenericWeapon implements Weapon {
 
     private boolean canBurst() {
         return !isInCooldown() 
-            || (currentBullet < this.weaponStats.getCurrentBurstSize() && timeSinceLastAtk >= BURST_DELAY);
+            || currentBullet < this.weaponStats.getCurrentBurstSize() && timeSinceLastAtk >= BURST_DELAY;
     }
 
+    /**
+     * Method for generating one or more projectile from their attack contexts.
+     * 
+     * @param contexts the contexts that will be used to generate the projectiles.
+     * @return a {@link Set} containing the generated projectiles.
+     */
     protected Set<Projectile> generateProjectiles(final List<AttackContext> contexts) {
         return contexts.stream()
             .map(e -> new ConcreteProjectile(e, this.weaponStats.getProjStats()))

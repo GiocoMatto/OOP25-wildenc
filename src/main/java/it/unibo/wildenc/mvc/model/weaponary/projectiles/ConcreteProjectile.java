@@ -13,7 +13,7 @@ import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStat
  * as a schematic for modelling any projectile weapons can shoot.
  */
 public class ConcreteProjectile extends AbstractMovable implements Projectile {
-    
+
     private final ProjectileStats projStats;
     private final AttackContext attackInformation;
     private double timePassed;

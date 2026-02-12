@@ -2,6 +2,7 @@ package it.unibo.wildenc.mvc.model.game;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,6 +56,9 @@ public class GameImpl implements Game {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<MapObject> getAllMapObjects() {
         return Stream.concat(Stream.of(map.getPlayer()), map.getAllObjects().stream()).toList();
@@ -80,10 +84,10 @@ public class GameImpl implements Game {
         ) {
             player.addWeapon(
                 STATLOADER.getWeaponFactoryForWeapon(
-                    wc.toLowerCase(), 
+                    wc.toLowerCase(Locale.ITALIAN), 
                     player, 
                     () -> new Vector2d(0, 0))
-            );            
+            );
         } else {
             player.getWeapons().stream()
                 .filter(w -> wc.equalsIgnoreCase(
@@ -153,18 +157,21 @@ public class GameImpl implements Game {
             playerStats.speed(),
             playerStats.health()
         );
-        playerStats.addDefaultWeapon().accept(null, actualPlayer);;
+        playerStats.addDefaultWeapon().accept(null, actualPlayer);
         return actualPlayer;
     }
 
     private boolean doPlayerHasWeapon(final String weaponName) {
-        return !player.getWeapons().isEmpty() &&
-            !player.getWeapons().stream()
+        return !player.getWeapons().isEmpty() 
+            && !player.getWeapons().stream()
                 .noneMatch(w -> weaponName.equalsIgnoreCase(
                     w.getName().split(":")[1]
         ));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PlayerInfos getPlayerInfos() {
         return new PlayerInfos(player.getExp(), player.getLevel(), player.getExpToNextLevel(), player.getMoney());

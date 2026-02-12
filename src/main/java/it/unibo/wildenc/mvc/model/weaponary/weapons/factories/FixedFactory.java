@@ -16,21 +16,28 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.GenericWeapon;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 
+/**
+ * Factory for FixedWeapons. A FixedWeapon is a {@link GeneriWeapon} that shoots projectiles
+ * directly to a specified point.
+ */
 public class FixedFactory implements WeaponFactory {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Weapon createWeapon(
-        String weaponName, 
-        double baseCooldown, 
-        double baseDamage, 
-        double hbRadius,
-        double baseVelocity, 
-        double baseTTL, 
-        int baseProjAtOnce, 
-        int baseBurst, 
-        Entity ownedBy,
+        final String weaponName, 
+        final double baseCooldown, 
+        final double baseDamage, 
+        final double hbRadius,
+        final double baseVelocity, 
+        final double baseTTL, 
+        final int baseProjAtOnce, 
+        final int baseBurst, 
+        final Entity ownedBy,
         final boolean immortal,
-        Supplier<Vector2dc> posToHit
+        final Supplier<Vector2dc> posToHit
     ) {
         return new GenericWeapon(
             weaponName,
@@ -40,7 +47,7 @@ public class FixedFactory implements WeaponFactory {
             posToHit,
             ProjectileStats.getBuilder()
                 .damage(baseDamage)
-                .physics((dt, atkInfo) -> straightMovement(dt, atkInfo))
+                .physics(this::straightMovement)
                 .radius(hbRadius)
                 .velocity(baseVelocity)
                 .ttl(baseTTL)
@@ -56,11 +63,11 @@ public class FixedFactory implements WeaponFactory {
                 );
                 weaponStats.setBurstSize(level);
             },
-            weaponStats -> basicSpawn(weaponStats)
+            this::basicSpawn
         );
     }
 
-    private List<AttackContext> basicSpawn(WeaponStats weaponStats) {
+    private List<AttackContext> basicSpawn(final WeaponStats weaponStats) {
         final List<AttackContext> toRet = new ArrayList<>();
         for (int i = 0; i < weaponStats.getProjectilesShotAtOnce(); i++) {
             toRet.add(new AttackContext(
@@ -72,7 +79,7 @@ public class FixedFactory implements WeaponFactory {
         return toRet;
     }
 
-    private Vector2d straightMovement(Double dt, AttackContext atkInfo) {
+    private Vector2d straightMovement(final double dt, final AttackContext atkInfo) {
         return new Vector2d(
             atkInfo.getLastPosition().x() + atkInfo.getVelocity() * dt * atkInfo.getDirectionVersor().x(),
             atkInfo.getLastPosition().y() + atkInfo.getVelocity() * dt * atkInfo.getDirectionVersor().y()

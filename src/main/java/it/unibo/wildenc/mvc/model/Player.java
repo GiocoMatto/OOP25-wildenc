@@ -37,12 +37,14 @@ public interface Player extends Entity {
 
     /**
      * Adds experience points to the player.
+     * 
      * @param amount the experience to add.
      */
     void addExp(int amount);
 
     /**
-     * Adds money coins
+     * Adds money coins.
+     * 
      * @param amount money to add
      */
     void addMoney(int amount);
@@ -53,6 +55,7 @@ public interface Player extends Entity {
     int getMoney();
 
     /**
+     * Heals the players from an amount of HP.
      * 
      * @param amount of heal to add
      */
@@ -61,8 +64,8 @@ public interface Player extends Entity {
     /**
      * Sets the movement direction of the player.
      * This is typically called by an Input Controller.
-     * * @param direction 
-     * the new direction vector (as a {@link Vector2dc})
+     * 
+     * @param direction the new direction vector (as a {@link Vector2dc})
      */
     void setDirection(Vector2dc direction);
 

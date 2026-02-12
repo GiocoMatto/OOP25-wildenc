@@ -189,6 +189,9 @@ public class GameViewImpl implements GameView, GamePointerView {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector2dc getMousePointerInfo() {
         return new Vector2d(mouseX, mouseY);

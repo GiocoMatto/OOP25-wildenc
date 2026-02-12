@@ -11,16 +11,20 @@ import java.io.ObjectOutputStream;
 import it.unibo.wildenc.mvc.controller.api.SavedData;
 import it.unibo.wildenc.mvc.controller.api.SavedDataHandler;
 
-public class SavedDataHandlerImpl implements SavedDataHandler{
+/**
+ * Class for managing saved data. This class loads and saves
+ * instances of {@link SavedData} which are {@link Serializable}.
+ */
+public class SavedDataHandlerImpl implements SavedDataHandler {
     private static final File DATA_LOCATION = new File("build", "saveData.wenc");
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void saveData(SavedData data) throws FileNotFoundException, IOException {
+    public void saveData(final SavedData data) throws FileNotFoundException, IOException {
         try (
-            final ObjectOutputStream out = new ObjectOutputStream(
+            ObjectOutputStream out = new ObjectOutputStream(
                 new FileOutputStream(DATA_LOCATION)
             )
         ) {
@@ -34,12 +38,11 @@ public class SavedDataHandlerImpl implements SavedDataHandler{
     @Override
     public SavedData loadData() throws ClassNotFoundException, IOException {
         try (
-            final ObjectInputStream in = new ObjectInputStream(
+            ObjectInputStream in = new ObjectInputStream(
                 new FileInputStream(DATA_LOCATION)
             )
         ) {
             return (SavedData) in.readObject();
-        }     
+        }
     }
-
 }

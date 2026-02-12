@@ -141,7 +141,7 @@ public class GameMapImpl implements GameMap {
      */
     @Override
     public void spawnEnemies(final double deltaSeconds) {
-        int enemyCount = (int) mapObjects.parallelStream().filter(e -> e instanceof Enemy).count();
+        final int enemyCount = (int) mapObjects.parallelStream().filter(e -> e instanceof Enemy).count();
         this.addAllObjects(es.spawn(player, enemyCount, deltaSeconds));
     }
 
@@ -243,7 +243,7 @@ public class GameMapImpl implements GameMap {
         }
     }
 
-    private void onEnemyDeath(Enemy e) {
+    private void onEnemyDeath(final Enemy e) {
         addAllObjects(e.getLoot());
         this.currentMapBestiary.merge(e.getName(), 1, Integer::sum);
     }

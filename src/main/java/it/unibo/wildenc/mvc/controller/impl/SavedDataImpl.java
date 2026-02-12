@@ -6,19 +6,21 @@ import java.util.Map;
 
 import it.unibo.wildenc.mvc.controller.api.SavedData;
 
-
+/**
+ * Implementation for SavedData. This is a {@link Serializable}, and
+ * it's used to save data (such as coins, unlocked characters, pokedex)
+ * from previous games.
+ */
 public class SavedDataImpl implements SavedData, Serializable {
 
     private int totalCoins;
     private final Map<String, Integer> pokedexMap = new LinkedHashMap<>();
 
-    public SavedDataImpl() { } 
-
     /**
      * {@inheritDoc}
      */
     @Override
-    public void updateCoins(int earnedCoins) {
+    public void updateCoins(final int earnedCoins) {
         this.totalCoins += earnedCoins;
     }
 
@@ -26,8 +28,8 @@ public class SavedDataImpl implements SavedData, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public void updatePokedex(String name, int newKills) {
-        if(pokedexMap.containsKey(name)) {
+    public void updatePokedex(final String name, final int newKills) {
+        if (pokedexMap.containsKey(name)) {
             this.pokedexMap.replace(
                 name, 
                 this.pokedexMap.get(name) + newKills

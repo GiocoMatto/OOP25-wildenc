@@ -66,8 +66,8 @@ public interface GameView {
 
     /**
      * Display the list of power up.
+     * 
      * @param powerUps List of power up.
-     * @return the player chose.
      */
     void openPowerUp(Set<Game.WeaponChoice> powerUps);
 

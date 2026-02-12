@@ -20,7 +20,6 @@ import it.unibo.wildenc.mvc.controller.api.InputHandler;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Game.PlayerType;
-import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import it.unibo.wildenc.mvc.model.Game.PlayerInfos;
 import it.unibo.wildenc.mvc.model.game.GameImpl;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerWeapon;
@@ -48,12 +47,6 @@ public class EngineImpl implements Engine {
      */
     public enum STATUS { RUNNING, PAUSE, END }
 
-    @Override
-    public void start(final Game.PlayerType pt) {
-        playerType = pt;
-        this.views.forEach(e -> e.start(pt));
-    }
-
     /**
      * Create a Engine.
      */
@@ -63,6 +56,15 @@ public class EngineImpl implements Engine {
         } catch (final ClassNotFoundException | IOException e) {
             this.data = new SavedDataImpl();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void start(final Game.PlayerType pt) {
+        playerType = pt;
+        this.views.forEach(e -> e.start(pt));
     }
 
     /**
@@ -176,14 +178,36 @@ public class EngineImpl implements Engine {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Game.PlayerType> getPlayerType() {
         return Arrays.stream(Game.PlayerType.values()).toList();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PlayerType getPlayerTypeChoise() {
         return this.playerType;
+    }
+
+    private void saveAllData() {
+        try {
+            model.getGameStatistics()
+                .entrySet()
+                .stream()
+                .forEach(entry -> data.updatePokedex(entry.getKey(), entry.getValue()));
+            data.updateCoins(model.getPlayerInfos().coins());
+            dataHandler.saveData(data);
+        } catch (final IOException e) { 
+            /*
+                If got any exception while saving,
+                no data will be saved instead.
+            */
+        }
     }
 
     /**
@@ -265,22 +289,6 @@ public class EngineImpl implements Engine {
                 System.out.println(e.toString());
                 Thread.currentThread().interrupt();
             }
-        }
-    }
-
-    private void saveAllData() {
-        try {
-            model.getGameStatistics()
-                .entrySet()
-                .stream()
-                .forEach(entry -> data.updatePokedex(entry.getKey(), entry.getValue()));
-            data.updateCoins(model.getPlayerInfos().coins());
-            dataHandler.saveData(data);
-        } catch (final IOException e) { 
-            /*
-                If got any exception while saving,
-                no data will be saved instead.
-            */
         }
     }
 }
