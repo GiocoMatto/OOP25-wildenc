@@ -29,6 +29,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -331,9 +332,11 @@ public class GameViewImpl implements GameView, GamePointerView {
         box.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
         box.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
         /* start game play */
-        final Label avatar = new Label(pt.name());
-        avatar.setMinSize(120, 120);
-        avatar.setStyle("-fx-border-color: black");
+        final ImageView avatar = new ImageView(new Image(getClass()
+        .getResource("/images/menu/" + pt.name().toLowerCase() + ".png").toExternalForm()
+        ));
+        avatar.setFitWidth(175);
+        avatar.setFitHeight(175);
         final HBox infoBar = new HBox(10);
         infoBar.setAlignment(Pos.CENTER);
         infoBar.setPadding(new Insets(30));
