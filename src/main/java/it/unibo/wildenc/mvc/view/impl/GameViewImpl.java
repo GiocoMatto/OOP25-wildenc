@@ -15,6 +15,7 @@ import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.model.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -62,6 +63,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     private Collection<MapObjViewData> backupColl = List.of();
     private boolean gameStarted = false;
     private Rectangle2D rec = Screen.getPrimary().getVisualBounds();
+    private final SoundManager soundManager;
 
     //mappa associa wasd ai comandi MovementInput
     private final Map<KeyCode, MovementInput> keyToInputMap = Map.of(
@@ -74,7 +76,8 @@ public class GameViewImpl implements GameView, GamePointerView {
     private volatile double mouseY;
 
     public GameViewImpl() {
-        renderer = new ViewRendererImpl();        
+        renderer = new ViewRendererImpl();    
+        this.soundManager = new SoundManager();    
     }
 
     @Override
@@ -87,6 +90,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         final Scene scene = new Scene(new StackPane());
         gameStage.setScene(scene);
         gameStage.setOnCloseRequest((e) -> {
+            soundManager.stopMusic();
             engine.unregisterView(this);
             gameStage.close();
         });
@@ -151,10 +155,7 @@ public class GameViewImpl implements GameView, GamePointerView {
                 engine.addInput(keyToInputMap.get(event.getCode()));
             }
             if (event.getCode().equals(KeyCode.ESCAPE)) {
-                engine.setPause(true);
-            }
-            if (event.getCode().equals(KeyCode.ENTER)) {
-                engine.setPause(false);
+                engine.openViewPause();
             }
         });
         //listener tasto rilasciato
@@ -168,6 +169,7 @@ public class GameViewImpl implements GameView, GamePointerView {
                 engine.removeAllInput();
             }
         });
+        soundManager.playMusic("theme.mp3");
         return root;
     }
 
@@ -201,17 +203,55 @@ public class GameViewImpl implements GameView, GamePointerView {
      */
     @Override
     public void lost(final Map<String, Integer> lostInfo) {
-        // JOptionPane.showMessageDialog(frame, "You lost!");
-        // System.exit(0);
-    }
+        
+        Platform.runLater(() -> {
+            soundManager.stopMusic();
+            
+            VBox root = new VBox(20); //per il layout
+            root.setAlignment(Pos.CENTER);
+            root.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);");
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void pause() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'pause'");
+            Label title = new Label("GAME OVER"); //testo
+            title.setStyle("-fx-text-fill: red; -fx-font-size: 60px; -fx-font-weight: bold; -fx-font-family: 'Arial';");
+
+            VBox statsBox = new VBox(5);
+            statsBox.setAlignment(Pos.CENTER);
+            Label subTitle = new Label("Statistiche Partita");
+            subTitle.setStyle("-fx-text-fill: white; -fx-font-size: 20px; -fx-underline: true;");
+            statsBox.getChildren().add(subTitle);
+
+            // Itera sulla mappa per creare le label
+            if (lostInfo != null && !lostInfo.isEmpty()) {
+                lostInfo.forEach((key, value) -> {
+                    String labelText = key.split(":")[1]+ ": " + value;
+                    Label statLabel = new Label(labelText);
+                    statLabel.setStyle("-fx-text-fill: lightgray; -fx-font-size: 16px;");
+                    statsBox.getChildren().add(statLabel);
+                });
+            } else {
+                Label noStats = new Label("Nessuna statistica disponibile.");
+                noStats.setStyle("-fx-text-fill: gray;");
+                statsBox.getChildren().add(noStats);
+            }
+
+            //Pulsanti
+            Button btnMenu = new Button("Torna al Menu");
+            btnMenu.setStyle("-fx-font-size: 18px; -fx-padding: 10 20 10 20;");
+            btnMenu.setOnAction(e -> {
+                //riapre menu usando l'ultimo personaggio scelto
+                engine.menu(engine.getPlayerTypeChoise());
+            });
+
+            Button btnExit = new Button("Esci dal Gioco");
+            btnExit.setStyle("-fx-font-size: 18px; -fx-padding: 10 20 10 20;");
+            btnExit.setOnAction(e -> Platform.exit());
+
+            //aggiungo al root
+            root.getChildren().addAll(title, statsBox, btnMenu, btnExit);
+
+            switchRoot(root);
+
+        });
     }
 
     /**
@@ -429,6 +469,64 @@ public class GameViewImpl implements GameView, GamePointerView {
             .concat(Integer.toString(exp))
             .concat(" / ")
             .concat(Integer.toString(neededExp)));
+    }
+
+    @Override
+    public void playSound(String soundName) {
+        soundManager.play(soundName);
+    }
+
+    @Override
+    public void pause() {
+        Platform.runLater(() ->{
+            StackPane root = (StackPane)gameStage.getScene().getRoot();
+
+            VBox pauseMenu = new VBox(20);
+            pauseMenu.setAlignment(Pos.CENTER);
+            pauseMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);"); //nero 70% trasp
+
+            Label title = new Label("PAUSA");
+            title.setStyle("-fx-text-fill: white; -fx-font-size: 50px; -fx-font-weight: bold;");
+
+            //pulsanti riprendi e torna al menu
+            Button resumeBtn = new Button("Riprendi");
+            resumeBtn.setStyle("-fx-font-size: 20px; -fx-padding: 10 20;");
+            resumeBtn.setOnAction(e -> {
+                engine.closeViewPause();
+                //root.getChildren().remove(pauseMenu);
+                //engine.setPause(false);//toglie pausa dall'engine
+            });
+
+            Button exitBtn = new Button("Torna al Menu");
+            exitBtn.setStyle("-fx-font-size: 20px; -fx-padding: 10 20;");
+            exitBtn.setOnAction(e -> {
+                soundManager.stopMusic(); //ferma musica background
+                engine.close();
+                engine.menu(engine.getPlayerTypeChoise()); //torna al menu principale
+            });
+
+            pauseMenu.getChildren().addAll(title, resumeBtn, exitBtn);
+            root.getChildren().add(pauseMenu);
+            pauseMenu.requestFocus();//da il focus al menu di pausa
+
+        });
+    }
+
+    @Override
+    public void closePause() {
+        StackPane root = (StackPane)gameStage.getScene().getRoot();
+
+        Platform.runLater(() -> root.getChildren().remove(1));
+    }
+
+    @Override
+    public void pauseMusic() {
+        soundManager.pauseMusic();
+    }
+
+    @Override
+    public void resumeMusic() {
+        soundManager.resumeMusic();
     }
 
 }

@@ -38,18 +38,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
     }
 
     private void addDefaultWeaponTo(final Enemy e) {
-        /*e.addWeapon(wf.getDefaultStaticPointWeapon(
-            BASE_COOLDOWN_PROJECTILE,
-            BASE_DAMAGE_PROJECTILE, 
-            BASE_HITBOX_PROJECTILE, 
-            BASE_VELOCITY_PROJECTILE, 
-            BASE_TIME_TO_LIVE_PROJECTILE,
-            BASE_PROJ_AT_ONCE, 
-            BASE_BURST_PROJECTILE, 
-            e,
-            () -> new Vector2d(target.getPosition())
-        ));
-        */
+        e.addWeapon(statLoader.getWeaponFactoryForWeapon("shuriken", e, () -> e.getPosition()));
+        
     }
 
     private void addMeleeWeaponTo(final Enemy e) {

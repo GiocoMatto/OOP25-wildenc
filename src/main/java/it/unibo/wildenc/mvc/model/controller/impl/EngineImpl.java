@@ -36,9 +36,9 @@ public class EngineImpl implements Engine {
     private final Set<MovementInput> activeMovements = Collections.synchronizedSet(new HashSet<>());
     private final SavedDataHandler dataHandler = new SavedDataHandlerImpl();
     private final List<GameView> views = new LinkedList<>();
-    private final GameLoop loop = new GameLoop();
+    private GameLoop loop;
     private final Object pauseLock = new Object();
-    private volatile STATUS gameStatus = STATUS.RUNNING;
+    private volatile STATUS gameStatus;
     private volatile Game model;
     private Game.PlayerType playerType;
     private SavedData data;
@@ -71,10 +71,12 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void startGameLoop() {
-        model = new GameImpl(playerType);
+        this.model = new GameImpl(playerType);
         this.views.forEach(v -> v.switchRoot(v.game()));
+        this.loop = new GameLoop();
         this.loop.setDaemon(true);
         this.loop.start();
+        this.gameStatus = STATUS.RUNNING;
     }
 
     /**
@@ -107,6 +109,7 @@ public class EngineImpl implements Engine {
     @Override
     public void onLeveUpChoise(final String choise) {
         this.model.choosenWeapon(choise);
+        this.views.forEach(v -> v.playSound("levelUp"));
         setPause(false);
         this.views.forEach(e -> e.closePowerUp());
     }
@@ -114,8 +117,8 @@ public class EngineImpl implements Engine {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setPause(final boolean status) {
+    //@Override
+    private void setPause(final boolean status) {
         synchronized (pauseLock) {
             this.gameStatus = status ? STATUS.PAUSE : STATUS.RUNNING;
             pauseLock.notifyAll();
@@ -137,7 +140,6 @@ public class EngineImpl implements Engine {
     @Override
     public void close() {
         gameStatus = STATUS.END;
-        saveAllData();
     }
 
     /**
@@ -193,9 +195,18 @@ public class EngineImpl implements Engine {
     public final class GameLoop extends Thread {
         private static final long SLEEP_TIME = 20;
 
+        //variabili per i suoni
+        private long lastStepTime = 0; //per il ritmo dei passi
+        private int lastExp = 0;
+
         @Override
         public void run() {
             try {
+
+                if(model != null) {
+                    lastExp = model.getPlayer().getExp();
+                }
+
                 long lastTime = System.nanoTime();
                 while (STATUS.END != gameStatus) {
                     synchronized (pauseLock) {
@@ -209,6 +220,21 @@ public class EngineImpl implements Engine {
                     lastTime = now;
                     //passo il nuovo vettore calcolato
                     model.updateEntities(dt, ih.handleMovement(activeMovements));
+
+                    if (!activeMovements.isEmpty()) {
+                        // Suona ogni 350ms per simulare il passo
+                        if ((now - lastStepTime) / 1_000_000 > 350) {
+                            views.forEach(v -> v.playSound("walk"));
+                            lastStepTime = now;
+                        }
+                    }
+                    final int currentExp = model.getPlayer().getExp();
+
+                    if (currentExp != lastExp) {
+                        views.forEach(v -> v.playSound("collect"));
+                        lastExp = currentExp;
+                    }
+
                     final PlayerInfos playerInfos = model.getPlayerInfos();
                     if (model.hasPlayerLevelledUp()) {
                         setPause(true);
@@ -283,5 +309,24 @@ public class EngineImpl implements Engine {
                 no data will be saved instead.
             */
         }
+    }
+
+
+    @Override
+    public void openViewPause() {
+        setPause(true);
+        this.views.forEach(e -> {
+            e.pause();
+            e.pauseMusic();
+     });
+    }
+
+    @Override
+    public void closeViewPause() {
+        setPause(false);
+        this.views.forEach(e -> {
+            e.closePause();
+            e.resumeMusic();
+        });
     }
 }
