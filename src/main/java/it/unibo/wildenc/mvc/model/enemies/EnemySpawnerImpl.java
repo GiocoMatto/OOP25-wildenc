@@ -23,7 +23,7 @@ public class EnemySpawnerImpl implements EnemySpawner {
     private static final int DS_X = 1200;
     private static final int DS_Y = 700;
     private static final int BASE_ENEMY = 10;
-    private static final double ENEMY_LOAD_FACTOR = 2.6;
+    private static final double ENEMY_LOAD_FACTOR = 2.4;
     private static final int PROBABILITY = 100;
     private static final int START_LIFE = 100;
     private static final double LIFE_LOAD_FACTOR = 2.6;
