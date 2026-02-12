@@ -1,6 +1,6 @@
 package it.unibo.wildenc.mvc.view.api;
 
-import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
 import javafx.scene.image.Image;
 
 public interface SpriteManager {

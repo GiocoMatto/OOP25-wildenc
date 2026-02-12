@@ -8,11 +8,11 @@ import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
-import it.unibo.wildenc.mvc.controller.api.Engine;
-import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
-import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import java.util.Map;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.controller.api.Engine;
+import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.model.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.application.Platform;
@@ -262,7 +262,7 @@ public class GameViewImpl implements GameView, GamePointerView {
      */
     @Override
     public Parent pokedexView(final Map<String, Integer> pokedexView) {
-        final Button goToMenu = new Button("Torna al menu");
+        final Button goToMenu = new Button("Torna al menu" + (pokedexView.size() == 0 ? " (Pokedex vuoto)" : ""));
         goToMenu.setOnAction(e -> engine.menu(engine.getPlayerTypeChoise()));
         goToMenu.setMaxWidth(Double.MAX_VALUE);
         final ListView<Map.Entry<String, Integer>> listView = new ListView<>();
@@ -282,7 +282,7 @@ public class GameViewImpl implements GameView, GamePointerView {
                 setGraphic(row);
             }
         });
-        final VBox box = new VBox(5, goToMenu, listView);
+        final VBox box = new VBox(goToMenu, listView);
         final StackPane root = new StackPane(box);
         listView.setFixedCellSize(26);
         listView.setPrefHeight(pokedexView.size() * 26 + 2);

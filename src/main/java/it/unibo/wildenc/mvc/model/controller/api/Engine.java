@@ -1,10 +1,10 @@
-package it.unibo.wildenc.mvc.controller.api;
+package it.unibo.wildenc.mvc.model.controller.api;
 
 import java.util.List;
 import java.util.Set;
 
-import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.view.api.GameView;
 
 /**

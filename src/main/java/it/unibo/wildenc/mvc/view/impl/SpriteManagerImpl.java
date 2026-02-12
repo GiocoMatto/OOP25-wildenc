@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.view.api.SpriteManager;
 import javafx.scene.image.Image;
 
