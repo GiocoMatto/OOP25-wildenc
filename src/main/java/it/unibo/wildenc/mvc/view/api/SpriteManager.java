@@ -15,4 +15,6 @@ public interface SpriteManager {
      * @return a Sprite object corresponding to the e
      */
     Sprite getSprite(int frameCount, MapObjViewData objData);
+
+    Image getGrassTile();
 }

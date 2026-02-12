@@ -121,5 +121,10 @@ public class SpriteManagerImpl implements SpriteManager {
             }
         }
     }
+
+    @Override
+    public Image getGrassTile() {
+        return this.loadedSpriteMap.get("grasstile");
+    }
 }
 
