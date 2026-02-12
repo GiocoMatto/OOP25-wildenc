@@ -30,6 +30,7 @@ import it.unibo.wildenc.mvc.model.enemies.EnemySpawnerImpl;
 public class GameMapImpl implements GameMap {
 
     private static final double NANO_TO_SECOND_FACTOR = 1_000_000_000.0;
+    private static final int OBJECT_COLLECTOR_DISTANCE = 3_000;
 
     private final Player player;
     private final Map<String, Integer> currentMapBestiary = Collections.synchronizedMap(new LinkedHashMap<>());
@@ -193,11 +194,15 @@ public class GameMapImpl implements GameMap {
             .map(o -> (Movable) o)
             .forEach(o -> {
                 o.updatePosition(deltaSeconds);
-                // cleanup dead objects like projectiles after TTL expiry
-                if (!o.isAlive()) {
+                // cleanup to prevent lag caused by useless objects
+                if (!o.isAlive() || objectTooFar(o)) {
                     toRemove.add(o);
                 }
             });
+    }
+
+    private boolean objectTooFar(final MapObject obj) {
+        return !CollisionLogic.areInRange(player, obj, OBJECT_COLLECTOR_DISTANCE);
     }
 
     private void projectileHit(final Projectile p, final Entity e, final Set<MapObject> toRemove) {
