@@ -48,7 +48,6 @@ import javafx.stage.StageStyle;
 
 public class GameViewImpl implements GameView, GamePointerView {
     private Engine engine; // TODO: should be final?
-
     private final ViewRenderer renderer;
     private final Canvas canvas = new Canvas(1600, 900);
     private final ProgressBar experienceBar = new ProgressBar(0);
@@ -80,8 +79,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         gameStage.setHeight(rec.getHeight() * 0.85);
         gameStage.setWidth(rec.getWidth() * 0.85);
         experienceBar.setPrefWidth(rec.getWidth() * 0.5);
-        //ngine.menu(Game.PlayerType.CHARMANDER);
-        Scene scene = new Scene(new StackPane());
+        final Scene scene = new Scene(new StackPane());
         gameStage.setScene(scene);
         gameStage.setOnCloseRequest((e) -> {
             engine.unregisterView(this);
@@ -98,10 +96,14 @@ public class GameViewImpl implements GameView, GamePointerView {
      * {@inheritDoc}
      */
     @Override
-    public void setEngine(Engine e) {
+    public void setEngine(final Engine e) {
         this.engine = e;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void switchRoot(final Parent root) {
         root.requestFocus();
         this.gameStage.getScene().setRoot(root);
@@ -115,24 +117,17 @@ public class GameViewImpl implements GameView, GamePointerView {
         /* defining layout */
         renderer.setCanvas(canvas);
         final StackPane root = new StackPane();
-        
         this.renderer.setContainer(root);
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
-        
         root.getChildren().add(canvas);
-        
         final BorderPane ui = new BorderPane();
         final HBox expBox = new HBox();
         root.getChildren().add(ui);
-
         ui.setPickOnBounds(false);
-
         expBox.getChildren().add(levelText);
         expBox.getChildren().add(experienceBar);
-
         ui.setTop(expBox);
-        
         canvas.setManaged(false); // canvas should be indipendent
         canvas.setFocusTraversable(true);
         canvas.requestFocus();
@@ -143,8 +138,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         canvas.setOnMouseMoved(e -> {
             mouseX = e.getSceneX() - (gameStage.getWidth() / 2);
             mouseY = e.getSceneY() - (gameStage.getHeight() / 2);
-        });
-        
+        });        
         canvas.setOnKeyPressed(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
                 engine.addInput(keyToInputMap.get(event.getCode()));
@@ -156,14 +150,12 @@ public class GameViewImpl implements GameView, GamePointerView {
                 engine.setPause(false);
             }
         });
-
         //listener tasto rilasciato
         canvas.setOnKeyReleased(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
                 engine.removeInput(keyToInputMap.get(event.getCode()));
             }
         });
-
         canvas.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (!isNowFocused) {
                 engine.removeAllInput();
@@ -176,7 +168,7 @@ public class GameViewImpl implements GameView, GamePointerView {
      * {@inheritDoc}
      */
     @Override
-    public void updateSprites(Collection<MapObjViewData> mObj) {
+    public void updateSprites(final Collection<MapObjViewData> mObj) {
         if (!gameStarted) {
             canvas.widthProperty().addListener((obs, oldVal, newVal) -> updateSprites(backupColl));
             canvas.heightProperty().addListener((obs, oldVal, newVal) -> updateSprites(backupColl));
@@ -189,6 +181,9 @@ public class GameViewImpl implements GameView, GamePointerView {
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Vector2dc getMousePointerInfo() {
         return new Vector2d(mouseX, mouseY);
@@ -212,13 +207,15 @@ public class GameViewImpl implements GameView, GamePointerView {
         throw new UnsupportedOperationException("Unimplemented method 'pause'");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void openPowerUp(final Set<Game.WeaponChoice> powerUps) {
-        StackPane root = (StackPane) gameStage.getScene().getRoot();
-
-        Label text = new Label("Sblocca arma o potenziamento:");
-        ListView<String> listView = new ListView<>();
-        VBox box = new VBox(5, text, listView);
+        final StackPane root = (StackPane) gameStage.getScene().getRoot();
+        final Label text = new Label("Sblocca arma o potenziamento:");
+        final ListView<String> listView = new ListView<>();
+        final VBox box = new VBox(5, text, listView);
         box.setAlignment(Pos.CENTER);
         powerUpWrapper = new StackPane(box);
         powerUpWrapper.setPadding(new Insets(15));
@@ -228,7 +225,6 @@ public class GameViewImpl implements GameView, GamePointerView {
             powerUpWrapper.toFront();
             listView.requestFocus();
         });
-
         listView.getItems().addAll(powerUps.stream().map(e -> e.toString()).toList());
         listView.getSelectionModel().selectFirst();
         listView.setFixedCellSize(26);
@@ -255,37 +251,77 @@ public class GameViewImpl implements GameView, GamePointerView {
 
         powerUpWrapper.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         powerUpWrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.15));
+        powerUpWrapper.setMaxWidth(rec.getWidth() * 0.15);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Parent pokedexView(Map<String, Integer> pokedexView) {
-        Button goToMenu = new Button("Torna al menù");
+    public Parent pokedexView(final Map<String, Integer> pokedexView) {
+        final Button goToMenu = new Button("Torna al menu");
         goToMenu.setOnAction(e -> engine.menu(engine.getPlayerTypeChoise()));
-        ListView<Map.Entry<String, Integer>> listView = new ListView<>();
+        goToMenu.setMaxWidth(Double.MAX_VALUE);
+        final ListView<Map.Entry<String, Integer>> listView = new ListView<>();
         listView.getItems().addAll(pokedexView.entrySet());
         listView.setCellFactory(lv -> new ListCell<>() {
             @Override
-            protected void updateItem(Map.Entry<String, Integer> entry, boolean empty) {
+            protected void updateItem(final Map.Entry<String, Integer> entry, final boolean empty) {
                 super.updateItem(entry, empty);
                 if (empty || entry == null) {
                     setGraphic(null);
                     return;
                 }
-                Label img = new Label("Immagine: " + entry.getKey().split(":")[1]);
-                Label kills = new Label("Uccisioni: " + entry.getValue());
-                HBox row = new HBox(15, img, kills);
+                final Label img = new Label("Nome: " + entry.getKey().split(":")[1]);
+                final Label kills = new Label("Uccisioni: " + entry.getValue());
+                final HBox row = new HBox(15, img, kills);
                 row.setAlignment(Pos.CENTER_LEFT);
                 setGraphic(row);
             }
         });
-        VBox root = new VBox(goToMenu, listView);
+        final VBox box = new VBox(5, goToMenu, listView);
+        final StackPane root = new StackPane(box);
+        listView.setFixedCellSize(26);
+        listView.setPrefHeight(pokedexView.size() * 26 + 2);
+        box.setPadding(new Insets(15));
+        box.setStyle("-fx-background-color: #AEC6CF;");
+        box.setMaxWidth(rec.getWidth() * 0.35);
+        box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        box.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
+        VBox.setVgrow(listView, Priority.ALWAYS);
+        box.setMaxWidth(rec.getWidth() * 0.35);
+        final Image img = new Image(
+            getClass().getResource("/sprites/backgroundReapeted.jpg").toExternalForm(), 
+            250, 
+            250, 
+            true, 
+            true
+        );
+        final BackgroundImage bgImg = new BackgroundImage(
+            img, 
+            BackgroundRepeat.REPEAT, 
+            BackgroundRepeat.REPEAT, 
+            BackgroundPosition.DEFAULT, 
+            new BackgroundSize(
+                BackgroundSize.AUTO, 
+                BackgroundSize.AUTO, 
+                false, 
+                false, 
+                false, 
+                false
+            )
+        );
+        root.setBackground(new Background(bgImg));
         return root;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Parent menu(final Game.PlayerType pt) {
-        StackPane root = new StackPane();
-        VBox box = new VBox();
+        final StackPane root = new StackPane();
+        final VBox box = new VBox();
         root.getChildren().add(box);
         box.setPadding(new Insets(10));
         box.setStyle("-fx-background-color: lightblue;");
@@ -295,10 +331,10 @@ public class GameViewImpl implements GameView, GamePointerView {
         box.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
         box.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
         /* start game play */
-        Label avatar = new Label(pt.name());
+        final Label avatar = new Label(pt.name());
         avatar.setMinSize(120, 120);
         avatar.setStyle("-fx-border-color: black");
-        HBox infoBar = new HBox(10);
+        final HBox infoBar = new HBox(10);
         infoBar.setAlignment(Pos.CENTER);
         infoBar.setPadding(new Insets(30));
         infoBar.setStyle("-fx-background-color: #AEC6CF;");
@@ -309,26 +345,20 @@ public class GameViewImpl implements GameView, GamePointerView {
             });
             infoBar.getChildren().add(btnPoke);
         }
-        Button playBtn = new Button("Gioca");
+        final Button playBtn = new Button("Gioca");
         playBtn.setPrefHeight(50);
         playBtn.setOnAction(e -> engine.startGameLoop());
-        VBox centerBox = new VBox(15, avatar, infoBar, playBtn);
+        final VBox centerBox = new VBox(15, avatar, infoBar, playBtn);
         centerBox.setAlignment(Pos.CENTER);
         /* oter buttons */
-        Button boxBtn = new Button("POKEDEX");
+        final Button boxBtn = new Button("POKEDEX");
         boxBtn.setOnAction(e -> engine.pokedex());
-        HBox downMenu = new HBox(boxBtn);
+        final HBox downMenu = new HBox(boxBtn);
         boxBtn.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(boxBtn, Priority.ALWAYS);
         playBtn.setMaxWidth(Double.MAX_VALUE);
-        Image img = new Image(
-            getClass().getResource("/sprites/background.jpg").toExternalForm(), 
-            300, 
-            300, 
-            true, 
-            true
-        );
-        BackgroundImage bgImg = new BackgroundImage(
+        final Image img = new Image(getClass().getResource("/sprites/background.jpg").toExternalForm());
+        final BackgroundImage bgImg = new BackgroundImage(
             img, 
             BackgroundRepeat.NO_REPEAT, 
             BackgroundRepeat.NO_REPEAT, 
@@ -343,8 +373,8 @@ public class GameViewImpl implements GameView, GamePointerView {
             )
         );
         root.setBackground(new Background(bgImg));
-        Region spacer1 = new Region();
-        Region spacer2 = new Region();
+        final Region spacer1 = new Region();
+        final Region spacer2 = new Region();
         VBox.setVgrow(spacer1, Priority.ALWAYS);
         VBox.setVgrow(spacer2, Priority.ALWAYS);
         centerBox.setFillWidth(true);
@@ -352,20 +382,33 @@ public class GameViewImpl implements GameView, GamePointerView {
         return root;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void shop() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'shop'");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void closePowerUp() {
-        StackPane root = (StackPane) gameStage.getScene().getRoot();
+        final StackPane root = (StackPane) gameStage.getScene().getRoot();
         Platform.runLater(() -> root.getChildren().remove(powerUpWrapper));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void updateExpBar(int exp, int level, int neededExp) {
+    public void updateExpBar(
+        final int exp, 
+        final int level, 
+        final int neededExp
+    ) {
         experienceBar.setProgress((double) exp / (double) neededExp);
         levelText.setText("LV "
             .concat(Integer.toString(level))
