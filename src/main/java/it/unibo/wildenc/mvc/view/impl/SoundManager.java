@@ -56,4 +56,16 @@ public class SoundManager {
             backgroundMusic.stop();
         }
     }
+
+    public void pauseMusic() {
+        if (backgroundMusic != null && backgroundMusic.getStatus() == MediaPlayer.Status.PLAYING) {
+            backgroundMusic.pause();
+        }
+    }
+
+    public void resumeMusic() {
+        if (backgroundMusic != null && backgroundMusic.getStatus() == MediaPlayer.Status.PAUSED) {
+            backgroundMusic.play();
+        }
+    }
 }

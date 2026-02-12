@@ -81,4 +81,17 @@ public interface GameView {
      */
 
     void playSound(String soundName);
+
+    void closePause();
+
+    /**
+     * Pauses background music
+     */
+    void pauseMusic();
+
+    /**
+     * resumes background music
+     */
+    void resumeMusic();
+
 }

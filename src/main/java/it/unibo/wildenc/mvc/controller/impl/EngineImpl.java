@@ -117,8 +117,8 @@ public class EngineImpl implements Engine {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setPause(final boolean status) {
+    //@Override
+    private void setPause(final boolean status) {
         synchronized (pauseLock) {
             this.gameStatus = status ? STATUS.PAUSE : STATUS.RUNNING;
             pauseLock.notifyAll();
@@ -305,5 +305,24 @@ public class EngineImpl implements Engine {
                 no data will be saved instead.
             */
         }
+    }
+
+
+    @Override
+    public void openViewPause() {
+        setPause(true);
+        this.views.forEach(e -> {
+            e.pause();
+            e.pauseMusic();
+     });
+    }
+
+    @Override
+    public void closeViewPause() {
+        setPause(false);
+        this.views.forEach(e -> {
+            e.closePause();
+            e.resumeMusic();
+        });
     }
 }
