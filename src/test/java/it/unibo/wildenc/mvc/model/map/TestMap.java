@@ -143,4 +143,18 @@ public class TestMap {
 
         assertTrue(map.getAllObjects().size() > initialSize, "No enemies were spawend.");
     }
+
+    @Test
+    void objectsTooFarShouldBeCleanedUp() {
+        final var player = getEmptyPlayer();
+        final var map = getEmptyMapWithObjects(player, 
+            Set.of(TestObject.FarEnemyObject.getAsCloseRangeEnemy(Set.of(), "farEnemy", Optional.of(player))));
+
+        assertTrue(map.getAllObjects().size() == 1, "Object was not added to the map.");
+
+        map.updateEntities(TEST_TIME_NANOSECONDS, TestDirections.STILL.getVect());
+
+        assertTrue(map.getAllObjects().size() == 0, "Object was not removed.");
+
+    }
 }

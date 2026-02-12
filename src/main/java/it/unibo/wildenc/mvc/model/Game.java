@@ -34,9 +34,9 @@ public interface Game {
     /**
      * Notify which weapon was chosen.
      * 
-     * @param wc chosen weapon.
+     * @param wc name of chosen weapon.
      */
-    void choosenWeapon(WeaponChoice wc);
+    void choosenWeapon(String wc);
 
     /**
      * Get the weapons to chose from when the player levels up.
@@ -71,7 +71,7 @@ public interface Game {
      * 
      * @return earned money.
      */
-    int getEarnedMoney();
+    PlayerInfos getPlayerInfos();
 
     /**
      * Constant default player types.
@@ -118,8 +118,25 @@ public interface Game {
      * Represents a weapon to choose from on level up.
      * 
      * @param name the name of the weapon.
+     * @param lvlUpDescription a brief explanation on 
+     *      what clicking this specific upgrade does.
      */
-    record WeaponChoice(String name) {
+    record WeaponChoice(String name, String lvlUpDescription) {
+        @Override
+        public final String toString() {
+            return this.name() + " | " + this.lvlUpDescription();
+        }
+    }
+
+    /**
+     * Player infos that could be needed outside.
+     * 
+     * @param experience player's experience;
+     * @param level player's level;
+     * @param neededExp experience that player needs to level up;
+     * @param coins player's earned coins in this game.
+     */
+    record PlayerInfos(int experience, int level, int neededExp, int coins) {
     }
 
     /**

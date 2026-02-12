@@ -24,18 +24,13 @@ import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.Projectile;
 import it.unibo.wildenc.mvc.model.enemies.EnemySpawnerImpl;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.Level;
-
 /**
  * Basic {@link Map} implementation.
  */
 public class GameMapImpl implements GameMap {
 
-    private static final Logger LOGGER = LogManager.getLogger("Ciao!");
     private static final double NANO_TO_SECOND_FACTOR = 1_000_000_000.0;
+    private static final int OBJECT_COLLECTOR_DISTANCE = 3_000;
 
     private final Player player;
     private final Map<String, Integer> currentMapBestiary = Collections.synchronizedMap(new LinkedHashMap<>());
@@ -50,7 +45,6 @@ public class GameMapImpl implements GameMap {
     public GameMapImpl(final Player p) {
         player = p;
         this.es = new EnemySpawnerImpl(p);
-        setupLogger();
     }
 
     /**
@@ -65,11 +59,6 @@ public class GameMapImpl implements GameMap {
         player = p;
         this.es = es;
         mapObjects.addAll(initialObjs);
-        setupLogger();
-    }
-
-    private void setupLogger() {
-        Configurator.setRootLevel(Level.DEBUG);
     }
 
     /**
@@ -125,7 +114,6 @@ public class GameMapImpl implements GameMap {
         final double deltaSeconds = deltaTime / NANO_TO_SECOND_FACTOR;
         final Set<MapObject> objToRemove = new LinkedHashSet<>(); // FIXME: creating a set every tick may cause lag
         player.setDirection(playerDirection);
-        log(player);
         player.updatePosition(deltaSeconds);
         updateObjectPositions(deltaSeconds, objToRemove);
         checkPlayerHits(objToRemove);
@@ -141,7 +129,7 @@ public class GameMapImpl implements GameMap {
      */
     @Override
     public void spawnEnemies(final double deltaSeconds) {
-        int enemyCount = (int) mapObjects.parallelStream().filter(e -> e instanceof Enemy).count();
+        final int enemyCount = (int) mapObjects.parallelStream().filter(e -> e instanceof Enemy).count();
         this.addAllObjects(es.spawn(player, enemyCount, deltaSeconds));
     }
 
@@ -204,25 +192,17 @@ public class GameMapImpl implements GameMap {
         mapObjects.parallelStream()
             .filter(e -> e instanceof Movable)
             .map(o -> (Movable) o)
-            .peek(this::log) // FIXME: temp just for debug phase
             .forEach(o -> {
                 o.updatePosition(deltaSeconds);
-                // cleanup dead objects like projectiles after TTL expiry
-                if (!o.isAlive()) {
+                // cleanup to prevent lag caused by useless objects
+                if (!o.isAlive() || objectTooFar(o)) {
                     toRemove.add(o);
                 }
             });
-        LOGGER.debug(mapObjects.size());
     }
 
-    private void log(final Movable o) {
-        LOGGER.debug(o.getClass() + " x: " + o.getPosition().x() + " y: " + o.getPosition().y());
-        if (o instanceof Entity e) {
-            LOGGER.debug("health: " + e.getCurrentHealth());
-        }
-        if (o instanceof Projectile) {
-            LOGGER.debug("direzione proiettile: " + o.getDirection());
-        }
+    private boolean objectTooFar(final MapObject obj) {
+        return !CollisionLogic.areInRange(player, obj, OBJECT_COLLECTOR_DISTANCE);
     }
 
     private void projectileHit(final Projectile p, final Entity e, final Set<MapObject> toRemove) {
@@ -236,14 +216,12 @@ public class GameMapImpl implements GameMap {
         if (!e.isAlive()) {
             toRemove.add(e);
             if (e instanceof Enemy en) {
-                addAllObjects(en.getLoot());
-                this.currentMapBestiary.merge(e.getName(), 1, Integer::sum);
+                onEnemyDeath(en);
             }
-            LOGGER.debug("{} died!!!", e.getClass().getSimpleName());
         }
     }
 
-    private void onEnemyDeath(Enemy e) {
+    private void onEnemyDeath(final Enemy e) {
         addAllObjects(e.getLoot());
         this.currentMapBestiary.merge(e.getName(), 1, Integer::sum);
     }

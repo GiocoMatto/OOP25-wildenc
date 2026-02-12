@@ -1,4 +1,4 @@
-package it.unibo.wildenc.mvc.controller.api;
+package it.unibo.wildenc.mvc.model.controller.api;
 
 import java.util.Map;
 

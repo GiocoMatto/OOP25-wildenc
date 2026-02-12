@@ -3,9 +3,10 @@ package it.unibo.wildenc.mvc.view.api;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import it.unibo.wildenc.mvc.controller.api.Engine;
-import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
+
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.controller.api.Engine;
+import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
 import javafx.scene.Parent;
 import javafx.scene.layout.StackPane;
 
@@ -35,9 +36,9 @@ public interface GameView {
     void updateSprites(Collection<MapObjViewData> mObjs);
 
     /**
-     * Display the win screen.
+     * Update experience bar and level during the game.
      */
-    void won();
+    void updateExpBar(int exp, int level, int neededExp);
 
     /**
      * Display the loss screen.
