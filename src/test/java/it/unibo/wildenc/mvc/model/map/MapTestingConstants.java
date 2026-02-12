@@ -27,22 +27,25 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.factories.FixedFactory;
  * Testing constants for the map.
  */
 public final class MapTestingConstants {
-    /* Collectible */
-    private static final int VALUE_COLLECTIBLE = 34;
 
     /**
      * 1 second in nanoseconds.
      */
     public static final int TEST_TIME_NANOSECONDS = 1_000_000_000;
+
     /**
      * 1 second.
      */
     public static final double TEST_TIME_SECONDS = 1.0;
+
     /**
      * 20 ticks of 1 second each, 20 seconds.
      */
     public static final int TEST_SIMULATION_TICKS = 20;
 
+    /* Collectible */
+    private static final int VALUE_COLLECTIBLE = 34;
+ 
     private MapTestingConstants() { }
 
     /**
@@ -233,7 +236,6 @@ public final class MapTestingConstants {
                 name, 
                 target, 
                 Set.of(m -> Optional.of(new ExperienceGem(m.getPosition(), VALUE_COLLECTIBLE)))));
-                
             for (final var w : weapons) {
                 e.addWeapon(w);
             }
@@ -265,9 +267,8 @@ public final class MapTestingConstants {
             this.baseBurst = baseBurst;
             this.baseProjAtOnce = baseProjAtOnce;
         }
-        
+
         Weapon getAsWeapon(final Entity owner, final Supplier<Vector2dc> target) {
-            
             return new FixedFactory().createWeapon(
                 "testWeapon", 
                 baseCooldown, 
