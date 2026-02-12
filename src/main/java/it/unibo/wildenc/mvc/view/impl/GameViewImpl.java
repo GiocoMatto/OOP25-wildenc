@@ -375,6 +375,9 @@ public class GameViewImpl implements GameView, GamePointerView {
     @Override
     public Parent menu(final Game.PlayerType pt) {
         final StackPane root = new StackPane();
+        final ImageView title = new ImageView(new Image(getClass().getResource(PATH + "title.png").toExternalForm()));
+        title.setPreserveRatio(true);
+        title.setFitWidth(400);
         final VBox box = new VBox();
         root.getChildren().add(box);
         box.setPadding(new Insets(10));
@@ -434,7 +437,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         VBox.setVgrow(spacer1, Priority.ALWAYS);
         VBox.setVgrow(spacer2, Priority.ALWAYS);
         centerBox.setFillWidth(true);
-        box.getChildren().addAll(spacer1, centerBox, spacer2, downMenu);
+        box.getChildren().addAll(title, spacer1, centerBox, spacer2, downMenu);
         return root;
     }
 
