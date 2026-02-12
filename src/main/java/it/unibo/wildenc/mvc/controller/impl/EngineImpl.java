@@ -1,4 +1,4 @@
-package it.unibo.wildenc.mvc.model.controller.impl;
+package it.unibo.wildenc.mvc.controller.impl;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,19 +9,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
+
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
+import it.unibo.wildenc.mvc.controller.api.Engine;
+import it.unibo.wildenc.mvc.controller.api.InputHandler;
+import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.controller.api.SavedData;
+import it.unibo.wildenc.mvc.controller.api.SavedDataHandler;
+import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Game.PlayerType;
 import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
-import it.unibo.wildenc.mvc.model.controller.api.Engine;
-import it.unibo.wildenc.mvc.model.controller.api.InputHandler;
-import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
-import it.unibo.wildenc.mvc.model.controller.api.SavedData;
-import it.unibo.wildenc.mvc.model.controller.api.SavedDataHandler;
-import it.unibo.wildenc.mvc.model.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game.PlayerInfos;
 import it.unibo.wildenc.mvc.model.game.GameImpl;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerWeapon;
@@ -112,17 +114,24 @@ public class EngineImpl implements Engine {
         this.views.forEach(v -> v.playSound("levelUp"));
         setPause(false);
         this.views.forEach(e -> e.closePowerUp());
+        close(GameView::closePowerUp);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    //@Override
     private void setPause(final boolean status) {
         synchronized (pauseLock) {
             this.gameStatus = status ? STATUS.PAUSE : STATUS.RUNNING;
             pauseLock.notifyAll();
         }
+    }
+
+    private void open(final Consumer<GameView> c) {
+        setPause(true);
+        this.views.forEach(e -> c.accept(e));
+    }
+
+    private void close(final Consumer<GameView> c) {
+        this.views.forEach(e -> c.accept(e));
+        setPause(false);
     }
 
     /**
@@ -131,7 +140,6 @@ public class EngineImpl implements Engine {
     @Override
     public void pokedex() {
         this.views.forEach(e -> e.switchRoot(e.pokedexView(data.getPokedex())));
-        //this.views.forEach(e -> e.switchRoot(e.pokedexView(Map.of("caio", 1, "caio1", 3, "caio2", 0, "caio3", 9))));
     }
 
     /**
@@ -237,8 +245,7 @@ public class EngineImpl implements Engine {
 
                     final PlayerInfos playerInfos = model.getPlayerInfos();
                     if (model.hasPlayerLevelledUp()) {
-                        setPause(true);
-                        views.forEach(e -> e.openPowerUp(model.weaponToChooseFrom()));
+                        open(e -> e.openPowerUp(model.weaponToChooseFrom()));
                     }
                     if (model.isGameEnded()) {
                         saveAllData();
@@ -261,30 +268,28 @@ public class EngineImpl implements Engine {
                         });
                     final Collection<MapObjViewData> mapDataColl = model.getAllMapObjects().stream()
                         .map(mapObj -> {
-                            if (mapObj instanceof Entity e) {
-                                return new MapObjViewData(
-                                    mapObj.getName(), 
-                                    mapObj.getPosition().x(), 
-                                    mapObj.getPosition().y(), 
-                                    mapObj.getHitbox(),
-                                    Optional.of(e.getDirection().x()), 
-                                    Optional.of(e.getDirection().y())
-                                );
-                            } else {
-                                return new MapObjViewData(
-                                    mapObj.getName(),
-                                    mapObj.getPosition().x(),
-                                    mapObj.getPosition().y(),
-                                    mapObj.getHitbox(),
-                                    Optional.empty(), Optional.empty()
-                                );
-                            }
+                            return new MapObjViewData(
+                                mapObj.getName(), 
+                                mapObj.getPosition().x(), 
+                                mapObj.getPosition().y(), 
+                                mapObj.getHitbox(),
+                                (mapObj instanceof Entity e) 
+                                ? Optional.of(e.getDirection().x()) 
+                                : Optional.empty(), 
+                                (mapObj instanceof Entity e) 
+                                ? Optional.of(e.getDirection().y()) 
+                                : Optional.empty()
+                            );
                         })
                         .toList();
                     views.stream()
                         .forEach(view -> {
                             view.updateSprites(mapDataColl);
-                            view.updateExpBar(playerInfos.experience(), playerInfos.level(), playerInfos.neededExp());
+                            view.updateExpBar(
+                                playerInfos.experience(), 
+                                playerInfos.level(), 
+                                playerInfos.neededExp()
+                            );
                         });
                     Thread.sleep(SLEEP_TIME);
                 }
@@ -303,28 +308,20 @@ public class EngineImpl implements Engine {
                 .forEach(entry -> data.updatePokedex(entry.getKey(), entry.getValue()));
             data.updateCoins(model.getPlayerInfos().coins());
             dataHandler.saveData(data);
-        } catch (final IOException e) { 
-            /*
-                If got any exception while saving,
-                no data will be saved instead.
-            */
-        }
+        } catch (final IOException e) { }
     }
-
 
     @Override
     public void openViewPause() {
-        setPause(true);
-        this.views.forEach(e -> {
+        open(e -> {
             e.pause();
             e.pauseMusic();
-     });
+        });
     }
 
     @Override
     public void closeViewPause() {
-        setPause(false);
-        this.views.forEach(e -> {
+        close(e -> {
             e.closePause();
             e.resumeMusic();
         });

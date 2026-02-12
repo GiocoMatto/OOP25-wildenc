@@ -7,7 +7,7 @@ plugins {
     application
 
     /*
-     * Adds tasks to export a runnable jar.
+     * Adds tasks to export a runnable jar. 
      * In order to create it, launch the "shadowJar" task.
      * The runnable jar will be found in build/libs/projectname-all.jar
      */

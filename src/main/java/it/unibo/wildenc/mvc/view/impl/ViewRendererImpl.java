@@ -2,7 +2,7 @@ package it.unibo.wildenc.mvc.view.impl;
 
 import java.util.Collection;
 
-import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.view.api.SpriteManager;
 import it.unibo.wildenc.mvc.view.api.SpriteManager.Sprite;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;

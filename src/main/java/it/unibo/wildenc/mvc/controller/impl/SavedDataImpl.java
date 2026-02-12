@@ -1,10 +1,10 @@
-package it.unibo.wildenc.mvc.model.controller.impl;
+package it.unibo.wildenc.mvc.controller.impl;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import it.unibo.wildenc.mvc.model.controller.api.SavedData;
+import it.unibo.wildenc.mvc.controller.api.SavedData;
 
 
 public class SavedDataImpl implements SavedData, Serializable {

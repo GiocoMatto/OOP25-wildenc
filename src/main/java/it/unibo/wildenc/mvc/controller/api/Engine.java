@@ -1,10 +1,10 @@
-package it.unibo.wildenc.mvc.model.controller.api;
+package it.unibo.wildenc.mvc.controller.api;
 
 import java.util.List;
 import java.util.Set;
 
+import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
-import it.unibo.wildenc.mvc.model.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.view.api.GameView;
 
 /**
@@ -32,13 +32,6 @@ public interface Engine {
      * Remove all input.
      */
     void removeAllInput();
-
-    /**
-     * Update the status of the gameLoop.
-     * 
-     * @param status True: running game Loop. False: stop game loop.
-     */
-    //void setPause(boolean status);
 
     /**
      * Select the weapon to unlock or levelup.
@@ -89,7 +82,6 @@ public interface Engine {
     List<Game.PlayerType> getPlayerType();
     
     Game.PlayerType getPlayerTypeChoise();
-
 
     void openViewPause();
 

@@ -1,11 +1,11 @@
-package it.unibo.wildenc.mvc.model.controller.impl;
+package it.unibo.wildenc.mvc.controller.impl;
 
 import java.util.Set;
 
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
-import it.unibo.wildenc.mvc.model.controller.api.InputHandler;
+import it.unibo.wildenc.mvc.controller.api.InputHandler;
 import it.unibo.wildenc.util.Utilities;
 
 public class InputHandlerImpl implements InputHandler {

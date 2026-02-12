@@ -7,12 +7,14 @@ import java.util.Set;
 
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
+import org.joml.sampling.StratifiedSampling;
 
 import java.util.Map;
+
+import it.unibo.wildenc.mvc.controller.api.Engine;
+import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
-import it.unibo.wildenc.mvc.model.controller.api.Engine;
-import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
-import it.unibo.wildenc.mvc.model.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.application.Application;
@@ -57,6 +59,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     private final ProgressBar experienceBar = new ProgressBar(0);
     private final Text levelText = new Text("LV 1");
     private StackPane powerUpWrapper = new StackPane();
+    private VBox pauseMenu = new VBox();
     private Stage gameStage = new Stage(StageStyle.DECORATED);
     private Collection<MapObjViewData> backupColl = List.of();
     private boolean gameStarted = false;
@@ -287,7 +290,15 @@ public class GameViewImpl implements GameView, GamePointerView {
         });
         listView.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                engine.onLeveUpChoise(listView.getSelectionModel().getSelectedItem());
+                engine.onLeveUpChoise(
+                    powerUps.stream()
+                        .filter(wc -> wc.toString().equals(
+                            listView.getSelectionModel().getSelectedItem()
+                        ))
+                        .findFirst()
+                        .get()
+                        .name()
+                );
             }
         });
         VBox.setVgrow(listView, Priority.ALWAYS);
@@ -473,7 +484,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         Platform.runLater(() ->{
             StackPane root = (StackPane)gameStage.getScene().getRoot();
 
-            VBox pauseMenu = new VBox(20);
+            pauseMenu = new VBox(20);
             pauseMenu.setAlignment(Pos.CENTER);
             pauseMenu.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);"); //nero 70% trasp
 
@@ -485,8 +496,6 @@ public class GameViewImpl implements GameView, GamePointerView {
             resumeBtn.setStyle("-fx-font-size: 20px; -fx-padding: 10 20;");
             resumeBtn.setOnAction(e -> {
                 engine.closeViewPause();
-                //root.getChildren().remove(pauseMenu);
-                //engine.setPause(false);//toglie pausa dall'engine
             });
 
             Button exitBtn = new Button("Torna al Menu");
@@ -508,7 +517,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void closePause() {
         StackPane root = (StackPane)gameStage.getScene().getRoot();
 
-        Platform.runLater(() -> root.getChildren().remove(1));
+        Platform.runLater(() -> root.getChildren().remove(pauseMenu));
     }
 
     @Override

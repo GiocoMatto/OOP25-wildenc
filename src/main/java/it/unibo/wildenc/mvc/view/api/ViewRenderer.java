@@ -2,7 +2,7 @@ package it.unibo.wildenc.mvc.view.api;
 
 import java.util.Collection;
 
-import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Region;
 

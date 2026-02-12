@@ -38,7 +38,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
     }
 
     private void addDefaultWeaponTo(final Enemy e) {
-        e.addWeapon(statLoader.getWeaponFactoryForWeapon("shuriken", e, () -> e.getPosition()));
+        e.addWeapon(statLoader.getWeaponFactoryForWeapon("ember", e, () -> e.getPosition()));
         
     }
 
@@ -86,7 +86,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
             Optional.of(target),
             new HashSet<>(List.of(experienceLoot(spawnPosition), percentageLoot(coinLoot(spawnPosition), 0.1)))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 
@@ -109,7 +110,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
                 percentageLoot(healthLoot(spawnPosition), 0.4)
             ))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 
@@ -131,7 +133,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
                 percentageLoot(healthLoot(spawnPosition), 0.5)
             ))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 
@@ -176,7 +179,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
                 percentageLoot(healthLoot(spawnPosition), 0.05)
             ))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 
@@ -199,7 +203,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
                 percentageLoot(healthLoot(spawnPosition), 0.1)
             ))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 
