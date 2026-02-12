@@ -1,5 +1,6 @@
 package it.unibo.wildenc.mvc.view.impl;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +49,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class GameViewImpl implements GameView, GamePointerView {
+    private static final String PATH = File.separator + "images" + File.separator + "menu" + File.separator;
     private Engine engine; // TODO: should be final?
     private final ViewRenderer renderer;
     private final Canvas canvas = new Canvas(1600, 900);
@@ -292,7 +294,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         VBox.setVgrow(listView, Priority.ALWAYS);
         box.setMaxWidth(rec.getWidth() * 0.35);
         final Image img = new Image(
-            getClass().getResource("/sprites/backgroundReapeted.jpg").toExternalForm(), 
+            getClass().getResource(PATH + "backgroundReapeted.jpg").toExternalForm(), 
             250, 
             250, 
             true, 
@@ -333,7 +335,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         box.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
         /* start game play */
         final ImageView avatar = new ImageView(new Image(getClass()
-        .getResource("/images/menu/" + pt.name().toLowerCase() + ".png").toExternalForm()
+        .getResource(PATH + pt.name().toLowerCase() + ".png").toExternalForm()
         ));
         avatar.setFitWidth(175);
         avatar.setFitHeight(175);
@@ -360,7 +362,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         boxBtn.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(boxBtn, Priority.ALWAYS);
         playBtn.setMaxWidth(Double.MAX_VALUE);
-        final Image img = new Image(getClass().getResource("/sprites/background.jpg").toExternalForm());
+        final Image img = new Image(getClass().getResource(PATH + "background.jpg").toExternalForm());
         final BackgroundImage bgImg = new BackgroundImage(
             img, 
             BackgroundRepeat.NO_REPEAT, 

@@ -15,12 +15,4 @@ public interface SpriteManager {
      * @return a Sprite object corresponding to the e
      */
     Sprite getSprite(int frameCount, MapObjViewData objData);
-
-    /**
-     * Methods for getting the grass tile. This is isolated as it isn't an
-     * entity to handle.
-     * 
-     * @return the image corresponding to the grass tile.
-     */
-    Image getGrassTile();
 }
