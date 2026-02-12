@@ -1,6 +1,6 @@
 package it.unibo.wildenc.mvc.view.api;
 
-import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
 import javafx.scene.image.Image;
 
 public interface SpriteManager {
@@ -15,12 +15,4 @@ public interface SpriteManager {
      * @return a Sprite object corresponding to the e
      */
     Sprite getSprite(int frameCount, MapObjViewData objData);
-
-    /**
-     * Methods for getting the grass tile. This is isolated as it isn't an
-     * entity to handle.
-     * 
-     * @return the image corresponding to the grass tile.
-     */
-    Image getGrassTile();
 }

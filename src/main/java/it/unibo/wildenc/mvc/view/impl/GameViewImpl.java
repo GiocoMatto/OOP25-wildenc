@@ -1,5 +1,6 @@
 package it.unibo.wildenc.mvc.view.impl;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -7,11 +8,11 @@ import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
-import it.unibo.wildenc.mvc.controller.api.Engine;
-import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
-import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import java.util.Map;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.controller.api.Engine;
+import it.unibo.wildenc.mvc.model.controller.api.MapObjViewData;
+import it.unibo.wildenc.mvc.model.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
 import javafx.application.Platform;
@@ -29,6 +30,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -47,6 +49,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class GameViewImpl implements GameView, GamePointerView {
+    private static final String PATH = "/images/menu/";
     private Engine engine; // TODO: should be final?
     private final ViewRenderer renderer;
     private final Canvas canvas = new Canvas(1600, 900);
@@ -259,7 +262,7 @@ public class GameViewImpl implements GameView, GamePointerView {
      */
     @Override
     public Parent pokedexView(final Map<String, Integer> pokedexView) {
-        final Button goToMenu = new Button("Torna al menu");
+        final Button goToMenu = new Button("Torna al menu" + (pokedexView.size() == 0 ? " (Pokedex vuoto)" : ""));
         goToMenu.setOnAction(e -> engine.menu(engine.getPlayerTypeChoise()));
         goToMenu.setMaxWidth(Double.MAX_VALUE);
         final ListView<Map.Entry<String, Integer>> listView = new ListView<>();
@@ -279,7 +282,7 @@ public class GameViewImpl implements GameView, GamePointerView {
                 setGraphic(row);
             }
         });
-        final VBox box = new VBox(5, goToMenu, listView);
+        final VBox box = new VBox(goToMenu, listView);
         final StackPane root = new StackPane(box);
         listView.setFixedCellSize(26);
         listView.setPrefHeight(pokedexView.size() * 26 + 2);
@@ -291,7 +294,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         VBox.setVgrow(listView, Priority.ALWAYS);
         box.setMaxWidth(rec.getWidth() * 0.35);
         final Image img = new Image(
-            getClass().getResource("/sprites/backgroundReapeted.jpg").toExternalForm(), 
+            getClass().getResource(PATH + "backgroundReapeted.jpg").toExternalForm(), 
             250, 
             250, 
             true, 
@@ -331,9 +334,11 @@ public class GameViewImpl implements GameView, GamePointerView {
         box.prefWidthProperty().bind(root.widthProperty().multiply(0.35));
         box.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
         /* start game play */
-        final Label avatar = new Label(pt.name());
-        avatar.setMinSize(120, 120);
-        avatar.setStyle("-fx-border-color: black");
+        final ImageView avatar = new ImageView(new Image(getClass()
+        .getResource(PATH + pt.name().toLowerCase() + ".png").toExternalForm()
+        ));
+        avatar.setFitWidth(175);
+        avatar.setFitHeight(175);
         final HBox infoBar = new HBox(10);
         infoBar.setAlignment(Pos.CENTER);
         infoBar.setPadding(new Insets(30));
@@ -357,7 +362,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         boxBtn.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(boxBtn, Priority.ALWAYS);
         playBtn.setMaxWidth(Double.MAX_VALUE);
-        final Image img = new Image(getClass().getResource("/sprites/background.jpg").toExternalForm());
+        final Image img = new Image(getClass().getResource(PATH + "background.jpg").toExternalForm());
         final BackgroundImage bgImg = new BackgroundImage(
             img, 
             BackgroundRepeat.NO_REPEAT, 
