@@ -23,7 +23,7 @@ public class SpriteManagerImpl implements SpriteManager {
 
     private static final int SPRITE_SIZE = 64;
     private static final int DOT_PNG_PREFIX_LENGHT = 4;
-    private static final String SPRITES_LOCATION = "images" + File.separator + "sprites";
+    private static final String SPRITES_LOCATION = "images/sprites";
 
     private static final List<Integer> SPRITE_MAP = List.of(2, 1, 0, 7, 6, 5, 4, 3);
 
@@ -109,9 +109,9 @@ public class SpriteManagerImpl implements SpriteManager {
                     ZipEntry entry;
                     while ((entry = zip.getNextEntry()) != null) {
                         String name = entry.getName();
-                        if (name.startsWith(SPRITES_LOCATION + File.separator) && name.endsWith(".png")) {
+                        if (name.startsWith(SPRITES_LOCATION + "/") && name.endsWith(".png")) {
                             String key = name.substring(SPRITES_LOCATION.length() + 1, name.length() - DOT_PNG_PREFIX_LENGHT);
-                            Image img = new Image(getClass().getResourceAsStream(File.separator + name));
+                            Image img = new Image(getClass().getResourceAsStream("/" + name));
                             loadedSpriteMap.put(key, img);
                         }
                     }

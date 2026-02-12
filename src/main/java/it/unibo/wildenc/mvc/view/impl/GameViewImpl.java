@@ -49,7 +49,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class GameViewImpl implements GameView, GamePointerView {
-    private static final String PATH = File.separator + "images" + File.separator + "menu" + File.separator;
+    private static final String PATH = "/images/menu/";
     private Engine engine; // TODO: should be final?
     private final ViewRenderer renderer;
     private final Canvas canvas = new Canvas(1600, 900);
