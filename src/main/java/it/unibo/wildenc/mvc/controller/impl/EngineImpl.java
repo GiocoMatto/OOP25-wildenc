@@ -3,17 +3,15 @@ package it.unibo.wildenc.mvc.controller.impl;
 import java.util.Collections;
 import java.util.HashSet;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
-
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
-
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.InputHandler;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
@@ -23,7 +21,6 @@ import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Game.PlayerType;
-import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import it.unibo.wildenc.mvc.model.Game.PlayerInfos;
 import it.unibo.wildenc.mvc.model.game.GameImpl;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerWeapon;
@@ -36,8 +33,8 @@ import it.unibo.wildenc.mvc.view.api.GameView;
 public class EngineImpl implements Engine {
     //Set per i movimenti attivi, non piu queue
     private final Set<MovementInput> activeMovements = Collections.synchronizedSet(new HashSet<>());
+    private final List<GameView> views = Collections.synchronizedList(new ArrayList<>());
     private final SavedDataHandler dataHandler = new SavedDataHandlerImpl();
-    private final List<GameView> views = new LinkedList<>();
     private GameLoop loop;
     private final Object pauseLock = new Object();
     private volatile STATUS gameStatus;
@@ -112,8 +109,6 @@ public class EngineImpl implements Engine {
     public void onLeveUpChoise(final String choise) {
         this.model.choosenWeapon(choise);
         this.views.forEach(v -> v.playSound("levelUp"));
-        setPause(false);
-        this.views.forEach(e -> e.closePowerUp());
         close(GameView::closePowerUp);
     }
 
