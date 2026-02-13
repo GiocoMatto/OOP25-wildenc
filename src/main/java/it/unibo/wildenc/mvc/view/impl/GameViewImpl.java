@@ -8,6 +8,7 @@ import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import java.util.Map;
+import java.util.Objects;
 
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
@@ -85,6 +86,12 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void start(final Lobby.PlayerType pt) {
         gameStage = new Stage();
         gameStage.setTitle("Wild Encounter");
+        final Image icon = new Image(
+            Objects.requireNonNull(
+                getClass().getResource(PATH + "icon.png")
+            ).toExternalForm()
+        );
+        gameStage.getIcons().add(icon);
         gameStage.setHeight(rec.getHeight() * 0.85);
         gameStage.setWidth(rec.getWidth() * 0.85);
         experienceBar.setPrefWidth(rec.getWidth() * 0.5);
