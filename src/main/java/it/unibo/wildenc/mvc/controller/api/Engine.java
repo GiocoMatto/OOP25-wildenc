@@ -99,7 +99,13 @@ public interface Engine {
      */
     Game.PlayerType getPlayerTypeChoise();
 
+    /**
+     * Show the view for set game in pause.
+     */
     void openViewPause();
 
+    /**
+     * Restart the game by the pause.
+     */
     void closeViewPause();
 }

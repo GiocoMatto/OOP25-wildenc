@@ -59,6 +59,23 @@ public class EngineImpl implements Engine {
         }
     }
 
+    private void setPause(final boolean status) {
+        synchronized (pauseLock) {
+            this.gameStatus = status ? STATUS.PAUSE : STATUS.RUNNING;
+            pauseLock.notifyAll();
+        }
+    }
+
+    private void open(final Consumer<GameView> c) {
+        setPause(true);
+        this.views.forEach(c::accept);
+    }
+
+    private void close(final Consumer<GameView> c) {
+        this.views.forEach(c::accept);
+        setPause(false);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -113,23 +130,6 @@ public class EngineImpl implements Engine {
         this.model.choosenWeapon(choise);
         this.views.forEach(v -> v.playSound("levelUp"));
         close(GameView::closePowerUp);
-    }
-
-    private void setPause(final boolean status) {
-        synchronized (pauseLock) {
-            this.gameStatus = status ? STATUS.PAUSE : STATUS.RUNNING;
-            pauseLock.notifyAll();
-        }
-    }
-
-    private void open(final Consumer<GameView> c) {
-        setPause(true);
-        this.views.forEach(e -> c.accept(e));
-    }
-
-    private void close(final Consumer<GameView> c) {
-        this.views.forEach(e -> c.accept(e));
-        setPause(false);
     }
 
     /**
@@ -202,23 +202,56 @@ public class EngineImpl implements Engine {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void openViewPause() {
+        open(e -> {
+            e.pause();
+            e.pauseMusic();
+        });
+    }
+
+    /**
+     * {@hineritDoc}
+     */
+    @Override
+    public void closeViewPause() {
+        close(e -> {
+            e.closePause();
+            e.resumeMusic();
+        });
+    }
+
+    private void saveAllData() {
+        try {
+            model.getGameStatistics()
+                .entrySet()
+                .stream()
+                .forEach(entry -> data.updatePokedex(entry.getKey(), entry.getValue()));
+            data.updateCoins(model.getPlayerInfos().coins());
+            dataHandler.saveData(data);
+        } catch (final IOException e) { }
+    }
+
+    /**
      * The game loop.
      */
     public final class GameLoop extends Thread {
         private static final long SLEEP_TIME = 20;
-
-        //variabili per i suoni
-        private long lastStepTime = 0; //per il ritmo dei passi
-        private int lastExp = 0;
+        private static final long DIVISOR = 1_000_000;
+        private static final long LIMIT = 350;
 
         @Override
         public void run() {
             try {
+                //variabili per i suoni
+                long lastStepTime = 0; //per il ritmo dei passi
+                int lastExp = 0;
 
-                if(model != null) {
+                if (model != null) {
                     lastExp = model.getPlayer().getExp();
                 }
-
                 long lastTime = System.nanoTime();
                 while (STATUS.END != gameStatus) {
                     synchronized (pauseLock) {
@@ -235,7 +268,7 @@ public class EngineImpl implements Engine {
 
                     if (!activeMovements.isEmpty()) {
                         // Suona ogni 350ms per simulare il passo
-                        if ((now - lastStepTime) / 1_000_000 > 350) {
+                        if ((now - lastStepTime) / DIVISOR > LIMIT) {
                             views.forEach(v -> v.playSound("walk"));
                             lastStepTime = now;
                         }
@@ -295,39 +328,13 @@ public class EngineImpl implements Engine {
                                 playerInfos.neededExp()
                             );
                         });
-                    Thread.sleep(SLEEP_TIME);
+                    sleep(SLEEP_TIME);
                 }
             } catch (final InterruptedException e) {
                 System.out.println(e.toString());
-                Thread.currentThread().interrupt();
+                currentThread().interrupt();
             }
         }
     }
 
-    private void saveAllData() {
-        try {
-            model.getGameStatistics()
-                .entrySet()
-                .stream()
-                .forEach(entry -> data.updatePokedex(entry.getKey(), entry.getValue()));
-            data.updateCoins(model.getPlayerInfos().coins());
-            dataHandler.saveData(data);
-        } catch (final IOException e) { }
-    }
-
-    @Override
-    public void openViewPause() {
-        open(e -> {
-            e.pause();
-            e.pauseMusic();
-        });
-    }
-
-    @Override
-    public void closeViewPause() {
-        close(e -> {
-            e.closePause();
-            e.resumeMusic();
-        });
-    }
 }
