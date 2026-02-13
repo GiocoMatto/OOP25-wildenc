@@ -69,6 +69,10 @@ public class StatLoader {
         return this.loadedEnemyConfigs.values();
     }
 
+    public Collection<LoadedEntityStats> getAllPlayerData() {
+        return this.loadedPlayerConfigs.values();
+    }
+
     public LoadedWeaponStats getLoadedWeaponStats(final String weaponName) {
         if (loadedWeaponConfigs.containsKey(weaponName)) {
             return loadedWeaponConfigs.get(weaponName);
@@ -181,10 +185,11 @@ public class StatLoader {
         double hbRadius,
         double maxHealth,
         double velocity,
-        String rarity
+        String rarity,
+        String weapon
     ) {
         public static LoadedEntityStats empty(final String entityName) {
-            return new LoadedEntityStats(entityName, 0, 0, 0, null);
+            return new LoadedEntityStats(entityName, 0, 0, 0, null, null);
         }
     }
 }

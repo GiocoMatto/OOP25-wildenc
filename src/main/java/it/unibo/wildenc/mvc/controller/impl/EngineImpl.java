@@ -22,10 +22,12 @@ import it.unibo.wildenc.mvc.controller.api.SavedDataHandler;
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Game;
-import it.unibo.wildenc.mvc.model.Game.PlayerType;
+import it.unibo.wildenc.mvc.model.Lobby.PlayerType;
 import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
+import it.unibo.wildenc.mvc.model.Lobby;
 import it.unibo.wildenc.mvc.model.Game.PlayerInfos;
 import it.unibo.wildenc.mvc.model.game.GameImpl;
+import it.unibo.wildenc.mvc.model.lobby.LobbyImpl;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.PointerWeapon;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
@@ -42,7 +44,8 @@ public class EngineImpl implements Engine {
     private final Object pauseLock = new Object();
     private volatile STATUS gameStatus;
     private volatile Game model;
-    private Game.PlayerType playerType;
+    private final Lobby lobby = new LobbyImpl();
+    private Lobby.PlayerType playerType;
     private SavedData data;
     private final InputHandler ih = new InputHandlerImpl();
 
@@ -52,9 +55,8 @@ public class EngineImpl implements Engine {
     public enum STATUS { RUNNING, PAUSE, END }
 
     @Override
-    public void start(final Game.PlayerType pt) {
-        playerType = pt;
-        this.views.forEach(e -> e.start(pt));
+    public void start() {
+        this.views.forEach(e -> e.start(lobby.getSelectablePlayers().getFirst()));
     }
 
     /**
@@ -154,7 +156,7 @@ public class EngineImpl implements Engine {
      * {@inheritDoc}
      */
     @Override
-    public void menu(final Game.PlayerType pt) {
+    public void menu(final Lobby.PlayerType pt) {
         this.playerType = pt;
         this.views.forEach(e -> e.switchRoot(e.menu(pt)));
     }
@@ -188,8 +190,8 @@ public class EngineImpl implements Engine {
     }
 
     @Override
-    public List<Game.PlayerType> getPlayerType() {
-        return Arrays.stream(Game.PlayerType.values()).toList();
+    public List<Lobby.PlayerType> getSelectablePlayers() {
+        return lobby.getSelectablePlayers();
     }
 
     @Override

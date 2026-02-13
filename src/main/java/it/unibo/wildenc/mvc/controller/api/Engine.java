@@ -1,10 +1,10 @@
 package it.unibo.wildenc.mvc.controller.api;
 
 import java.util.List;
-import java.util.Set;
 
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.Lobby;
 import it.unibo.wildenc.mvc.view.api.GameView;
 
 /**
@@ -12,7 +12,7 @@ import it.unibo.wildenc.mvc.view.api.GameView;
  */
 public interface Engine {
 
-    void start(Game.PlayerType pt);
+    void start();
 
     /**
      * Accept the movement of the player to add.
@@ -48,7 +48,7 @@ public interface Engine {
     /**
      * Show the menu.
      */
-    void menu(Game.PlayerType pt);
+    void menu(Lobby.PlayerType player);
 
     /**
      * Show the shop.
@@ -79,9 +79,14 @@ public interface Engine {
      */
     void unregisterView(GameView gv);
 
-    List<Game.PlayerType> getPlayerType();
+    /**
+     * Gets a list of selectable players.
+     * 
+     * @return A {@link List} of selectable players as {@link Game.PlayerType}.
+     */
+    List<Lobby.PlayerType> getSelectablePlayers();
     
-    Game.PlayerType getPlayerTypeChoise();
+    Lobby.PlayerType getPlayerTypeChoise();
 
     void openViewPause();
 
