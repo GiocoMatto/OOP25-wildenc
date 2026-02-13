@@ -27,7 +27,7 @@ public class GenericWeapon implements Weapon {
 
     private final String weaponName;
     private final Function<WeaponStats, List<AttackContext>> attackInfoGenerator;
-    private double timeSinceLastAtk = Double.MAX_VALUE;
+    private double timeSinceLastAtk = 0;
     private int currentBullet;
 
     /**

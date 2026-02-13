@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.Lobby;
 import it.unibo.wildenc.mvc.view.api.GameView;
 
 /**
@@ -13,10 +14,8 @@ public interface Engine {
 
     /**
      * Starts the engine for a specific player type.
-     * 
-     * @param pt the selected player type.
      */
-    void start(Game.PlayerType pt);
+    void start();
 
     /**
      * Accept the movement of the player to add.
@@ -54,7 +53,7 @@ public interface Engine {
      * 
      * @param pt the player type.
      */
-    void menu(Game.PlayerType pt);
+    void menu(Lobby.PlayerType player);
 
     /**
      * Show the shop.
@@ -86,18 +85,13 @@ public interface Engine {
     void unregisterView(GameView gv);
 
     /**
-     * Lists all of the available player types.
+     * Gets a list of selectable players.
      * 
-     * @return a {@link List} of available PlayerTypes.
+     * @return A {@link List} of selectable players as {@link Game.PlayerType}.
      */
-    List<Game.PlayerType> getPlayerType();
+    List<Lobby.PlayerType> getSelectablePlayers();
 
-    /**
-     * Returns the chosen player type.
-     * 
-     * @return the chosen player type.
-     */
-    Game.PlayerType getPlayerTypeChoise();
+    Lobby.PlayerType getPlayerTypeChoise();
 
     /**
      * Show the view for set game in pause.

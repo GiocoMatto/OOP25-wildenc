@@ -53,4 +53,8 @@ public final class Utilities {
         final var norm = new Vector2d(toConvert).normalize();
         return norm.isFinite() ? norm : new Vector2d(0, 0);
     }
+
+    public static String capitalize(final String toCap) {
+        return toCap.substring(0, 1).toUpperCase() + toCap.substring(1);
+    }
 }

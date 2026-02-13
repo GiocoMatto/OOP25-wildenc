@@ -23,6 +23,8 @@ import it.unibo.wildenc.util.Utilities;
  */
 public class PointingMeleeFactory implements WeaponFactory {
 
+    private double fromPlayer = 60;
+
     /**
      * {@inheritDoc}
      */
@@ -48,22 +50,20 @@ public class PointingMeleeFactory implements WeaponFactory {
             posToHit,
             ProjectileStats.getBuilder()
                 .damage(baseDamage)
+                .physics((dt, atkInfo) -> still(dt, atkInfo))
                 // FISICA: Usiamo una lambda che mantiene l'offset rispetto all'owner
                 .physics(this::still)
                 .radius(hbRadius)
-                .velocity(0) // Melee di solito non ha velocità propria
-                .ttl(baseTTL) // Usare un valore basso, es. 0.1 - 0.2
+                .velocity(0)
+                .ttl(baseTTL)
                 .owner(ownedBy)
                 .id(weaponName)
                 .immortal(immortal)
                 .build(),
             (level, weaponStats) -> {
                 weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, level);
-                // Per il melee, aumentare il livello spesso aumenta il raggio (range)
-                weaponStats.getProjStats().setMultiplier(
-                    ProjStatType.HITBOX, 
-                    weaponStats.getProjStats().getStatValue(ProjStatType.HITBOX) + level * 2
-                );
+                weaponStats.getProjStats().setMultiplier(ProjStatType.HITBOX, 1 + level / 100);
+                this.fromPlayer += level / 10;
             },
             this::meleeSpawn
         );
@@ -79,7 +79,7 @@ public class PointingMeleeFactory implements WeaponFactory {
 
         final Vector2d direction = new Vector2d(
             Utilities.normalizeVector(weaponStats.getPosToHit().get())
-        ).mul(60);
+        ).mul(fromPlayer);
 
         final Vector2d finalTarget = new Vector2d(origin).add(direction);
         return List.of(new AttackContext(

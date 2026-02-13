@@ -33,7 +33,7 @@ public final class PlayerImpl extends AbstractEntity implements Player {
         final Vector2dc startPos, 
         final double hitbox, 
         final double speed, 
-        final int maxHealth
+        final double maxHealth
     ) {
         // inizializzazione con valori iniziali
         super(startPos, hitbox, speed, maxHealth, new LinkedHashSet<>());
