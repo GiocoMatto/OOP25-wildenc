@@ -266,8 +266,9 @@ public class GameViewImpl implements GameView, GamePointerView {
         final StackPane root = (StackPane) gameStage.getScene().getRoot();
         final Label text = new Label("Sblocca arma o potenziamento:");
         final ListView<String> listView = new ListView<>();
-        final VBox box = new VBox(5, text, listView);
+        final VBox box = new VBox(10, text, listView);
         box.setAlignment(Pos.CENTER);
+        box.setFillWidth(true);
         powerUpWrapper = new StackPane(box);
         powerUpWrapper.setPadding(new Insets(15));
         powerUpWrapper.setStyle("-fx-background-color: #AEC6CF;");
@@ -279,7 +280,6 @@ public class GameViewImpl implements GameView, GamePointerView {
         listView.getItems().addAll(powerUps.stream().map(e -> e.toString()).toList());
         listView.getSelectionModel().selectFirst();
         listView.setFixedCellSize(26);
-        listView.setPrefHeight(powerUps.size() * 26 + 2);
         listView.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 levelupHandler(powerUps, listView);
@@ -291,10 +291,11 @@ public class GameViewImpl implements GameView, GamePointerView {
             }
         });
         VBox.setVgrow(listView, Priority.ALWAYS);
-
+        listView.setMaxWidth(Double.MAX_VALUE);
         powerUpWrapper.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        powerUpWrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.15));
-        powerUpWrapper.setMaxWidth(rec.getWidth() * 0.15);
+        powerUpWrapper.prefWidthProperty().bind(root.widthProperty().multiply(0.4));
+        powerUpWrapper.prefHeightProperty().bind(root.heightProperty().multiply(0.2));
+        StackPane.setAlignment(powerUpWrapper, Pos.CENTER);
     }
 
     private void levelupHandler(final Set<Game.WeaponChoice> powerUps, final ListView<String> listView) {
