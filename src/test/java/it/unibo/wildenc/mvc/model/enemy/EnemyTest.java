@@ -1,4 +1,4 @@
-package it.unibo.wildenc;
+package it.unibo.wildenc.mvc.model.enemy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -24,12 +24,13 @@ import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
 public class EnemyTest {
     private static final double DELTA_SECONDS = 0.1;
     private static final Vector2d SPAWN_POSITION = new Vector2d(0, 0);
-    private static final int HITBOX = 2;
+    private static final int HITBOX = 1;
     private static final int SPEED = 10;
     private static final int HEALTH = 500;
     private static final String NAME = "Pikachu";
+    private static final double MAX_DISTANCE = 400;
+    private static final double MIN_DISTANCE = 250;
     /* Collectible */
-    private static final double HITBOX_COLLECTIBLE = 5;
     private static final int VALUE_COLLECTIBLE = 34;
     private static final MapObject TARGET_1 = new MapObject() {
 
@@ -59,7 +60,7 @@ public class EnemyTest {
 
         @Override
         public Vector2dc getPosition() {
-            return new Vector2d(105, 0);
+            return new Vector2d(405, 0);
         }
 
         @Override
@@ -111,7 +112,15 @@ public class EnemyTest {
 
     @Test
     public void CloseRangeEnemyTest() {
-        this.enemy = new CloseRangeEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_1), Set.of(e -> experienceLoot(e.getPosition()))));
+        this.enemy = new CloseRangeEnemy(new AbstractEnemyField(
+            SPAWN_POSITION, 
+            HITBOX, 
+            SPEED, 
+            HEALTH, 
+            NAME, 
+            Optional.of(TARGET_1), 
+            Set.of(e -> experienceLoot(e.getPosition())
+        )));
         int count = 0;
         while (!CollisionLogic.areColliding(enemy, TARGET_1)) {
             enemy.updatePosition(DELTA_SECONDS);
@@ -123,21 +132,37 @@ public class EnemyTest {
     @Test
     public void RangedEnemyTest() {
         /* enemy is fare away the player */
-        this.enemy = new RangedEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_2), Set.of(e -> experienceLoot(e.getPosition()))));
+        this.enemy = new RangedEnemy(new AbstractEnemyField(
+            SPAWN_POSITION, 
+            HITBOX, 
+            SPEED, 
+            HEALTH, 
+            NAME, 
+            Optional.of(TARGET_2), 
+            Set.of(e -> experienceLoot(e.getPosition())
+        )));
         int count = 0;
-        while (!CollisionLogic.areInRange(enemy, TARGET_2, RangedEnemy.MAX_DISTANCE)) {
+        while (!CollisionLogic.areInRange(enemy, TARGET_2, MAX_DISTANCE)) {
             enemy.updatePosition(DELTA_SECONDS);
             count++;
         }
         assertEquals(1, count);
         /* enemy is too much near the player */
-        this.enemy = new RangedEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_3), Set.of(e -> experienceLoot(e.getPosition()))));
+        this.enemy = new RangedEnemy(new AbstractEnemyField(
+            SPAWN_POSITION, 
+            HITBOX, 
+            SPEED, 
+            HEALTH, 
+            NAME, 
+            Optional.of(TARGET_3), 
+            Set.of(e -> experienceLoot(e.getPosition()))
+        ));
         count = 0;
-        while (CollisionLogic.areInRange(enemy, TARGET_3, RangedEnemy.MIN_DISTANCE)) {
+        while (CollisionLogic.areInRange(enemy, TARGET_3, MIN_DISTANCE)) {
             enemy.updatePosition(DELTA_SECONDS);
             count++;
         }
-        assertEquals(8, count);
+        assertEquals(178, count);
     }
 
     @Test

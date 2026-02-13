@@ -9,8 +9,8 @@ import it.unibo.wildenc.util.Utilities;
  * A enemy that attach to a specific distance by the player.
  */
 public class RangedEnemy extends AbstractEnemy {
-    public static final int MAX_DISTANCE = 400;
-    public static final int MIN_DISTANCE = 250;
+    private static final int MAX_DISTANCE = 400;
+    private static final int MIN_DISTANCE = 250;
 
     /**
      * Create a new ranged Enemey.
