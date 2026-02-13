@@ -54,7 +54,8 @@ public class EngineImpl implements Engine {
 
     @Override
     public void start() {
-        this.views.forEach(e -> e.start(lobby.getSelectablePlayers().getFirst()));
+        playerType = lobby.getSelectablePlayers().getFirst();
+        this.views.forEach(e -> e.start(playerType));
     }
 
     /**
