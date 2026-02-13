@@ -90,15 +90,6 @@ public class EngineImpl implements Engine {
      * {@inheritDoc}
      */
     @Override
-    public void start(final Game.PlayerType pt) {
-        playerType = pt;
-        this.views.forEach(e -> e.start(pt));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void startGameLoop() {
         this.model = new GameImpl(playerType);
         this.views.forEach(v -> v.switchRoot(v.game()));

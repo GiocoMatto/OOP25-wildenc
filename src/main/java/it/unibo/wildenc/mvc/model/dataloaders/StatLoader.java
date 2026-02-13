@@ -154,6 +154,10 @@ public class StatLoader {
         return this.loadedWeaponConfigs.values();
     }
 
+    public Collection<LoadedEntityStats> getAllPlayerData() {
+        return this.loadedPlayerConfigs.values();
+    }
+
     /**
      * Method for getting the weapon given its name. This will use the
      * {@link LoadedWeaponStats}' specified factory for generating the weapon.
