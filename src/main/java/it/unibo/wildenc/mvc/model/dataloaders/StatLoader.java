@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -160,6 +161,7 @@ public class StatLoader {
         int baseBurst,
         boolean immortal,
         boolean availableToPlayer,
+        List<String> peculiarTo,
         Map<String, Double> special
     ) {
         public static LoadedWeaponStats empty(final String weaponName) {
@@ -175,6 +177,7 @@ public class StatLoader {
                 0,
                 false,
                 false,
+                List.of(),
                 Map.of()
             );
         }

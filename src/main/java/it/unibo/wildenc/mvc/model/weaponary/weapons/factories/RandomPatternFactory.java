@@ -55,6 +55,9 @@ public class RandomPatternFactory implements WeaponFactory{
             (level, weaponStats) -> {
                 weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, (level / 10) + 1);
                 weaponStats.getProjStats().setMultiplier(ProjStatType.HITBOX, (level / 10) + 1);
+                weaponStats.getProjStats().setTTL(
+                    weaponStats.getProjStats().getTTL() + level / 20
+                );
                 if (level % 5 == 0) {
                     weaponStats.setBurstSize(
                         weaponStats.getCurrentBurstSize() + 1
