@@ -1,9 +1,11 @@
 package it.unibo.wildenc.mvc.model.game;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,9 +15,12 @@ import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.GameMap;
+import it.unibo.wildenc.mvc.model.Lobby;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
+import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.dataloaders.StatLoader;
+import it.unibo.wildenc.mvc.model.dataloaders.StatLoader.LoadedWeaponStats;
 import it.unibo.wildenc.mvc.model.map.GameMapImpl;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
 
@@ -32,12 +37,12 @@ public class GameImpl implements Game {
     private boolean playerLevelledUp;
 
     /**
-     * Create a normal game.
+     * Create and start a normal game.
      * 
      * @param pt The player type.
      * @see PlayerType
      */
-    public GameImpl(final PlayerType pt) {
+    public GameImpl(final Lobby.PlayerType pt) {
         player = getPlayerByPlayerType(pt);
         map = new GameMapImpl(player);
     }
@@ -104,8 +109,15 @@ public class GameImpl implements Game {
      */
     @Override
     public Set<WeaponChoice> weaponToChooseFrom() {
-        return STATLOADER.getAllLoadedWeapons().stream()
-            .filter(ws -> ws.availableToPlayer())
+        var allWeapons = new ArrayList<>(
+            STATLOADER.getAllLoadedWeapons().stream()
+            .filter(ws -> 
+                ws.availableToPlayer() 
+                || (Objects.nonNull(ws.peculiarTo()) && ws.peculiarTo().contains(player.getName().split(":")[1]))
+            ).toList()
+        );
+        Collections.shuffle(allWeapons);
+        return allWeapons.stream()
             .map(ws -> {
                 if (!doPlayerHasWeapon(ws.weaponName())) {
                     return new WeaponChoice(
@@ -148,16 +160,17 @@ public class GameImpl implements Game {
         return Collections.unmodifiableMap(map.getMapBestiary());
     }
 
-    private Player getPlayerByPlayerType(final PlayerType playerType) {
-        final var playerStats = playerType.getPlayerStats();
+    private Player getPlayerByPlayerType(final Lobby.PlayerType playerType) {
         final Player actualPlayer = new PlayerImpl(
             playerType.name().toLowerCase(),
             new Vector2d(0, 0),
-            playerStats.hitbox(),
-            playerStats.speed(),
-            playerStats.health()
+            playerType.hitbox(),
+            playerType.speed(),
+            playerType.health()
         );
-        playerStats.addDefaultWeapon().accept(null, actualPlayer);
+        actualPlayer.addWeapon(
+            STATLOADER.getWeaponFactoryForWeapon(playerType.weapon(), actualPlayer, () -> new Vector2d(0, 0))
+        );
         return actualPlayer;
     }
 
@@ -181,5 +194,6 @@ public class GameImpl implements Game {
     public Player getPlayer() {
         return this.player;
     }
+
 
 }

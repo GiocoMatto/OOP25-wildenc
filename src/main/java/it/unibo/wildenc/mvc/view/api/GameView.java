@@ -7,13 +7,14 @@ import java.util.Set;
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.Lobby;
 import javafx.scene.Parent;
 
 public interface GameView {
 
     void switchRoot(Parent root);
 
-    void start(Game.PlayerType pt);
+    void start(Lobby.PlayerType pt);
 
     /**
      * Start the view.
@@ -52,7 +53,7 @@ public interface GameView {
     /**
      * Display the menu.
      */
-    Parent menu(Game.PlayerType pt);
+    Parent menu(Lobby.PlayerType pt);
 
     /**
      * Display the shop.

@@ -17,6 +17,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -245,6 +246,7 @@ public class StatLoader {
         int baseBurst,
         boolean immortal,
         boolean availableToPlayer,
+        List<String> peculiarTo,
         Map<String, Double> special
     ) {
         /**
@@ -266,6 +268,7 @@ public class StatLoader {
                 0,
                 false,
                 false,
+                List.of(),
                 Map.of()
             );
         }
@@ -286,7 +289,8 @@ public class StatLoader {
         double hbRadius,
         double maxHealth,
         double velocity,
-        String rarity
+        String rarity,
+        String weapon
     ) {
         /**
          * Returns an empty, placeholder, {@link LoadedEntityStats}.
@@ -295,7 +299,7 @@ public class StatLoader {
          * @return the empty, placeholder {@link LoadedEntityStats}.
          */
         public static LoadedEntityStats empty(final String entityName) {
-            return new LoadedEntityStats(entityName, 0, 0, 0, null);
+            return new LoadedEntityStats(entityName, 0, 0, 0, null, null);
         }
     }
 }

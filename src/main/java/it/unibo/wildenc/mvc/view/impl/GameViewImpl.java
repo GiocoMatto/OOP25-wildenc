@@ -1,13 +1,11 @@
 package it.unibo.wildenc.mvc.view.impl;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
-import org.joml.sampling.StratifiedSampling;
 
 import java.util.Map;
 
@@ -15,15 +13,15 @@ import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.Lobby;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
-import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
+import it.unibo.wildenc.util.Utilities;
 import javafx.scene.Parent;
 
 import javafx.scene.Scene;
@@ -36,7 +34,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -84,7 +81,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public void start(final Game.PlayerType pt) {
+    public void start(final Lobby.PlayerType pt) {
         gameStage = new Stage();
         gameStage.setTitle("Wild Encounter");
         gameStage.setHeight(rec.getHeight() * 0.85);
@@ -226,7 +223,7 @@ public class GameViewImpl implements GameView, GamePointerView {
             // Itera sulla mappa per creare le label
             if (lostInfo != null && !lostInfo.isEmpty()) {
                 lostInfo.forEach((key, value) -> {
-                    String labelText = key.split(":")[1]+ ": " + value;
+                    String labelText = Utilities.capitalize(key.split(":")[1]) + ": " + value;
                     Label statLabel = new Label(labelText);
                     statLabel.setStyle("-fx-text-fill: lightgray; -fx-font-size: 16px;");
                     statsBox.getChildren().add(statLabel);
@@ -374,7 +371,7 @@ public class GameViewImpl implements GameView, GamePointerView {
      * {@inheritDoc}
      */
     @Override
-    public Parent menu(final Game.PlayerType pt) {
+    public Parent menu(final Lobby.PlayerType pt) {
         final StackPane root = new StackPane();
         final ImageView title = new ImageView(new Image(getClass().getResource(PATH + "title.png").toExternalForm()));
         title.setPreserveRatio(true);
@@ -390,7 +387,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         box.prefHeightProperty().bind(root.heightProperty().multiply(0.6));
         /* start game play */
         final ImageView avatar = new ImageView(new Image(getClass()
-        .getResource(PATH + pt.name().toLowerCase() + ".png").toExternalForm()
+            .getResource(PATH + pt.name().toLowerCase() + ".png").toExternalForm()
         ));
         avatar.setFitWidth(175);
         avatar.setFitHeight(175);
@@ -398,7 +395,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         infoBar.setAlignment(Pos.CENTER);
         infoBar.setPadding(new Insets(30));
         infoBar.setStyle("-fx-background-color: #AEC6CF;");
-        for (final var e : engine.getPlayerType()) {
+        for (final var e : engine.getSelectablePlayers()) {
             final Button btnPoke = new Button(e.name());
             btnPoke.setOnAction(btn -> {
                 engine.menu(e);
