@@ -148,6 +148,11 @@ public class ProjectileStats {
             .findFirst().get().setMult(newMult);
     }
 
+    /**
+     * Method for getting a {@link ProjectileStats} builder.
+     * 
+     * @return a {@link ProjectileStats} builder
+     */
     public static ProjStatsBuilder getBuilder() {
         return new ProjStatsBuilder();
     }
@@ -230,7 +235,11 @@ public class ProjectileStats {
         }
     }
 
-    public final static class ProjStatsBuilder {
+    /**
+     * A builder for ProjectileStats. This was made to increase
+     * code readibility.
+     */
+    public static final class ProjStatsBuilder {
         private double damage;
         private double hbRadius;
         private double velocity;
@@ -240,48 +249,101 @@ public class ProjectileStats {
         private Entity owner;
         private BiFunction<Double, AttackContext, Vector2d> moveFunc;
 
-        private ProjStatsBuilder() {}
+        private ProjStatsBuilder() { }
 
+        /**
+         * Sets the damage for the projectile.
+         * 
+         * @param dmg the damage to be set
+         * @return this builder.
+         */
         public ProjStatsBuilder damage(final double dmg) {
             this.damage = dmg;
             return this;
         }
 
+        /**
+         * Sets the hitbox radius for the projectile.
+         * 
+         * @param rad the hitbox radius to be set
+         * @return this builder.
+         */
         public ProjStatsBuilder radius(final double rad) {
             this.hbRadius = rad;
             return this;
         }
 
+        /**
+         * Sets the velocity for the projectile.
+         * 
+         * @param vel the velocity to be set
+         * @return this builder.
+         */
         public ProjStatsBuilder velocity(final double vel) {
             this.velocity = vel;
             return this;
         }
 
-        public ProjStatsBuilder ttl(final double ttl) {
-            this.ttl = ttl;
+        /**
+         * Sets the time to live for the projectile.
+         * 
+         * @param timetolive the time to live to be set
+         * @return this builder.
+         */
+        public ProjStatsBuilder ttl(final double timetolive) {
+            this.ttl = timetolive;
             return this;
         }
 
-        public ProjStatsBuilder id(final String id) {
-            this.id = id;
+        /**
+         * Sets the id for the projectile.
+         * 
+         * @param pID the id to be set
+         * @return this builder.
+         */
+        public ProjStatsBuilder id(final String pID) {
+            this.id = pID;
             return this;
         }
 
-        public ProjStatsBuilder immortal(final boolean immortal) {
-            this.immortal = immortal;
+        /**
+         * Sets if the projectile is immortal or not.
+         * 
+         * @param immortality a boolean that specifies if the projectile is immortal or not.
+         * @return this builder.
+         */
+        public ProjStatsBuilder immortal(final boolean immortality) {
+            this.immortal = immortality;
             return this;
         }
 
+        /**
+         * Sets the projectile's owner.
+         * 
+         * @param owned the owner of the projectile.
+         * @return this builder.
+         */
         public ProjStatsBuilder owner(final Entity owned) {
             this.owner = owned;
             return this;
         }
 
+        /**
+         * Sets the physics of the projectile.
+         * 
+         * @param mov the movement function of the projectile.
+         * @return this builder
+         */
         public ProjStatsBuilder physics(final BiFunction<Double, AttackContext, Vector2d> mov) {
             this.moveFunc = mov;
             return this;
         }
 
+        /**
+         * Builds a {@link ProjectileStats} as specified by using the methods above.
+         * 
+         * @return the built {@link ProjectileStats}
+         */
         public ProjectileStats build() {
             if (this.id == null) {
                 this.id = "noid";

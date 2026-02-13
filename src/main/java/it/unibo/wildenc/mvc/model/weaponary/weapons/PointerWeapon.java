@@ -16,6 +16,18 @@ import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
  */
 public class PointerWeapon extends GenericWeapon {
 
+    /**
+     * Constructor for the class.
+     * 
+     * @param weaponName the name of the weapon.
+     * @param initialCooldown the initial cooldown of the weapon.
+     * @param initialBurst the initial quantity of Projectiles in a burst.
+     * @param initialProjAtOnce the initial quantity of Projectile shot in one attack.
+     * @param initialPosToHit the position which the weapon is aiming at, initially.
+     * @param pStats the statistics of the Projectile this weapon will shoot.
+     * @param upgradeLogics the logics of upgrading for this weapon.
+     * @param attackInfoGenerator a {@link Function} specifing how the Projectiles should be shot.
+     */
     public PointerWeapon(
         final String weaponName, 
         final double initialCooldown, 
@@ -39,9 +51,11 @@ public class PointerWeapon extends GenericWeapon {
     }
 
     /**
-     * {@inheritDoc}
+     * Sets a new position which the Weapon is aiming to.
+     * 
+     * @param newPosToHit the new position aimed by the weapon.
      */
     public void setPosToHit(final Supplier<Vector2dc> newPosToHit) {
-        this.weaponStats.setPosToHit(newPosToHit);
+        this.getStats().setPosToHit(newPosToHit);
     }
 }

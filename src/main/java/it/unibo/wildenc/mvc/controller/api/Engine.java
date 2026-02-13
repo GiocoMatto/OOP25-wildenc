@@ -12,6 +12,9 @@ import it.unibo.wildenc.mvc.view.api.GameView;
  */
 public interface Engine {
 
+    /**
+     * Starts the engine for a specific player type.
+     */
     void start();
 
     /**
@@ -47,6 +50,8 @@ public interface Engine {
 
     /**
      * Show the menu.
+     * 
+     * @param pt the player type.
      */
     void menu(Lobby.PlayerType player);
 
@@ -85,10 +90,16 @@ public interface Engine {
      * @return A {@link List} of selectable players as {@link Game.PlayerType}.
      */
     List<Lobby.PlayerType> getSelectablePlayers();
-    
+
     Lobby.PlayerType getPlayerTypeChoise();
 
+    /**
+     * Show the view for set game in pause.
+     */
     void openViewPause();
 
+    /**
+     * Restart the game by the pause.
+     */
     void closeViewPause();
 }

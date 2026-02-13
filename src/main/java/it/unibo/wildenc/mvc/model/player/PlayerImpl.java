@@ -10,7 +10,7 @@ import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 /**
  * Implementation of the Player entity
  */
-public class PlayerImpl extends AbstractEntity implements Player {
+public final class PlayerImpl extends AbstractEntity implements Player {
 
     private static final int BASE_EXP_STEP = 100; //costante per il calcolo
 

@@ -16,27 +16,43 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.GenericWeapon;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 
+/**
+ * Factory class for a TyphoonWeapon. A TyphoonWeapon is an implementation
+ * of a {@link GenericWeapon} which generates projectile which orbit around the
+ * player, at a specified distance.
+ */
 public class TyphoonFactory implements WeaponFactory {
+
+    private static final int LV_2 = 2;
+    private static final int LV_5 = 5;
 
     private final double distanceFromPlayer;
 
+    /**
+     * Constructor for the class.
+     * 
+     * @param fromPlayer the offset between the orbitals and the player.
+     */
     public TyphoonFactory(final double fromPlayer) {
         this.distanceFromPlayer = fromPlayer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Weapon createWeapon(
-        String weaponName, 
-        double baseCooldown, 
-        double baseDamage, 
-        double hbRadius,
-        double baseVelocity, 
-        double baseTTL, 
-        int baseProjAtOnce, 
-        int baseBurst, 
-        Entity ownedBy,
-        boolean immortal,
-        Supplier<Vector2dc> posToHit
+        final String weaponName, 
+        final double baseCooldown, 
+        final double baseDamage, 
+        final double hbRadius,
+        final double baseVelocity, 
+        final double baseTTL, 
+        final int baseProjAtOnce, 
+        final int baseBurst, 
+        final Entity ownedBy,
+        final boolean immortal,
+        final Supplier<Vector2dc> posToHit
     ) {
         return new GenericWeapon(
             weaponName, 
@@ -57,12 +73,12 @@ public class TyphoonFactory implements WeaponFactory {
                 ).build(), 
                 (lvl, weaponstats) -> {
                     weaponstats.getProjStats().setMultiplier(ProjStatType.DAMAGE, 1 + Math.log(lvl));
-                    if(lvl % 2 == 0) {
+                    if (lvl % LV_2 == 0) {
                         weaponstats.setCooldown(
                             weaponstats.getCooldown() - lvl / 100
                         );
                     }
-                    if(lvl % 5 == 0) {
+                    if (lvl % LV_5 == 0) {
                         weaponstats.increaseProjectilesShotAtOnce();
                     }
                 },
@@ -93,17 +109,17 @@ public class TyphoonFactory implements WeaponFactory {
     private static Vector2d circularMovement(
         final double dt, 
         final AttackContext atkInfo, 
-        Entity ownedBy,
+        final Entity ownedBy,
         final double orbitRadius
     ) {
-        Vector2dc center = ownedBy.getPosition();
-        Vector2dc dir = atkInfo.getDirectionVersor();
-        double currentRad = Math.atan2(dir.y(), dir.x());
-        double nextRad = currentRad + (atkInfo.getVelocity() * dt);
+        final Vector2dc center = ownedBy.getPosition();
+        final Vector2dc dir = atkInfo.getDirectionVersor();
+        final double currentRad = Math.atan2(dir.y(), dir.x());
+        final double nextRad = currentRad + (atkInfo.getVelocity() * dt);
         atkInfo.setDirection(Math.toDegrees(nextRad));
-        double deltaAngleRad = atkInfo.getVelocity() * dt;
-        double nextAngleRad = currentRad + deltaAngleRad;
-        double nextAngleDeg = Math.toDegrees(nextAngleRad);
+        final double deltaAngleRad = atkInfo.getVelocity() * dt;
+        final double nextAngleRad = currentRad + deltaAngleRad;
+        final double nextAngleDeg = Math.toDegrees(nextAngleRad);
         atkInfo.setDirection(nextAngleDeg); 
 
         return new Vector2d(
