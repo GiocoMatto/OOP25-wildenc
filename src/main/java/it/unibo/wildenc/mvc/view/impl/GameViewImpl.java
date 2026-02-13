@@ -56,6 +56,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     private final ViewRenderer renderer;
     private final Canvas canvas = new Canvas(1600, 900);
     private final ProgressBar experienceBar = new ProgressBar(0);
+    private ProgressBar hpBar;
     private final Text levelText = new Text("LV 1");
     private StackPane powerUpWrapper = new StackPane();
     private VBox pauseMenu = new VBox();
@@ -130,15 +131,26 @@ public class GameViewImpl implements GameView, GamePointerView {
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
         root.getChildren().add(canvas);
+        
         final BorderPane ui = new BorderPane();
-        final HBox expBox = new HBox();
         root.getChildren().add(ui);
         ui.setPickOnBounds(false);
+
+        final HBox expBox = new HBox(10);
         expBox.setAlignment(Pos.TOP_CENTER);
-        expBox.setPadding(new Insets(15));
-        expBox.getChildren().add(levelText);
-        expBox.getChildren().add(experienceBar);
-        ui.setTop(expBox);
+        expBox.getChildren().addAll(levelText, experienceBar);
+
+        hpBar = new javafx.scene.control.ProgressBar(1.0);
+        hpBar.setStyle("-fx-accent: red;");
+        hpBar.setPrefWidth(200);
+
+        final VBox hud = new VBox(5);
+        hud.setAlignment(Pos.TOP_CENTER);
+        hud.setPadding(new Insets(15));
+        hud.getChildren().addAll(expBox, hpBar); // prima l'exp poi gli HP sotto
+
+        ui.setTop(hud);
+
         canvas.setManaged(false); // canvas should be indipendent
         canvas.setFocusTraversable(true);
         canvas.requestFocus();
@@ -529,6 +541,13 @@ public class GameViewImpl implements GameView, GamePointerView {
     @Override
     public void resumeMusic() {
         soundManager.resumeMusic();
+    }
+
+    @Override
+    public void updateHealthBar(double currentHealth, double maxHealth) {
+        if(hpBar != null && maxHealth > 0) {
+            Platform.runLater(() -> hpBar.setProgress(currentHealth/maxHealth));
+        }
     }
 
 }
