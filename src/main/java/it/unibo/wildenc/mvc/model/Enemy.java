@@ -9,13 +9,6 @@ import java.util.Set;
 public interface Enemy extends Entity {
 
     /**
-     * Get the name ofthe enemy.
-     * 
-     * @return the name of enemy.
-     */
-    String getName();
-
-    /**
      * Get the {@link MapObject} of the target (the Player).
      * 
      * @return Relative MapObject Player.

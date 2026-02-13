@@ -123,4 +123,22 @@ Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura
 	\caption{Schema UML che evidenzia la struttura MVC del progetto}\label{uml:gameArchitecture}
 \end{figure}
 
+\section{Design Dettagliato}
+%
+\subsubsection{Leonardo Mengozzi - Gestione nemici}
+%
+\subsubsection{Abstract Factory di enemy}
+%
+\begin{figure}[H]
+	\includegraphics[width=13cm]{FactoryEnemy}
+	\caption{UML rappresenta Abstract factory per gli enemys}\label{uml:factoryEnemy}
+\end{figure}
+%
+\textbf{Problema:} Wild Encounter ha diverse tipologie di nemici, ma la cui creazione richiede parametri simili e l'assegnamento delle armi fisso dopo la creazione delle istanze. 
+%
+\textbf{Soluzione}: Per rendere facile e sicura la creazione delle istanze di nemici si è adottato un \textit{Abstract factory} che espone un metodo con parametri necessari a ogni nemico per essere istanziato.
+% applicato il template method
+\subsubsection{Applicazione template method}
+\textbf{Problema:} 
+
 \end{document}
