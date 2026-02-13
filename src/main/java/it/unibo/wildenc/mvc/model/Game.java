@@ -138,4 +138,10 @@ public interface Game {
      */
     record PlayerInfos(int experience, int level, int neededExp, int coins) {
     }
+
+    /**
+     * gets the player entity (used for sounds of collectibles)
+     * @return the player
+     */
+    Player getPlayer();
 }

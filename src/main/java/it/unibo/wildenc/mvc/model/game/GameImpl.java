@@ -177,4 +177,9 @@ public class GameImpl implements Game {
         return new PlayerInfos(player.getExp(), player.getLevel(), player.getExpToNextLevel(), player.getMoney());
     }
 
+    @Override
+    public Player getPlayer() {
+        return this.player;
+    }
+
 }

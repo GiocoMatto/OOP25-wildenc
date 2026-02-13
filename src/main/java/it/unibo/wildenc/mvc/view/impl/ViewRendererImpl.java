@@ -8,6 +8,7 @@ import it.unibo.wildenc.mvc.view.api.SpriteManager.Sprite;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 
 /**
@@ -52,6 +53,8 @@ public class ViewRendererImpl implements ViewRenderer {
                 .findFirst()
                 .orElse(null)
         );
+        
+        drawGrassTiles(draw, scale);
 
         final double bgX = -this.cameraX % SPRITE_SIZE * scale;
         final double bgY = -this.cameraY % SPRITE_SIZE * scale;
@@ -93,6 +96,32 @@ public class ViewRendererImpl implements ViewRenderer {
         draw.restore();
 
         frameCount++;
+    }
+
+    private void drawGrassTiles(GraphicsContext draw, double scale) {
+        Image grassTile = spriteManager.getGrassTile();
+
+        if (grassTile != null) {
+            double startX = -this.cameraX % SPRITE_SIZE;
+            double startY = -this.cameraY % SPRITE_SIZE;
+
+            // For managing little changes.
+            if (startX > 0) {
+                startX -= SPRITE_SIZE;
+            }
+            if (startY > 0) {
+                startY -= SPRITE_SIZE;
+            }
+
+            double viewportWidth = INITIAL_CANVAS_WIDTH;
+            double viewportHeight = canvas.getHeight() / scale;
+
+            for (double x = startX; x < viewportWidth + SPRITE_SIZE; x += SPRITE_SIZE) {
+                for (double y = startY; y < viewportHeight + SPRITE_SIZE; y += SPRITE_SIZE) {
+                    draw.drawImage(grassTile, x, y, SPRITE_SIZE, SPRITE_SIZE);
+                }
+            }
+        }
     }
 
     /**

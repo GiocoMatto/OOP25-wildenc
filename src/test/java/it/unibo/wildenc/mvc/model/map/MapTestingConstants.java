@@ -140,7 +140,8 @@ public final class MapTestingConstants {
         MovableObject(0, 10, 5, 1, 0),
         MovableObject2(10, 10, 5, 1, 0),
         PlayerObject(0, 0, 5, 1, 100),
-        EnemyObject(0, 30, 5, 1, 100);
+        EnemyObject(0, 30, 5, 1, 100),
+        FarEnemyObject(2000, 30, 5, 1, 100);
 
         private final Vector2dc pos;
         private final double hitbox;

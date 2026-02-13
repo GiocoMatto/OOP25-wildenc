@@ -23,10 +23,10 @@ public class EnemySpawnerImpl implements EnemySpawner {
     private static final int DS_X = 1200;
     private static final int DS_Y = 700;
     private static final int BASE_ENEMY = 10;
-    private static final double ENEMY_LOAD_FACTOR = 1.3;
+    private static final double ENEMY_LOAD_FACTOR = 2.4;
     private static final int PROBABILITY = 100;
     private static final int START_LIFE = 100;
-    private static final double LIFE_LOAD_FACTOR = 1.5;
+    private static final double LIFE_LOAD_FACTOR = 2.6;
     private final Random rand;
     private final EnemyFactory enemyFactory;
     private long totalTime;
@@ -131,7 +131,7 @@ public class EnemySpawnerImpl implements EnemySpawner {
      */
     @Override
     public Set<Enemy> spawn(final Player p, final int enemyCount, final double tick) {
-        final int target = BASE_ENEMY + (int) Math.pow(p.getLevel(), ENEMY_LOAD_FACTOR);
+        final int target = BASE_ENEMY + (int) Math.round(Math.pow(p.getLevel(), ENEMY_LOAD_FACTOR));
         final int n = Math.max(0, target - enemyCount);
         this.totalTime = (int) (this.totalTime + tick);
         final int life = START_LIFE + (int) (totalTime * LIFE_LOAD_FACTOR);

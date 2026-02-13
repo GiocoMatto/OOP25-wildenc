@@ -1,5 +1,6 @@
 package it.unibo.wildenc.mvc.view.impl;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -31,7 +32,7 @@ public class SpriteManagerImpl implements SpriteManager {
     private static final int FRAME_LENGTH = 6;
     private static final double DELTA_STILL = 0.01;
     private static final String DOT_PNG = ".png";
-    private static final String SPRITES_LOCATION = "sprites";
+    private static final String SPRITES_LOCATION = "images/sprites";
 
     private static final List<Integer> SPRITE_MAP = List.of(2, 1, 0, 7, 6, 5, 4, 3);
 
@@ -146,5 +147,6 @@ public class SpriteManagerImpl implements SpriteManager {
             }
         }
     }
+    
 }
 

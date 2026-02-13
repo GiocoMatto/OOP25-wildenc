@@ -38,13 +38,6 @@ public interface Engine {
     void removeAllInput();
 
     /**
-     * Update the status of the gameLoop.
-     * 
-     * @param status True: running game Loop. False: stop game loop.
-     */
-    void setPause(boolean status);
-
-    /**
      * Select the weapon to unlock or levelup.
      * 
      * @param choise the choise of the player.
@@ -105,4 +98,8 @@ public interface Engine {
      * @return the chosen player type.
      */
     Game.PlayerType getPlayerTypeChoise();
+
+    void openViewPause();
+
+    void closeViewPause();
 }

@@ -37,18 +37,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
     }
 
     private void addDefaultWeaponTo(final Enemy e) {
-        /*e.addWeapon(wf.getDefaultStaticPointWeapon(
-            BASE_COOLDOWN_PROJECTILE,
-            BASE_DAMAGE_PROJECTILE, 
-            BASE_HITBOX_PROJECTILE, 
-            BASE_VELOCITY_PROJECTILE, 
-            BASE_TIME_TO_LIVE_PROJECTILE,
-            BASE_PROJ_AT_ONCE, 
-            BASE_BURST_PROJECTILE, 
-            e,
-            () -> new Vector2d(target.getPosition())
-        ));
-        */
+        e.addWeapon(statLoader.getWeaponFactoryForWeapon("ember", e, () -> e.getPosition()));
+        
     }
 
     private void addMeleeWeaponTo(final Enemy e) {
@@ -99,7 +89,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
             Optional.of(target),
             new HashSet<>(List.of(experienceLoot(), percentageLoot(coinLoot(), 0.1)))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 
@@ -122,7 +113,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
                 percentageLoot(healthLoot(), 0.4)
             ))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 
@@ -144,7 +136,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
                 percentageLoot(healthLoot(), 0.5)
             ))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 
@@ -189,7 +182,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
                 percentageLoot(healthLoot(), 0.05)
             ))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 
@@ -212,7 +206,8 @@ public class EnemyFactoryImpl implements EnemyFactory {
                 percentageLoot(healthLoot(), 0.1)
             ))
         ));
-        addMeleeWeaponTo(e);
+        //addMeleeWeaponTo(e);
+        addDefaultWeaponTo(e);
         return e;
     }
 

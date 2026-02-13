@@ -7,7 +7,7 @@ plugins {
     application
 
     /*
-     * Adds tasks to export a runnable jar.
+     * Adds tasks to export a runnable jar. 
      * In order to create it, launch the "shadowJar" task.
      * The runnable jar will be found in build/libs/projectname-all.jar
      */
@@ -26,9 +26,9 @@ java {
     }
 }
 
-val javaFXModules = listOf("base", "controls", "fxml", "swing", "graphics")
+val javaFXModules = listOf("base", "controls", "fxml", "swing", "graphics", "media")
 
-val supportedPlatforms = listOf("linux", "mac", "win") // All required for OOP
+val supportedPlatforms = listOf("mac-aarch64", "linux", "mac", "win") // All required for OOP
 
 dependencies {
     // Suppressions for SpotBugs
