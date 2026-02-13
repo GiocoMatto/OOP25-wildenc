@@ -1,8 +1,10 @@
 package it.unibo.wildenc.mvc.model.game;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -14,7 +16,9 @@ import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
+import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.dataloaders.StatLoader;
+import it.unibo.wildenc.mvc.model.dataloaders.StatLoader.LoadedWeaponStats;
 import it.unibo.wildenc.mvc.model.map.GameMapImpl;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
 
@@ -100,8 +104,15 @@ public class GameImpl implements Game {
      */
     @Override
     public Set<WeaponChoice> weaponToChooseFrom() {
-        return STATLOADER.getAllLoadedWeapons().stream()
-            .filter(ws -> ws.availableToPlayer())
+        var allWeapons = new ArrayList<>(
+            STATLOADER.getAllLoadedWeapons().stream()
+            .filter(ws -> 
+                ws.availableToPlayer() 
+                || (Objects.nonNull(ws.peculiarTo()) && ws.peculiarTo().contains(player.getName().split(":")[1]))
+            ).toList()
+        );
+        Collections.shuffle(allWeapons);
+        return allWeapons.stream()
             .map(ws -> {
                 if (!doPlayerHasWeapon(ws.weaponName())) {
                     return new WeaponChoice(

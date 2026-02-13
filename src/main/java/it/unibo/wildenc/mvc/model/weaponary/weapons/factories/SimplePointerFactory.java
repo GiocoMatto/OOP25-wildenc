@@ -16,25 +16,23 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 import it.unibo.wildenc.util.Utilities;
 
-public class PointingMeleeFactory implements WeaponFactory {
-
-    private double fromPlayer = 60;
+public class SimplePointerFactory implements WeaponFactory {
 
     @Override
     public Weapon createWeapon(
         String weaponName, 
         double baseCooldown, 
         double baseDamage, 
-        double hbRadius,    
+        double hbRadius,
         double baseVelocity, 
         double baseTTL, 
         int baseProjAtOnce, 
         int baseBurst, 
-        Entity ownedBy, 
-        boolean immortal,
+        Entity ownedBy,
+        final boolean immortal,
         Supplier<Vector2dc> posToHit
     ) {
-    return new PointerWeapon(
+        return new PointerWeapon(
             weaponName,
             baseCooldown,
             baseBurst,
@@ -42,38 +40,45 @@ public class PointingMeleeFactory implements WeaponFactory {
             posToHit,
             ProjectileStats.getBuilder()
                 .damage(baseDamage)
-                .physics((dt, atkInfo) -> still(dt, atkInfo))
+                .physics(this::straightMovement)
                 .radius(hbRadius)
-                .velocity(0)
+                .velocity(baseVelocity)
                 .ttl(baseTTL)
                 .owner(ownedBy)
                 .id(weaponName)
                 .immortal(immortal)
                 .build(),
             (level, weaponStats) -> {
-                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, level);
-                weaponStats.getProjStats().setMultiplier(ProjStatType.HITBOX, 1 + level / 100);
-                this.fromPlayer += level / 10;
+                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, 1 + (level / 4));
+                weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, (level / 100) + 1);
+                if(level % 7 == 0) {
+                    weaponStats.setBurstSize(
+                        weaponStats.getCurrentBurstSize() + 1
+                    );
+                }
             },
-            weaponStats -> meleeSpawn(weaponStats)
+            weaponStats -> singleSpawn(weaponStats)
         );
     }
 
-    private Vector2d still(final double deltaTime, final AttackContext atkInfo) {
-        return new Vector2d(atkInfo.getLastPosition());
+    private Vector2d straightMovement(final double dt, final AttackContext atkInfo) {
+        final Vector2dc start = atkInfo.getLastPosition();
+        return new Vector2d(
+            start.x() + dt * atkInfo.getVelocity() * atkInfo.getDirectionVersor().x(),
+            start.y() + dt * atkInfo.getVelocity() * atkInfo.getDirectionVersor().y()
+        );
     }
 
-    private List<AttackContext> meleeSpawn(final WeaponStats weaponStats) {
+    private static List<AttackContext> singleSpawn(final WeaponStats weaponStats) {
         final Vector2dc origin = weaponStats.getProjStats().getOwner().getPosition();
         final double velocity = weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY);
-        
-        final Vector2d direction = new Vector2d(
-            Utilities.normalizeVector(weaponStats.getPosToHit().get())
-        ).mul(fromPlayer);
+        final Vector2dc targetPos = weaponStats.getPosToHit().get();
 
-        final Vector2d finalTarget = new Vector2d(origin).add(direction);
+        final Vector2d dir = new Vector2d(Utilities.normalizeVector(new Vector2d(targetPos)));
+        final Vector2d finalTarget = new Vector2d(origin).add(dir);
+
         return List.of(new AttackContext(
-            new Vector2d(finalTarget), 
+            origin, 
             velocity, 
             () -> finalTarget
         ));

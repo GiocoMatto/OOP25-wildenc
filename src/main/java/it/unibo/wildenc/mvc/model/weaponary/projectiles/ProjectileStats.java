@@ -17,7 +17,7 @@ import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 public class ProjectileStats {
 
     private final Set<ProjStat> projStats = new LinkedHashSet<>();
-    private final double timeToLive;
+    private double timeToLive;
     private final String projID;
     private final Entity projOwner;
     private final boolean immortal;
@@ -108,6 +108,14 @@ public class ProjectileStats {
         return this.timeToLive;
     }
 
+    /**
+     * Setter method for the TTL.
+     * 
+     * @param newTTL the new time to live to be set.
+     */
+    public void setTTL(final double newTTL) {
+        this.timeToLive = newTTL;
+    }
     /**
      * Getter method for the owner of the projectile.
      * 
@@ -222,7 +230,7 @@ public class ProjectileStats {
         }
     }
 
-    public static class ProjStatsBuilder {
+    public final static class ProjStatsBuilder {
         private double damage;
         private double hbRadius;
         private double velocity;

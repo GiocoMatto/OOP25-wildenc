@@ -78,12 +78,13 @@ public interface Game {
      */
     enum PlayerType {
         CHARMANDER(300, 20, 100, (wf, p) -> {
-            p.addWeapon(StatLoader.getInstance().getWeaponFactoryForWeapon("melee", p, () -> new Vector2d(0, 0)));
+            p.addWeapon(StatLoader.getInstance().getWeaponFactoryForWeapon("ember", p, () -> new Vector2d(0, 0)));
         }),
-        BULBASAUR(20, 30, 200, (wf, p) -> {
+        BULBASAUR(200, 20, 120, (wf, p) -> {
+            p.addWeapon(StatLoader.getInstance().getWeaponFactoryForWeapon("frenzyplant", p, () -> new Vector2d(0, 0)));
         }),
-        SQUIRTLE(1000, 5, 90, (wf, p) -> {
-            // p.addWeapon(wf.getMeleeWeapon(8,4, p));
+        SQUIRTLE(250, 20, 90, (wf, p) -> {
+            p.addWeapon(StatLoader.getInstance().getWeaponFactoryForWeapon("bubble", p, () -> new Vector2d(0, 0)));
         });
 
         private final PlayerStats playerStats;

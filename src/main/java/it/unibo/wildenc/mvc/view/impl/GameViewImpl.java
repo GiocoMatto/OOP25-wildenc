@@ -24,6 +24,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
+import it.unibo.wildenc.util.Utilities;
 import javafx.scene.Parent;
 
 import javafx.scene.Scene;
@@ -226,7 +227,7 @@ public class GameViewImpl implements GameView, GamePointerView {
             // Itera sulla mappa per creare le label
             if (lostInfo != null && !lostInfo.isEmpty()) {
                 lostInfo.forEach((key, value) -> {
-                    String labelText = key.split(":")[1]+ ": " + value;
+                    String labelText = Utilities.capitalize(key.split(":")[1]) + ": " + value;
                     Label statLabel = new Label(labelText);
                     statLabel.setStyle("-fx-text-fill: lightgray; -fx-font-size: 16px;");
                     statsBox.getChildren().add(statLabel);
