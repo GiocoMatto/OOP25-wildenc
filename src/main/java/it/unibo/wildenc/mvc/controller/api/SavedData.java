@@ -6,14 +6,19 @@ import java.util.Map;
  * Responsible of storing all data between every game.
  */
 public interface SavedData {
-    
+
     /**
      * Update player coins.
+     * 
+     * @param earnedCoins the coins earned during the game.
      */
     void updateCoins(int earnedCoins);
 
     /**
      * Update infos about killed enemies. 
+     * 
+     * @param name the name of the enemy
+     * @param newKills the times which such enemy was killed during the game.
      */
     void updatePokedex(String name, int newKills);
 

@@ -20,7 +20,7 @@ import it.unibo.wildenc.mvc.model.map.CollisionLogic;
 import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
 
 /**
- * Test for the enemys.
+ * Test class for Enemies.
  */
 public class EnemyTest {
     private static final double DELTA_SECONDS = 0.1;
@@ -33,6 +33,11 @@ public class EnemyTest {
     private static final double MIN_DISTANCE = 250;
     /* Collectible */
     private static final int VALUE_COLLECTIBLE = 34;
+    private static final String UNIMPLEMENTED_MSG = "Unimplemented method 'getName'";
+    private static final double TARGET_1_POS_X = 5;
+    private static final double TARGET_2_POS_X = 105;
+    private static final double TARGET_3_POS_X = 77;
+
     private static final MapObject TARGET_1 = new MapObject() {
         private static final double X = 5;
         private static final double Y = 0;
@@ -113,6 +118,9 @@ public class EnemyTest {
         return Optional.of(new ExperienceGem(pos, VALUE_COLLECTIBLE));
     }
 
+    /**
+     * Test logic for CloseRangeEnemy.
+     */
     @Test
     void closeRangeEnemyTest() {
         final Enemy enemy = new CloseRangeEnemy(new AbstractEnemyField(
@@ -132,6 +140,9 @@ public class EnemyTest {
         assertEquals(3, count);
     }
 
+    /**
+     * Test logic for RangedEnemy.
+     */
     @Test
     void rangedEnemyTest() {
         final int steps = 178;
@@ -169,6 +180,9 @@ public class EnemyTest {
         assertEquals(steps, count);
     }
 
+    /**
+     * Test logic for RoamingEnemy.
+     */
     @Test
     void roamingEnemyTest() {
         /* Try enemy is immortal for 5s */

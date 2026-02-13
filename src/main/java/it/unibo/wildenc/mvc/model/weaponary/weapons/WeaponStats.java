@@ -27,6 +27,7 @@ public class WeaponStats {
      * @param projStats the statistics of the Projectile(s) this weapon is shooting
      * @param initialBurst the initial number of Projectiles in a burst
      * @param initialProjQuantity the initial number of Projectiles shot at once
+     * @param initialPosToHit the initial position the Projectile has to follow
      * @param upLogics the logics for upgrading the weapon.
      */
     public WeaponStats(
@@ -71,7 +72,7 @@ public class WeaponStats {
     public int getCurrentBurstSize() {
         return this.burstSize;
     }
-    
+
     /**
      * Setter method for the burst size.
      * 

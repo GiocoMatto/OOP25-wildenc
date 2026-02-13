@@ -11,8 +11,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 
-
-
+/**
+ * Implementation for ViewRenderer.
+ */
 public class ViewRendererImpl implements ViewRenderer {
 
     private static final int SPRITE_SIZE = 64;
@@ -27,12 +28,19 @@ public class ViewRendererImpl implements ViewRenderer {
 
     private Region backgroundContainer;
 
-    public ViewRendererImpl () {
+    /**
+     * Constructor for the class. The SpriteManager to be used
+     * is set here.
+     */
+    public ViewRendererImpl() {
         this.spriteManager = new SpriteManagerImpl();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void renderAll(Collection<MapObjViewData> objectDatas) {
+    public void renderAll(final Collection<MapObjViewData> objectDatas) {
         final GraphicsContext draw = canvas.getGraphicsContext2D();
         final double scale = canvas.getWidth() / INITIAL_CANVAS_WIDTH;
 
@@ -45,8 +53,17 @@ public class ViewRendererImpl implements ViewRenderer {
                 .findFirst()
                 .orElse(null)
         );
-
+        
         drawGrassTiles(draw, scale);
+
+        final double bgX = -this.cameraX % SPRITE_SIZE * scale;
+        final double bgY = -this.cameraY % SPRITE_SIZE * scale;
+        final double scaledTileSize = SPRITE_SIZE * scale;
+
+        backgroundContainer.setStyle(
+            "-fx-background-position: " + bgX + "px " + bgY + "px;" 
+            + "-fx-background-size: " + scaledTileSize + "px " + scaledTileSize + "px;"
+        );
 
         objectDatas.stream()
             .forEach(objectData -> {
@@ -74,7 +91,7 @@ public class ViewRendererImpl implements ViewRenderer {
                     radius * 2
                 );
                  */
-                 
+
         });
         draw.restore();
 
@@ -107,29 +124,38 @@ public class ViewRendererImpl implements ViewRenderer {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void setCanvas(Canvas c) {
+    public void setCanvas(final Canvas c) {
         canvas = c;
         this.canvas.getGraphicsContext2D().setImageSmoothing(false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clean() {
         final var draw = canvas.getGraphicsContext2D();
         draw.clearRect(0, 0, canvas.widthProperty().get(), canvas.heightProperty().get());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void updateCamera(MapObjViewData playerObj) {
-        double effectiveWidth = INITIAL_CANVAS_WIDTH;
-        double effectiveHeight = canvas.getHeight() / (canvas.getWidth() / INITIAL_CANVAS_WIDTH);
+    public void setContainer(final Region container) {
+        this.backgroundContainer = container;
+        backgroundContainer.getStylesheets().add(ClassLoader.getSystemResource("css/style.css").toExternalForm());
+    }
+
+    private void updateCamera(final MapObjViewData playerObj) {
+        final double effectiveWidth = INITIAL_CANVAS_WIDTH;
+        final double effectiveHeight = canvas.getHeight() / (canvas.getWidth() / INITIAL_CANVAS_WIDTH);
 
         this.cameraX = playerObj.x() - effectiveWidth / 2;
         this.cameraY = playerObj.y() - effectiveHeight / 2;
-    }
-
-    public void setContainer(Region container) {
-        this.backgroundContainer = container;
-        backgroundContainer.getStylesheets().add(ClassLoader.getSystemResource("css/style.css").toExternalForm());
     }
 }
