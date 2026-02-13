@@ -1,0 +1,56 @@
+@startuml TemplateMethodForEnemy
+
+' =========================
+'  Style
+' =========================
+
+skinparam shadowing false
+skinparam roundcorner 5
+skinparam dpi 150
+
+skinparam DefaultFontName "Inter"
+skinparam DefaultFontSize 12
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #F9F9F9
+  BorderColor #BFBFBF
+  FontColor #333333
+}
+
+skinparam Arrow {
+  Color #9E9E9E
+  Thickness 1
+}
+
+hide circle
+hide empty members
+
+' =========================
+'  Classes
+' =========================
+
+class AbstractEntity <<Interface>> {
+    +updatePosition(deltaTime : double) : void
+    #alterDirection() : Vector2dc
+}
+
+class CloseRangeEnemy { 
+    +alterDirection() : Vector2dc
+}
+class RangedEnemy {
+    +alterDirection() : Vector2dc
+}
+class RoamingEnemy {
+    +alterDirection() : Vector2dc
+}
+
+' =========================
+'  Relations
+' =========================
+
+CloseRangeEnemy --|> AbstractEntity
+RangedEnemy --|> AbstractEntity
+RoamingEnemy --|> AbstractEntity
+
+@enduml

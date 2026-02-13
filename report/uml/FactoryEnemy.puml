@@ -1,8 +1,10 @@
-@startuml Domain
+@startuml FactoryEnemy
 
 ' =========================
 '  Style
 ' =========================
+
+left to right direction
 
 skinparam shadowing false
 skinparam roundcorner 5
@@ -39,26 +41,30 @@ class EnemyFactory <<Interface>> {
   +roamingLongLifeEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
 }
 
-class EnemyFactoryImpl {
-
-}
-
 class Enemy <<Interface>> {
     +getTarget() : Optional<MapObject>
     +getLoot() : Set<Collectible>
 }
 
-class EnemyImpls {
+class EnemyFactoryImpl {
 
 }
+
+class CloseRangeEnemy { }
+class RangedEnemy { }
+class RoamingEnemy { }
 
 ' =========================
 '  Relations
 ' =========================
 
 EnemyFactory <|-- EnemyFactoryImpl
-Enemy <|-- EnemyImpls
-EnemyFactory *-- Enemy
-EnemyFactoryImpl *-- EnemyImpls
+Enemy <|-- CloseRangeEnemy
+Enemy <|-- RangedEnemy
+Enemy <|-- RoamingEnemy
+EnemyFactory ..> Enemy
+EnemyFactoryImpl ..> CloseRangeEnemy
+EnemyFactoryImpl ..> RangedEnemy
+EnemyFactoryImpl ..> RoamingEnemy
 
 @enduml

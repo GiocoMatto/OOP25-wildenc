@@ -139,6 +139,14 @@ Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura
 \textbf{Soluzione}: Per rendere facile e sicura la creazione delle istanze di nemici si è adottato un \textit{Abstract factory} che espone un metodo con parametri necessari a ogni nemico per essere istanziato.
 % applicato il template method
 \subsubsection{Applicazione template method}
-\textbf{Problema:} 
+%
+\begin{figure}[H]
+	\includegraphics[width=13cm]{TemplateMethodForEnemy}
+	\caption{UML rappresenta Abstract factory per gli enemys}\label{uml:templateMethodForEnemy}
+\end{figure}
+%
+\textbf{Problema:} Le implementazioni dei nemici differiscono solamenete per la specializzazione della logica di movimento e se possono o meno subire danno.
+%
+\textbf{Soluzione:} Applico il \textit{Template method} impostato nella Abstract Entity class col metodo astratto alterDirection e canTakeDamage per specificare il movimento specifico del nemico e per il Roaming enemy che può acuisire danno solo dopo un tempo specifico.
 
 \end{document}
