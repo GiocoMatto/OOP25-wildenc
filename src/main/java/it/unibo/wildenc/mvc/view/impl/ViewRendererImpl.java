@@ -3,6 +3,7 @@ package it.unibo.wildenc.mvc.view.impl;
 import java.util.Collection;
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.view.api.SpriteManager;
 import it.unibo.wildenc.mvc.view.api.SpriteManager.Sprite;
@@ -34,6 +35,9 @@ public class ViewRendererImpl implements ViewRenderer {
      */
     public ViewRendererImpl() {
         this.spriteManager = new SpriteManagerImpl();
+        // Made to be sure to SpotBugs to not flag this error.
+        this.canvas = null;
+        this.backgroundContainer = null;
     }
 
     /**
@@ -104,6 +108,10 @@ public class ViewRendererImpl implements ViewRenderer {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "This is intentional, as the referred canvas needs to be edited."
+    )
     @Override
     public void setCanvas(final Canvas c) {
         canvas = c;
@@ -132,6 +140,10 @@ public class ViewRendererImpl implements ViewRenderer {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "This is intentional, as the referred container needs to be edited."
+    )
     @Override
     public final void setStyleToContainer(final Region container, final String css) {
         this.backgroundContainer = container;

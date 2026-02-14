@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.util.Map;
 import java.util.Objects;
 import it.unibo.wildenc.mvc.controller.api.Engine;
@@ -45,7 +48,7 @@ import javafx.stage.StageStyle;
 /**
  * Basic view implementation with pointing system.
  */
-public class GameViewImpl implements GameView, GamePointerView {
+public final class GameViewImpl implements GameView, GamePointerView {
     private static final String PATH = "/images/menu/";
     private static final String STYLE = "css/style.css";
     private static final int PADDING = 15;
@@ -97,7 +100,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         experienceBar.setPrefWidth(rec.getWidth() * Proportions.HALF.getPercent());
         final Image icon = new Image(
             Objects.requireNonNull(
-                getClass().getResource(PATH + "icon.png")
+                GameViewImpl.class.getResource(PATH + "icon.png")
             ).toExternalForm()
         );
         gameStage.getIcons().add(icon);
@@ -118,6 +121,10 @@ public class GameViewImpl implements GameView, GamePointerView {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2", 
+        justification = "View won't edit the engine, only accessing it in read-mode."
+    )
     @Override
     public void setEngine(final Engine e) {
         this.engine = e;
@@ -208,7 +215,7 @@ public class GameViewImpl implements GameView, GamePointerView {
             canvas.heightProperty().addListener((obs, oldVal, newVal) -> updateSprites(backupColl));
             this.gameStarted = true;
         }
-        this.backupColl = mObj;
+        this.backupColl = List.copyOf(mObj);
         Platform.runLater(() -> {
             renderer.clean();
             renderer.renderAll(mObj);
@@ -315,7 +322,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         final int level, 
         final int neededExp
     ) {
-        experienceBar.setProgress(exp / neededExp);
+        experienceBar.setProgress((double) exp / neededExp);
         levelText.setText("LV "
             .concat(Integer.toString(level))
             .concat(" xp ")
@@ -325,12 +332,12 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public final void playSound(final String soundName) {
+    public void playSound(final String soundName) {
         soundManager.play(soundName);
     }
 
     @Override
-    public final void pause() {
+    public void pause() {
         Platform.runLater(() -> {
             final StackPane root = (StackPane) gameStage.getScene().getRoot();
             pauseMenu = new PauseBox(engine, soundManager);
@@ -342,7 +349,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public final void closePause() {
+    public void closePause() {
         final StackPane root = (StackPane) gameStage.getScene().getRoot();
         Platform.runLater(() -> {
             root.getChildren().remove(pauseMenu);
@@ -352,17 +359,17 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public final void pauseMusic() {
+    public void pauseMusic() {
         soundManager.pauseMusic();
     }
 
     @Override
-    public final void resumeMusic() {
+    public void resumeMusic() {
         soundManager.resumeMusic();
     }
 
     @Override
-    public final void updateHealthBar(final double currentHealth, final double maxHealth) {
+    public void updateHealthBar(final double currentHealth, final double maxHealth) {
         if (hpBar != null && maxHealth > 0) {
             Platform.runLater(() -> hpBar.setProgress(currentHealth / maxHealth));
         }

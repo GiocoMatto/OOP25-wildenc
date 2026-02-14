@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 /**
  * StackPane that displays Game Over screen.
  */
-public class LoseStackPane extends StackPane {
+public final class LoseStackPane extends StackPane {
 
     /**
      * Creates a new LoseStackPane.

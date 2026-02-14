@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 /**
  * Custom VBox that displays the Pause Menu.
  */
-public class PauseBox extends VBox {
+public final class PauseBox extends VBox {
 
     private final Button resumeBtn = new Button("Riprendi");
 
@@ -38,7 +38,7 @@ public class PauseBox extends VBox {
         });
 
         setOnKeyPressed(e -> {
-            if (e.getCode().equals(KeyCode.ESCAPE)) {
+            if (e.getCode() == KeyCode.ESCAPE) {
                 engine.closeViewPause();
             }
         });

@@ -137,8 +137,8 @@ public final class SpriteManagerImpl implements SpriteManager {
             try {
                 final String jarPath = decodedPath.substring(5, decodedPath.indexOf('!'));
                 try (ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath))) {
-                    ZipEntry entry;
-                    while ((entry = zip.getNextEntry()) != null) {
+                    ZipEntry entry = zip.getNextEntry();
+                    while (entry != null) {
                         final String name = entry.getName();
                         if (name.startsWith(SPRITES_LOCATION + "/") && name.endsWith(".png")) {
                             final String key = name.substring(
@@ -147,6 +147,7 @@ public final class SpriteManagerImpl implements SpriteManager {
                             final Image img = new Image(getClass().getResourceAsStream("/" + name));
                             loadedSpriteMap.put(key, img);
                         }
+                        entry = zip.getNextEntry();
                     }
                 }
             } catch (final IOException e) { 

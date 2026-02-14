@@ -1,7 +1,5 @@
 package it.unibo.wildenc.mvc.view.impl.roots;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
 import java.util.Map;
 
 import it.unibo.wildenc.mvc.controller.api.Engine;
@@ -23,6 +21,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
+import javafx.util.Pair;
 
 /**
  * View of the Pokedex.
@@ -44,11 +43,15 @@ public final class PokedexView extends StackPane {
         final Button goToMenu = new Button("Torna al menu" + (pokedexView.isEmpty() ? " (Pokedex vuoto)" : ""));
         goToMenu.setOnAction(e -> engine.menu(engine.getPlayerTypeChoise()));
         goToMenu.setMaxWidth(Double.MAX_VALUE);
-        final ListView<Map.Entry<String, Integer>> listView = new ListView<>();
-        listView.getItems().addAll(new LinkedHashSet<>(pokedexView.entrySet()));
+        final ListView<Pair<String, Integer>> listView = new ListView<>();
+        listView.getItems().addAll(
+            pokedexView.entrySet().stream()
+                .map(ent -> new Pair<>(ent.getKey(), ent.getValue()))
+                .toList()
+        );
         listView.setCellFactory(lv -> new ListCell<>() {
             @Override
-            protected void updateItem(final Map.Entry<String, Integer> entry, final boolean empty) {
+            protected void updateItem(final Pair<String, Integer> entry, final boolean empty) {
                 super.updateItem(entry, empty);
                 if (empty || entry == null) {
                     setGraphic(null);
@@ -96,5 +99,4 @@ public final class PokedexView extends StackPane {
         );
         setBackground(new Background(bgImg));
     }
-
 }
