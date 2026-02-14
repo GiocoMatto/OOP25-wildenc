@@ -3,6 +3,7 @@ package it.unibo.wildenc.mvc.model.game;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -17,9 +18,7 @@ import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.Lobby;
 import it.unibo.wildenc.mvc.model.MapObject;
 import it.unibo.wildenc.mvc.model.Player;
-import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.dataloaders.StatLoader;
-import it.unibo.wildenc.mvc.model.dataloaders.StatLoader.LoadedWeaponStats;
 import it.unibo.wildenc.mvc.model.map.GameMapImpl;
 import it.unibo.wildenc.mvc.model.player.PlayerImpl;
 
@@ -60,9 +59,12 @@ public class GameImpl implements Game {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<MapObject> getAllMapObjects() {
-        return Stream.concat(Stream.of(map.getPlayer()), map.getAllObjects().stream()).toList();
+        return Stream.concat(Stream.of(player), map.getAllObjects().stream()).toList();
     }
 
     /**
@@ -70,7 +72,7 @@ public class GameImpl implements Game {
      */
     @Override
     public boolean isGameEnded() {
-        return !map.getPlayer().isAlive();
+        return !player.isAlive();
     }
 
     /**
@@ -85,7 +87,7 @@ public class GameImpl implements Game {
         ) {
             player.addWeapon(
                 STATLOADER.getWeaponFactoryForWeapon(
-                    wc.toLowerCase(), 
+                    wc.toLowerCase(Locale.ITALIAN), 
                     player, 
                     () -> new Vector2d(0, 0))
             );
@@ -105,11 +107,11 @@ public class GameImpl implements Game {
      */
     @Override
     public Set<WeaponChoice> weaponToChooseFrom() {
-        var allWeapons = new ArrayList<>(
+        final var allWeapons = new ArrayList<>(
             STATLOADER.getAllLoadedWeapons().stream()
             .filter(ws -> 
                 ws.availableToPlayer() 
-                || (Objects.nonNull(ws.peculiarTo()) && ws.peculiarTo().contains(player.getName().split(":")[1]))
+                || Objects.nonNull(ws.peculiarTo()) && ws.peculiarTo().contains(player.getName().split(":")[1])
             ).toList()
         );
         Collections.shuffle(allWeapons);
@@ -158,7 +160,7 @@ public class GameImpl implements Game {
 
     private Player getPlayerByPlayerType(final Lobby.PlayerType playerType) {
         final Player actualPlayer = new PlayerImpl(
-            playerType.name().toLowerCase(),
+            playerType.name().toLowerCase(Locale.ENGLISH),
             new Vector2d(0, 0),
             playerType.hitbox(),
             playerType.speed(),
@@ -171,22 +173,25 @@ public class GameImpl implements Game {
     }
 
     private boolean doPlayerHasWeapon(final String weaponName) {
-        return !player.getWeapons().isEmpty() &&
-            !player.getWeapons().stream()
+        return !player.getWeapons().isEmpty() 
+            && !player.getWeapons().stream()
                 .noneMatch(w -> weaponName.equalsIgnoreCase(
                     w.getName().split(":")[1]
         ));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PlayerInfos getPlayerInfos() {
-        return new PlayerInfos(player.getExp(), player.getLevel(), player.getExpToNextLevel(), player.getMoney());
+        return new PlayerInfos(
+            player.getExp(),
+            player.getLevel(),
+            player.getExpToNextLevel(),
+            player.getMoney(),
+            player.getCurrentHealth(),
+            player.getMaxHealth()
+        );
     }
-
-    @Override
-    public Player getPlayer() {
-        return this.player;
-    }
-
-
 }

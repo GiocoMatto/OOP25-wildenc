@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * Represents lobby phase of the game, where the player is chosen.
  */
+@FunctionalInterface
 public interface Lobby {
 
     /**

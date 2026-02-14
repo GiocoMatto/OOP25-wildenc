@@ -10,14 +10,6 @@ import org.joml.Vector2dc;
  * Map of the game, it includes all core logic to update all the entities on it.
  */
 public interface GameMap {
-
-    /**
-     * Get the player.
-     * 
-     * @return the {@link Player}.
-     */
-    Player getPlayer();
-
     /**
      * Get all objects on this Map.
      * 

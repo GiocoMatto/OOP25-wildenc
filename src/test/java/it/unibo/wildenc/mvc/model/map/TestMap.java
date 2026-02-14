@@ -11,6 +11,7 @@ import it.unibo.wildenc.mvc.model.map.MapTestingConstants.MovableObjectTest;
 import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestDirections;
 import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestObject;
 import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestWeapon;
+import it.unibo.wildenc.util.Utilities;
 
 import static it.unibo.wildenc.mvc.model.map.MapTestingConstants.TEST_SIMULATION_TICKS;
 import static it.unibo.wildenc.mvc.model.map.MapTestingConstants.TEST_TIME_NANOSECONDS;
@@ -31,7 +32,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Testing for {@link GameMap}.
  */
-public class TestMap {
+class TestMap {
 
     private GameMap getEmptyMapWithObjects(final Player player, final Set<MapObject> objs) {
         return new GameMapImpl(player, (p, s, t) -> Set.of(), objs);
@@ -42,7 +43,7 @@ public class TestMap {
     }
 
     private Player getEmptyPlayer() {
-        return TestObject.PlayerObject.getAsPlayer();
+        return TestObject.PLAYEROBJECT.getAsPlayer();
     }
 
     private Player getArmedPlayer(final Function<Player, Weapon> w) {
@@ -53,7 +54,7 @@ public class TestMap {
 
     @Test
     void objectsShouldBeAddedToMap() {
-        final TestObject objConf = TestObject.StaticObject;
+        final TestObject objConf = TestObject.STATICOBJECT;
         final MapObject obj = objConf.getAsStaticObj();
         final GameMap map = getEmptyMapWithObjects(getEmptyPlayer(), Set.of(obj));
 
@@ -62,7 +63,7 @@ public class TestMap {
 
     @Test
     void staticObjectsShouldNotMove() {
-        final TestObject objConf = TestObject.StaticObject;
+        final TestObject objConf = TestObject.STATICOBJECT;
         final MapObjectTest obj = objConf.getAsStaticObj();
         final GameMap map = getEmptyMapWithObjects(getEmptyPlayer(), Set.of(obj));
 
@@ -73,7 +74,7 @@ public class TestMap {
 
     @Test
     void movableObjWithNoDirectionShouldNotMove() {
-        final TestObject objConf = TestObject.MovableObject;
+        final TestObject objConf = TestObject.MOVABLEOBJECT;
         final MovableObjectTest obj = objConf.getAsMovableObj();
         final GameMap map = getEmptyMapWithObjects(getEmptyPlayer(), Set.of(obj));
 
@@ -84,7 +85,7 @@ public class TestMap {
 
     @Test
     void movableObjWithDirectionShouldMoveCorrectly() {
-        final TestObject objConf = TestObject.MovableObject;
+        final TestObject objConf = TestObject.MOVABLEOBJECT;
         final TestDirections direction = TestDirections.RIGHT;
         final MovableObjectTest obj = objConf.getAsMovableObj();
         final GameMap map = getEmptyMapWithObjects(getEmptyPlayer(), Set.of(obj));
@@ -102,7 +103,7 @@ public class TestMap {
 
     @Test
     void whenEnemyProjectileHitboxTouchesPlayerHitboxPlayerHealthShouldDecrease() {
-        final TestObject enemyConf = TestObject.EnemyObject;
+        final TestObject enemyConf = TestObject.ENEMYOBJECT;
         final Player p = getEmptyPlayer();
         final Enemy enemy = enemyConf.getAsCloseRangeEnemy(new LinkedHashSet<>(), "testEnemy", Optional.of(p));
         final var weapon = TestWeapon.DEFAULT_WEAPON.getAsWeapon(enemy, () -> p.getPosition());
@@ -114,13 +115,14 @@ public class TestMap {
             map.updateEntities(TEST_TIME_NANOSECONDS, TestDirections.STILL.getVect());
         }
 
-        assertTrue(enemy.getCurrentHealth() == enemy.getMaxHealth(), "Enemy health must not change.");
+        assertTrue(Utilities.testFloatingPointEqual(
+            enemy.getCurrentHealth(), enemy.getMaxHealth()), "Enemy health must not change.");
         assertTrue(p.getCurrentHealth() < p.getMaxHealth(), "Player health didn't change.");
     }
 
     @Test
     void whenPlayerProjectileHitboxTouchesEnemyHitboxEnemyHealthShouldDecrease() {
-        final TestObject enemyConf = TestObject.EnemyObject;
+        final TestObject enemyConf = TestObject.ENEMYOBJECT;
         final Player p = getArmedPlayer(o -> TestWeapon.DEFAULT_WEAPON.getAsWeapon(o, () -> enemyConf.getPos()));
         final Enemy enemy = enemyConf.getAsCloseRangeEnemy(new LinkedHashSet<>(), "testEnemy", Optional.of(p));
         final GameMap map = getEmptyMapWithObjects(p, Set.of(enemy));
@@ -130,7 +132,8 @@ public class TestMap {
             map.updateEntities(TEST_TIME_NANOSECONDS, TestDirections.STILL.getVect());
         }
 
-        assertTrue(p.getCurrentHealth() == p.getMaxHealth(), "Player health must not change.");
+        assertTrue(Utilities.testFloatingPointEqual(
+            p.getCurrentHealth(), p.getMaxHealth()), "Player health must not change.");
         assertTrue(enemy.getCurrentHealth() < enemyConf.getHealth(), "Enemy health didn't change.");
     }
 
@@ -148,7 +151,7 @@ public class TestMap {
     void objectsTooFarShouldBeCleanedUp() {
         final var player = getEmptyPlayer();
         final var map = getEmptyMapWithObjects(player, 
-            Set.of(TestObject.FarEnemyObject.getAsCloseRangeEnemy(Set.of(), "farEnemy", Optional.of(player))));
+            Set.of(TestObject.FARENEMYOBJECT.getAsCloseRangeEnemy(Set.of(), "farEnemy", Optional.of(player))));
 
         assertTrue(map.getAllObjects().size() == 1, "Object was not added to the map.");
 

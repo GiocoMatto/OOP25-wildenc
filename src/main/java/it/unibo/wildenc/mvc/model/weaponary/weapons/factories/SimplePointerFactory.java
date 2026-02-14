@@ -16,21 +16,30 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 import it.unibo.wildenc.util.Utilities;
 
+/**
+ * Class for SimplePointer weapons. Simple pointer weapons are weapons
+ * that shoot one or more projectiles in the pointed direction.
+ */
 public class SimplePointerFactory implements WeaponFactory {
 
+    private static final int LV_7 = 7;
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Weapon createWeapon(
-        String weaponName, 
-        double baseCooldown, 
-        double baseDamage, 
-        double hbRadius,
-        double baseVelocity, 
-        double baseTTL, 
-        int baseProjAtOnce, 
-        int baseBurst, 
-        Entity ownedBy,
+        final String weaponName, 
+        final double baseCooldown, 
+        final double baseDamage, 
+        final double hbRadius,
+        final double baseVelocity, 
+        final double baseTTL, 
+        final int baseProjAtOnce, 
+        final int baseBurst, 
+        final Entity ownedBy,
         final boolean immortal,
-        Supplier<Vector2dc> posToHit
+        final Supplier<Vector2dc> posToHit
     ) {
         return new PointerWeapon(
             weaponName,
@@ -49,15 +58,15 @@ public class SimplePointerFactory implements WeaponFactory {
                 .immortal(immortal)
                 .build(),
             (level, weaponStats) -> {
-                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, 1 + (level / 4));
-                weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, (level / 100) + 1);
-                if(level % 7 == 0) {
+                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, 1 + ((double) level / 4));
+                weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, ((double) level / 100) + 1);
+                if (level % LV_7 == 0) {
                     weaponStats.setBurstSize(
                         weaponStats.getCurrentBurstSize() + 1
                     );
                 }
             },
-            weaponStats -> singleSpawn(weaponStats)
+            SimplePointerFactory::singleSpawn
         );
     }
 
@@ -70,7 +79,7 @@ public class SimplePointerFactory implements WeaponFactory {
     }
 
     private static List<AttackContext> singleSpawn(final WeaponStats weaponStats) {
-        final Vector2dc origin = weaponStats.getProjStats().getOwner().getPosition();
+        final Vector2dc origin = weaponStats.getProjStats().getOwnerPosition();
         final double velocity = weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY);
         final Vector2dc targetPos = weaponStats.getPosToHit().get();
 

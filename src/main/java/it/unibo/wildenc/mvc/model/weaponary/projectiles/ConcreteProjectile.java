@@ -1,8 +1,8 @@
 package it.unibo.wildenc.mvc.model.weaponary.projectiles;
 
+import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
-import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Projectile;
 import it.unibo.wildenc.mvc.model.map.objects.AbstractMovable;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
@@ -13,7 +13,7 @@ import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStat
  * as a schematic for modelling any projectile weapons can shoot.
  */
 public class ConcreteProjectile extends AbstractMovable implements Projectile {
-    
+
     private final ProjectileStats projStats;
     private final AttackContext attackInformation;
     private double timePassed;
@@ -36,7 +36,7 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
         );
         this.projStats = pStats;
         this.timePassed = 0;
-        this.attackInformation = atkInfo;
+        this.attackInformation = atkInfo.protectiveCopy();
     }
 
     /**
@@ -90,8 +90,16 @@ public class ConcreteProjectile extends AbstractMovable implements Projectile {
      * {@inheritDoc}
      */
     @Override
-    public Entity getOwner() {
-        return this.projStats.getOwner();
+    public Vector2dc getOwnerPosition() {
+        return new Vector2d(this.projStats.getOwnerPosition());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getOwnerName() {
+        return this.projStats.getOwnerName();
     }
 
     /**

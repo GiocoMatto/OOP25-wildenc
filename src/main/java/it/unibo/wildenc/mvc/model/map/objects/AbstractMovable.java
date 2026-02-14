@@ -12,7 +12,7 @@ import it.unibo.wildenc.mvc.model.Movable;
 public abstract class AbstractMovable extends AbstractMapObject implements Movable {
 
     private final Vector2d direction = new Vector2d(0, 0); // start by staying still
-    protected double speed;
+    private double speed;
 
     /**
      * Creates a new movable object.
@@ -39,7 +39,7 @@ public abstract class AbstractMovable extends AbstractMapObject implements Movab
      */
     @Override
     public Vector2dc getDirection() {
-        return direction;
+        return new Vector2d(direction);
     }
 
     /**
@@ -51,6 +51,15 @@ public abstract class AbstractMovable extends AbstractMapObject implements Movab
     }
 
     /**
+     * Method for setting a new speed.
+     * 
+     * @param newSpeed the new value for speed.
+     */
+    public void setSpeed(final double newSpeed) {
+        this.speed = newSpeed;
+    }
+
+    /**
      * Edit the direction of the Movable object.
      * 
      * @param direction normalized vector of the direction.
@@ -58,5 +67,4 @@ public abstract class AbstractMovable extends AbstractMapObject implements Movab
     protected void setDirection(final Vector2dc direction) {
         this.direction.set(direction);
     }
-
 }

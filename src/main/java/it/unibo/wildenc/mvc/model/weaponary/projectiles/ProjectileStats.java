@@ -4,9 +4,14 @@ import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.joml.Vector2d;
+import org.joml.Vector2dc;
 
+import com.google.errorprone.annotations.Immutable;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 
@@ -14,12 +19,14 @@ import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
  * Class for managing the statistics for a Projectile. This is made for mantaining SRP and
  * making a Projectile fully customizable on declaration of a specific weapon.
  */
+@Immutable
 public class ProjectileStats {
 
     private final Set<ProjStat> projStats = new LinkedHashSet<>();
-    private double timeToLive;
+    private final double timeToLive;
     private final String projID;
-    private final Entity projOwner;
+    private final Supplier<Vector2d> ownerPosition;
+    private final String ownerName;
     private final boolean immortal;
     private final BiFunction<Double, AttackContext, Vector2d> projMovementFunction;
 
@@ -52,7 +59,8 @@ public class ProjectileStats {
         projStats.add(new ProjStat(ProjStatType.VELOCITY, baseVelocity));
         this.timeToLive = ttl;
         this.projID = id;
-        this.projOwner = ownedBy;
+        this.ownerPosition = () -> (Vector2d) ownedBy.getPosition();
+        this.ownerName = ownedBy.getName();
         this.immortal = areProjImmortal;
         this.projMovementFunction = moveFunc;
     }
@@ -109,29 +117,30 @@ public class ProjectileStats {
     }
 
     /**
-     * Setter method for the TTL.
-     * 
-     * @param newTTL the new time to live to be set.
-     */
-    public void setTTL(final double newTTL) {
-        this.timeToLive = newTTL;
-    }
-    /**
-     * Getter method for the owner of the projectile.
-     * 
-     * @return the {@link Entity} that generated this Projectile.
-     */
-    public Entity getOwner() {
-        return this.projOwner;
-    }
-
-    /**
      * Method for knowing a projectile is immortal.
      * 
      * @return true if the projectile is immortal, false otherwise. 
      */
     public boolean isImmortal() {
         return this.immortal;
+    }
+
+    /**
+     * Method for getting the position of the owner of the projectile.
+     * 
+     * @return the position of the owner of the projectile.
+     */
+    public Vector2dc getOwnerPosition() {
+        return ownerPosition.get();
+    }
+
+    /**
+     * Method for getting the name of the owner of the projectile.
+     * 
+     * @return the name of the owner of the projectile.
+     */
+    public String getOwnerName() {
+        return ownerName;
     }
 
     /**
@@ -148,6 +157,11 @@ public class ProjectileStats {
             .findFirst().get().setMult(newMult);
     }
 
+    /**
+     * Method for getting a {@link ProjectileStats} builder.
+     * 
+     * @return a {@link ProjectileStats} builder
+     */
     public static ProjStatsBuilder getBuilder() {
         return new ProjStatsBuilder();
     }
@@ -159,7 +173,8 @@ public class ProjectileStats {
     public enum ProjStatType {
         DAMAGE("Damage"),
         VELOCITY("Velocity"),
-        HITBOX("Hitbox Radius");
+        HITBOX("Hitbox Radius"),
+        TTL("Time to Live");
 
         private final String statName;
 
@@ -230,7 +245,11 @@ public class ProjectileStats {
         }
     }
 
-    public final static class ProjStatsBuilder {
+    /**
+     * A builder for ProjectileStats. This was made to increase
+     * code readibility.
+     */
+    public static final class ProjStatsBuilder {
         private double damage;
         private double hbRadius;
         private double velocity;
@@ -240,48 +259,105 @@ public class ProjectileStats {
         private Entity owner;
         private BiFunction<Double, AttackContext, Vector2d> moveFunc;
 
-        private ProjStatsBuilder() {}
+        private ProjStatsBuilder() { }
 
+        /**
+         * Sets the damage for the projectile.
+         * 
+         * @param dmg the damage to be set
+         * @return this builder.
+         */
         public ProjStatsBuilder damage(final double dmg) {
             this.damage = dmg;
             return this;
         }
 
+        /**
+         * Sets the hitbox radius for the projectile.
+         * 
+         * @param rad the hitbox radius to be set
+         * @return this builder.
+         */
         public ProjStatsBuilder radius(final double rad) {
             this.hbRadius = rad;
             return this;
         }
 
+        /**
+         * Sets the velocity for the projectile.
+         * 
+         * @param vel the velocity to be set
+         * @return this builder.
+         */
         public ProjStatsBuilder velocity(final double vel) {
             this.velocity = vel;
             return this;
         }
 
-        public ProjStatsBuilder ttl(final double ttl) {
-            this.ttl = ttl;
+        /**
+         * Sets the time to live for the projectile.
+         * 
+         * @param timetolive the time to live to be set
+         * @return this builder.
+         */
+        public ProjStatsBuilder ttl(final double timetolive) {
+            this.ttl = timetolive;
             return this;
         }
 
-        public ProjStatsBuilder id(final String id) {
-            this.id = id;
+        /**
+         * Sets the id for the projectile.
+         * 
+         * @param pID the id to be set
+         * @return this builder.
+         */
+        public ProjStatsBuilder id(final String pID) {
+            this.id = pID;
             return this;
         }
 
-        public ProjStatsBuilder immortal(final boolean immortal) {
-            this.immortal = immortal;
+        /**
+         * Sets if the projectile is immortal or not.
+         * 
+         * @param immortality a boolean that specifies if the projectile is immortal or not.
+         * @return this builder.
+         */
+        public ProjStatsBuilder immortal(final boolean immortality) {
+            this.immortal = immortality;
             return this;
         }
 
+        /**
+         * Sets the projectile's owner.
+         * 
+         * @param owned the owner of the projectile.
+         * @return this builder.
+         */
+        @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2", 
+            justification = "The builder won't modify/expose the owner."
+        )
         public ProjStatsBuilder owner(final Entity owned) {
             this.owner = owned;
             return this;
         }
 
+        /**
+         * Sets the physics of the projectile.
+         * 
+         * @param mov the movement function of the projectile.
+         * @return this builder
+         */
         public ProjStatsBuilder physics(final BiFunction<Double, AttackContext, Vector2d> mov) {
             this.moveFunc = mov;
             return this;
         }
 
+        /**
+         * Builds a {@link ProjectileStats} as specified by using the methods above.
+         * 
+         * @return the built {@link ProjectileStats}
+         */
         public ProjectileStats build() {
             if (this.id == null) {
                 this.id = "noid";

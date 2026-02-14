@@ -90,6 +90,7 @@ public class EnemySpawnerImpl implements EnemySpawner {
             return creator.create(ef, origin, life, name());
         }
 
+        @FunctionalInterface
         private interface EnemyCreator {
             Enemy create(EnemyFactory ef, Vector2d origin, int life, String rarity);
         }

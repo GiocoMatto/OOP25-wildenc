@@ -1,8 +1,19 @@
 package it.unibo.wildenc;
+
 import javafx.application.Application;
 
-public class Launch {
-    public static void main(String[] args) {
+/**
+ * Class for launching the application.
+ */
+public final class Launch {
+    private Launch() { }
+
+    /**
+     * Main method for launching the application.
+     * 
+     * @param args ignored
+     */
+    public static void main(final String[] args) {
         Application.launch(EntryPoint.class, args);
     }
 }

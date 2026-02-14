@@ -1,4 +1,4 @@
-.root {
+.game-background {
     -fx-background-color: #3e8e3e;
     -fx-background-image: url("../images/sprites/grasstile.png");
     -fx-background-repeat: repeat;

@@ -1,7 +1,6 @@
 package it.unibo.wildenc.mvc.model;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -90,13 +89,15 @@ public interface Game {
      * @param level player's level;
      * @param neededExp experience that player needs to level up;
      * @param coins player's earned coins in this game.
+     * @param currentHealth player's current health
+     * @param maxHealth player's max health
      */
-    record PlayerInfos(int experience, int level, int neededExp, int coins) {
-    }
-
-    /**
-     * gets the player entity (used for sounds of collectibles)
-     * @return the player
-     */
-    Player getPlayer();
+    record PlayerInfos(
+        int experience,
+        int level,
+        int neededExp,
+        int coins,
+        double currentHealth,
+        double maxHealth
+    ) { }
 }

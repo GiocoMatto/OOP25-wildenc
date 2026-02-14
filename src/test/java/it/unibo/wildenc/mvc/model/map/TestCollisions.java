@@ -6,14 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.joml.Vector2d;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.wildenc.mvc.model.Movable;
 import it.unibo.wildenc.mvc.model.map.MapTestingConstants.MovableObjectTest;
-import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestObject;
 
-public class TestCollisions {
+/**
+ * Testing for {@link CollisionLogic}.
+ */
+class TestCollisions {
 
     @Test
     void twoObjectsWithSameCenterShouldCollide() {
@@ -48,9 +49,5 @@ public class TestCollisions {
             first.updatePosition(TEST_TIME_SECONDS);
             second.updatePosition(TEST_TIME_SECONDS);
         }
-
-
     }
-
-
 }

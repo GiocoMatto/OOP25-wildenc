@@ -15,11 +15,11 @@ import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestObject;
 /**
  * Testing for the {@link MapObject}s.
  */
-public class TestMapObjects {
+class TestMapObjects {
 
     @Test
     void mapObjectShouldBeCreatedWithCorrectCoordinates() {
-        final TestObject to = TestObject.StaticObject;
+        final TestObject to = TestObject.STATICOBJECT;
         final var obj = to.getAsStaticObj();
         assertEquals(to.getPos().x(), obj.getPosition().x());
         assertEquals(to.getPos().y(), obj.getPosition().y());
@@ -28,7 +28,7 @@ public class TestMapObjects {
 
     @Test
     void movableObjectWithNoDirectionShouldNotMove() {
-        final TestObject to = TestObject.MovableObject;
+        final TestObject to = TestObject.MOVABLEOBJECT;
         final var obj = to.getAsMovableObj();
         obj.updatePosition(TEST_TIME_SECONDS);
         assertEquals(to.getPos().x(), obj.getPosition().x());
@@ -37,7 +37,7 @@ public class TestMapObjects {
 
     @Test
     void movableObjectWithDirectionShouldMoveCorrectly() {
-        final TestObject to = TestObject.MovableObject;
+        final TestObject to = TestObject.MOVABLEOBJECT;
         final TestDirections td = TestDirections.RIGHT;
         final var obj = to.getAsMovableObj();
         // Test movement with a direction.

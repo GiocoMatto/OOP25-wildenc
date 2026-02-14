@@ -29,7 +29,7 @@ public class AttackContext {
         final double velocity,
         final Supplier<Vector2dc> positionToFollow
     ) {
-        this.lastPosition = initialPosition;
+        this.lastPosition = new Vector2d(initialPosition);
         this.toFollow = positionToFollow;
         this.velocity = velocity;
         this.atkVersorDirection = Utilities.normalizeVector(new Vector2d(this.toFollow.get()).sub(initialPosition));
@@ -59,7 +59,7 @@ public class AttackContext {
      * @return a {@link Vector2d} representing the direction versor the attack has to follow.
      */
     public Vector2dc getDirectionVersor() {
-        return this.atkVersorDirection;
+        return new Vector2d(this.atkVersorDirection);
     }
 
     /**
@@ -77,7 +77,7 @@ public class AttackContext {
      * @return the point contained in toFollow if present, if not the last position occupied by the Projectile.
      */
     public Vector2dc getLastPosition() {
-        return lastPosition;
+        return new Vector2d(lastPosition);
     }
 
     /**
