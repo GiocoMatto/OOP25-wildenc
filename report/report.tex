@@ -380,6 +380,8 @@ Già esposto precedentemente, è stato utilizzato per stilare i test automatici 
 La gestione delle posizioni di ogni elemento è stata facilitata di molto grazie alla libreria JOML, la quale si occupa di 
 tutto ciò che riguarda il lato matematico del movimento di oggetti, ciò grazie ai suoi Vector2d.
 %
+\subsection{Log4J}
+%
 \subsection{Jackson}
 %
 \subsection{JavaFX}
@@ -391,15 +393,14 @@ La grafica è stata creata grazie a JavaFX, la quale si occupa di fornire un mod
 	\item Gestione delle collisioni tramite Stream 
 	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L159C9-L159C15}{permalink 1}, 
 	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L226}{permalink 2}
-	\item Enum di Java 
-	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/76a93999af86865b827408da01535fbad8ae6eb9/src/test/java/it/unibo/wildenc/mvc/model/map/MapTestingConstants.java#L138C25-L138C25}{permalink 1}
-	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/76a93999af86865b827408da01535fbad8ae6eb9/src/test/java/it/unibo/wildenc/mvc/model/map/MapTestingConstants.java#L292}{permalink 2}
 	\item Optional
 	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/76a93999af86865b827408da01535fbad8ae6eb9/src/test/java/it/unibo/wildenc/mvc/model/map/MapTestingConstants.java#L231}{permalink}
 	\item Method reference lambda
 	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L83}{permalink}
+	\item Utilizzo libreria JOML per calcoli con vettori
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/CollisionLogic.java#L20}{permalink}
 \end{itemize}
-
+%
 \paragraph{Leonardo Mengozzi} 
 \begin{itemize}
 	\item Gestione della concorrenza con semafori per stoppare il gameLoop:
@@ -443,6 +444,37 @@ La grafica è stata creata grazie a JavaFX, la quale si occupa di fornire un mod
 	\item Uso della libreria Jackson per la lettura da .json:
 	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/model/dataloaders/StatLoader.java\#L12}{permalink}.
 \end{itemize}
+%
+\chapter{Commenti finali}
+%
+\section{Autovalutazione e lavori futuri}
+%
+\subsection{Andrea Maria Castronovo}
+%
+Mi sono occupato della parte di gestione della mappa e delle entità fornite dai miei colleghi. 
+%
+Dal punto di vista architetturale sono abbastanza sicuro di aver fatto una buona scelta organizzando
+i vari oggetti presenti nel gioco specializzandoli man mano; così facendo la gestione dei singoli oggetti
+risulta più immediata.
+%
+Il problema che mi si è subito presentato però è stato quello della differenziazione 
+tra i tipi effettivi: per esempio, dopo che un'entità ha sparato un proiettile, mi serviva un modo per identificare
+chi lo avesse sparato, così da poter ignorare la collisione tra proiettile e attaccante. Ho optato per differenziare
+ogni oggetto in base all'interfaccia, ad esempio se l'oggetto "Movable", presente in una collisione,
+implementava Player o Enemy tramite la keyword "instanceof" di Java. Questo ha portato a del codice sporco.
+%
+\section{Difficoltà incontrate e commenti per i docenti}
+%
+\subsection{Andrea Maria Castronovo}
+%
+Lavorare in un team è stata per me una cosa nuova: tutti i piccoli progetti che ho affrontato finora avevano in comune 
+il fatto che qualsiasi decisione spettasse unicamente a me. Fin dalle scuole superiori ho sempre avuto difficoltà a fare 
+lavori di gruppo con dei colleghi, per questo motivo ho trovato davvero interessante la presenza di un 
+progetto di gruppo obbligatorio in questo corso, soprattutto considerando i livelli di attenzione e dettaglio richiesti. 
+%
+Grazie a questo progetto ho potuto esercitarmi molto per quanto riguarda l'organizzazione e la coordinazione con gli altri,
+e credo che riuscire ad allenare questa "soft skill" prima di entrare nel mondo del lavoro sia una grande fortuna.
+%
 \appendix
 \chapter{Guida utente}
 All'avvio dell'applicazione si può selezionare il personaggio da giocare e avviare una nuova partita o ovviare la partita con il personaggio selezionato di defaut. Dalla stesa interfaccia si può anche andare nel Pokédex, chiccando il rispettivo menu, per visualizzare i risultati totali delle partite precedenti. Al primo avvio il Pokédex si presenterà vuoto non avendo ancora effettua alcuna partita.
