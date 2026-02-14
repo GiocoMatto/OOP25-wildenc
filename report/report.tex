@@ -28,6 +28,8 @@
 
 \maketitle
 
+\tableofcontents
+
 \setcounter{page}{2}
 
 \chapter{Analisi}
@@ -125,18 +127,18 @@ Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura
 
 \section{Design Dettagliato}
 %
-\subsubsection{Leonardo Mengozzi - Gestione nemici}
+\subsubsection{Leonardo Mengozzi - Gestione nemici e Controller}
 %
 \subsubsection{Abstract Factory di enemy}
 %
 \begin{figure}[H]
 	\includegraphics[width=13cm]{FactoryEnemy}
-	\caption{UML rappresenta Abstract factory per gli enemys}\label{uml:factoryEnemy}
+	\caption{UML rappresenta Abstract factory, con metodi d'esempio, per gli enemys}\label{uml:factoryEnemy}
 \end{figure}
 %
-\textbf{Problema:} Wild Encounter ha diverse tipologie di nemici, ma la cui creazione richiede parametri simili e l'assegnamento delle armi fisso dopo la creazione delle istanze. 
+\paragraph{Problema:} Wild Encounter ha diverse tipologie di nemici, ma la cui creazione richiede parametri simili e l'assegnamento delle armi fisso dopo la creazione delle istanze. 
 %
-\textbf{Soluzione}: Per rendere facile e sicura la creazione delle istanze di nemici si è adottato un \textit{Abstract factory} che espone un metodo con parametri necessari a ogni nemico per essere istanziato.
+\paragraph{Soluzione}: Per rendere facile e sicura la creazione delle istanze di nemici si è adottato un \textit{Abstract factory} che espone un metodo con parametri necessari a ogni nemico per essere istanziato.
 % applicato il template method
 \subsubsection{Applicazione template method}
 %
@@ -145,9 +147,59 @@ Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura
 	\caption{UML rappresenta Abstract factory per gli enemys}\label{uml:templateMethodForEnemy}
 \end{figure}
 %
-\textbf{Problema:} Le implementazioni dei nemici differiscono solamenete per la specializzazione della logica di movimento e se possono o meno subire danno.
+\paragraph{Problema:} Le implementazioni dei nemici differiscono solamenete per la specializzazione della logica di movimento e se possono o meno subire danno.
 %
-\textbf{Soluzione:} Applico il \textit{Template method} impostato nella Abstract Entity class col metodo astratto alterDirection e canTakeDamage per specificare il movimento specifico del nemico e per il Roaming enemy che può acuisire danno solo dopo un tempo specifico.
+\paragraph{Soluzione:} Concretizzo il metodo astratto alterDirection e canTakeDamage creati seguendo il design patter \textit{Template method}  nella Abstract Entity class per specificare il movimento specifico del nemico e per il Roaming enemy che può acuisire danno solo dopo un tempo specifico.
+% Gestione del game loop
+\subsubsection{Aggiornamento della grafica}
+\begin{figure}[H]
+	\includegraphics[width=13cm]{Observer}
+	\caption{UML rappresenta osberver controller e view}\label{uml:observer}
+\end{figure}
+%
+\paragraph{Problema} Nel caso un istanza dell'applicazione disponga di più GUI o CLI queste devono coerentemente rispondere alla unica logica.
+%
+\paragraph{Soluzione} Appico il design pattern Observe per notificare in modo coerente tutte le view registrate quando lo stato del gioco cambia. Seguendo l'architettura MVC, il controller (Engine) funge da Subject/Observable, mentre le view si registrano come Observer e vengono aggiornate dal controller durante il game loop.
+
+L'implementazione differisce dal modello standr per l'aggiunta della possibilità di disiscrivere un Observer dall'Observable e diversi metodi di notifica.
+
+\chapter{Sviluppo}
+
+\section{Testing automatizzato}
+Si è deciso di sottoporre a Testing il model di Wild-Enc, ossia:
+\begin{itemize}
+	\item Implementazioni delle armi 
+	\item Implementazione dei proiettili 
+	\item Implementazione dei nemici. I nemici close ranged devono avvicinarsi al player fino a toccarlo (entrare nella hitbox). I ranged devono stare fermi dentro una fascia (distanza minima e massima) dal player. I roaming devono vagare per la mappa senza dirigersi verso il player.
+	\item Implementazione del player
+	\item Implementazione dell'ambiente di gioco (la mappa)
+\end{itemize}
+
+\section{Note di sviluppo}
+
+\paragraph{Leonardo Mengozzi} 
+\begin{itemize}
+	\item Gestione della concorrenza con semafori per stoppare il gameLoop:
+https://github.com/GiocoMatto/wild-enc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L75
+https://github.com/GiocoMatto/wild-enc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L267
+	\item Esempio di uso di optional: 
+	
+	https://github.com/GiocoMatto/wild-enc/blob/c2c09abddaf900255b5bd60e0b6a763abe26b2ce/src/main/java/it/unibo/wildenc/mvc/model/enemies/AbstractEnemy.java\#L54
+
+	\item Uso di generic: 
+	
+	https://github.com/GiocoMatto/wild-enc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/util/Utilities.java\#L30
+	
+	\item Uso di stream: 
+	
+	https://github.com/GiocoMatto/wild-enc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L124
+	
+	https://github.com/GiocoMatto/wild-enc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L139
+	
+	\item Esempio di uso di lambda: 
+	
+	https://github.com/GiocoMatto/wild-enc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L40
+\end{itemize}
 
 \appendix
 \chapter{Guida utente}
@@ -157,7 +209,7 @@ Avviato il gioco si potrà muovere il personaggio con "WASD" e direzionare gli a
 
 Durante la partita a ogni nuovo livello del player apparità una interfaccia per selezionare un power-up. L'interfaccia sarà già selezionata e si potranno usare le frecette SU e GIU per selezionare il potenziamento e premere INVIO per applicarlo oppure con un doppio click del muose.
 
-Sempre durante la partita premendo ESC si mette il gioco in pausa e dalla interfaccia che appare si può riprendere la partita.
+Sempre durante la partita premendo ESC si mette il gioco in pausa e dalla interfaccia che appare si può riprendere la partita, oppure ripremendo ESC si riprende la partita.
 
 A fine partita si visualizza l'interfaccia per tornare al menu di gioco o chiudere l'applicazione, in entrambi i casi si effettua il salvataggi dei risultati della parita consultabili nel Pokédex. 
 
@@ -178,15 +230,33 @@ La chiusura della finestra in partita non comporta il salvataggio dei dati della
 \end{itemize}
 
 \paragraph{Leonardo Mengozzi} \begin{itemize}
-	\item Laboratorio 4 : https://virtuale.unibo.it/mod/forum/discuss.php?d=206731#p284046
-	\item Laboratorio 5 : 
-	\item Laboratorio 6 : 
-	\item Laboratorio 7 : 
-	\item Laboratorio 8 : 
-	\item Laboratorio 9 : 
-	\item Laboratorio 10 : 
-	\item Laboratorio 11 : 
-	\item Laboratorio 12 : 
+	\item Laboratorio 6: 
+	
+	https://virtuale.unibo.it/mod/forum/discuss.php?d=206731\#p284046
+
+	\item Laboratorio 7: 
+	
+	https://virtuale.unibo.it/mod/forum/discuss.php?d=207193\#p284727
+
+	\item Laboratorio 8: 
+	
+	https://virtuale.unibo.it/mod/forum/discuss.php?d=207921\#p285429
+
+	\item Laboratorio 9: 
+	
+	https://virtuale.unibo.it/mod/forum/discuss.php?d=208718\#p286620
+
+	\item Laboratorio 10: 
+	
+	https://virtuale.unibo.it/mod/forum/discuss.php?d=209589\#p288298
+
+	\item Laboratorio 11: 
+	
+	https://virtuale.unibo.it/mod/forum/discuss.php?d=210617\#p289204
+
+	\item Laboratorio 12: 
+	
+	https://virtuale.unibo.it/mod/forum/discuss.php?d=211539\#p290657
 \end{itemize}
 
 \paragraph{Lorenzo Mazzini} \begin{itemize}

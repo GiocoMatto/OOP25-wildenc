@@ -33,12 +33,8 @@ hide empty members
 ' =========================
 
 class EnemyFactory <<Interface>> {
-  +closeRangeEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
-  +closeRangeFastEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
-  +rangedEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
-  +rangedDoubleShotEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
-  +roamingEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
-  +roamingLongLifeEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
+  +closeRangeEnemy(spawnPosition : Vector2d, healt : int) : Enemy
+  +closeRangeFastEnemy(spawnPosition : Vector2d, healt : int) : Enemy
 }
 
 class Enemy <<Interface>> {
