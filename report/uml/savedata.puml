@@ -1,0 +1,62 @@
+@startuml SaveData
+
+' =========================
+'  Skin
+' =========================
+
+skinparam shadowing false
+skinparam roundcorner 5
+skinparam dpi 150
+
+skinparam DefaultFontName "Inter"
+skinparam DefaultFontSize 12
+skinparam linetype spline
+skinparam nodesep 80
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #F9F9F9
+  BorderColor #BFBFBF
+  FontColor #333333
+}
+
+skinparam Arrow {
+  Color #9E9E9E
+  Thickness 1
+}
+
+hide circle
+hide empty members
+
+' =========================
+'  Classes
+' =========================
+
+' Subtitle for classes: 
+' \n<size:10><i>(from model)</i></size>
+interface SavedDataHandler <<Interface>> {
+  saveData(SavedData): void
+  loadData(): SavedData
+}
+
+class SavedDataHandlerImpl {}
+
+interface SavedData <<Interface>> {
+  updateCoins(int newCoins) : void
+  updatePokedex(String name, int newElims) : void
+  getCoins() : int
+  getPokedex() Map<String, Integer> 
+}
+
+class SavedDataImpl {}
+
+interface Engine <<Interface>> {}
+
+SavedDataHandlerImpl .up.|> SavedDataHandler
+SavedDataImpl .up.|> SavedData
+SavedDataHandler -left-o SavedData : << manages >>
+SavedDataHandlerImpl -left-o SavedDataImpl
+Engine -up-* SavedDataHandlerImpl
+Engine -up-> SavedDataImpl
+
+@enduml
