@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 /**
  * Custom VBox that displays the Pause Menu.
  */
-public class PauseBox extends VBox {
+public final class PauseBox extends VBox {
 
     private final Button resumeBtn = new Button("Riprendi");
 
