@@ -192,7 +192,7 @@ fornire le armi che saranno sbloccate durante la progressione del gioco, ma anch
 L'interfaccia \textit{Game} è un Facade per \textit{GameMap}, in quanto si occupa di impacchettare e gestire i dati
 nei record, così facendo è possibile gestire gli oggetti della mappa in modo sicuro.
 %
-\subsection{Lorenzo Mazzini - Gestione armi e proiettili}
+\subsection*{Lorenzo Mazzini - Gestione armi e proiettili}
 
 \textbf{Introduzione:} All'interno del gioco dovranno essere disponibili varie tipologie di armi, ciascuna capace di generare diverse tipologie di attacchi con i quali sarà possibile colpire i nemici. Tali attacchi dovranno variare non solo dal punto di vista delle statistiche (quali danno, velocità...), ma anche dal punto di vista del loro comportamento relativo al movimento e alla generazione.
 
@@ -463,6 +463,19 @@ chi lo avesse sparato, così da poter ignorare la collisione tra proiettile e at
 ogni oggetto in base all'interfaccia, ad esempio se l'oggetto "Movable", presente in una collisione,
 implementava Player o Enemy tramite la keyword "instanceof" di Java. Questo ha portato a del codice non particolarmente pulito.
 %
+\subsection{Lorenzo Mazzini}
+Mi sono occupato della creazione delle armi per le entità e qualche altra funzione utile al progetto.
+%
+Posso ritenermi soddisfatto del lavoro fatto, sia perché l'obiettivo finale è stato correttamente raggiunto,
+ma anche perché, sulla base di un architettura corretta, mi sono accorto che aggiungere nuove funzionalità
+al gioco è risultato piuttosto facile e spesso anche intuitivo.
+%
+Durante la realizzazione sono sorti diversi problemi per ciò che riguarda le armi: primo di tutti è la
+creazione di diverse tipologie di armi, su cui è stato necessario effettuare diverse considerazioni partendo
+dal modello iniziale. Inoltre anche le armi a puntamento sono state particolarmente difficili da gestire, in
+quanto è la view a deciderne la direzione: è per questo nata la classe PointerFactory. Infine, ho trovato
+piuttosto difficile rendere il gioco compatibile per ogni sistema operativo, spesso optando per codice
+sicuramente non ottimale.
 \section{Difficoltà incontrate e commenti per i docenti}
 %
 \subsection{Andrea Maria Castronovo}
@@ -475,6 +488,16 @@ progetto di gruppo obbligatorio in questo corso, soprattutto considerando i live
 Grazie a questo progetto ho potuto esercitarmi molto per quanto riguarda l'organizzazione e la coordinazione con gli altri,
 e credo che riuscire ad allenare questa "soft skill" prima di entrare nel mondo del lavoro sia una grande fortuna.
 %
+\subsection{Lorenzo Mazzini}
+%
+Essendo il mio primo, grande progetto a seguito di molti altri molto più piccoli, è stata sicuramente propedeutica per
+tutti i lavori che farò in futuro: è stato necessario un livello di dettaglio nella scrittura del codice che non avevo mai
+affrontato prima, ma che mi aiuterà sicuramente in futuro per scrivere programmi in modo migliore.
+%
+Ho fatto anche esperienza nel lavorare in un team, anche questa cosa che non avevo mai fatto prima; seppur si debba mantenere
+un livello di coordinazione e di ordine per quanto riguarda l'organizzazione dei lavori, risulta anche più facile sviluppare
+nuove funzioni e risolvere problemi in quelle già scritte.
+
 \appendix
 \chapter{Guida utente}
 All'avvio dell'applicazione si può selezionare il personaggio da giocare e avviare una nuova partita o ovviare la partita con il personaggio selezionato di defaut. Dalla stesa interfaccia si può anche andare nel Pokédex, chiccando il rispettivo menu, per visualizzare i risultati totali delle partite precedenti. Al primo avvio il Pokédex si presenterà vuoto non avendo ancora effettua alcuna partita.
