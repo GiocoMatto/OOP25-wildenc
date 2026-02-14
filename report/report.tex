@@ -158,11 +158,17 @@ di AbstractEntity.
 %
 \textbf{Problema}: 
 %
-Deve esserci una mappa su cui gli oggetti devono coesistere ed interagire
+Deve esserci una mappa su cui gli oggetti devono coesistere ed interagire.
 %
 \\\textbf{Soluzione}: 
 %
-blablabla % TODO
+La \textit{GameMap} è la principale responsabile della gestione degli oggetti di gioco,
+è lei che gestirà i movimenti, le collisioni dei proiettili e si occuperà di spawnare i nemici.
+La mappa è pensata in relazione one-to-many con tanti \textit{MapObject}, in modo che possa contenerli
+e gestirli tutti. Lo spawning dei nemici è gestito assieme al movimento delle vari entità, ma la logica
+secondo cui questi spawnano è stata scorporata grazie all'interfaccia \textit{EnemySpawner} fornita da 
+Leonardo Mengozzi. Ciò consente in futuro di applicare logiche di spawn diverse alle varie mappe,
+in modo da creare nuove modalità di gioco o anche boss battle seguendo il principio OCP.
 %
 \subsubsection{Gestione della fase di gioco}
 %
