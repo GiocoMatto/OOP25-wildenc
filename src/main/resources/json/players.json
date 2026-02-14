@@ -1,8 +1,23 @@
 {
-    "missingno": {
-        "entityName": "missingno",
-        "hbRadius": 10,
+    "charmander": {
+        "entityName": "Charmander",
+        "hbRadius": 20,
         "maxHealth": 100.0,
-        "velocity": 2.5
-    }
+        "velocity": 300,
+        "weapon": "ember"
+    },
+    "bulbasaur": {
+        "entityName": "Bulbasaur",
+        "hbRadius": 30,
+        "maxHealth": 200.0,
+        "velocity": 210,
+        "weapon": "frenzyplant"
+    },
+    "squirtle": {
+        "entityName": "Squirtle",
+        "hbRadius": 20,
+        "maxHealth": 150.0,
+        "velocity": 200,
+        "weapon": "bubble"
+    } 
 }

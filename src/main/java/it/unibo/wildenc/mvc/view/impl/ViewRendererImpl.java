@@ -1,18 +1,20 @@
 package it.unibo.wildenc.mvc.view.impl;
 
 import java.util.Collection;
+import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.view.api.SpriteManager;
 import it.unibo.wildenc.mvc.view.api.SpriteManager.Sprite;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 
-
-
+/**
+ * Implementation for ViewRenderer.
+ */
 public class ViewRendererImpl implements ViewRenderer {
 
     private static final int SPRITE_SIZE = 64;
@@ -27,12 +29,25 @@ public class ViewRendererImpl implements ViewRenderer {
 
     private Region backgroundContainer;
 
-    public ViewRendererImpl () {
+    /**
+     * Constructor for the class. The SpriteManager to be used
+     * is set here.
+     */
+    public ViewRendererImpl() {
         this.spriteManager = new SpriteManagerImpl();
+        // Made to be sure to SpotBugs to not flag this error.
+        this.canvas = null;
+        this.backgroundContainer = null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void renderAll(Collection<MapObjViewData> objectDatas) {
+    public void renderAll(final Collection<MapObjViewData> objectDatas) {
+        if (Objects.isNull(canvas) || Objects.isNull(backgroundContainer)) {
+            return;
+        }
         final GraphicsContext draw = canvas.getGraphicsContext2D();
         final double scale = canvas.getWidth() / INITIAL_CANVAS_WIDTH;
 
@@ -46,7 +61,16 @@ public class ViewRendererImpl implements ViewRenderer {
                 .orElse(null)
         );
 
-        drawGrassTiles(draw, scale);
+        final double bgX = -this.cameraX % SPRITE_SIZE * scale;
+        final double bgY = -this.cameraY % SPRITE_SIZE * scale;
+        final double scaledTileSize = SPRITE_SIZE * scale;
+
+        if (Objects.nonNull(backgroundContainer)) {
+            backgroundContainer.setStyle(
+                "-fx-background-position: " + bgX + "px " + bgY + "px;" 
+                + "-fx-background-size: " + scaledTileSize + "px " + scaledTileSize + "px;"
+            );
+        }
 
         objectDatas.stream()
             .forEach(objectData -> {
@@ -74,62 +98,55 @@ public class ViewRendererImpl implements ViewRenderer {
                     radius * 2
                 );
                  */
-                 
+
         });
         draw.restore();
 
         frameCount++;
     }
 
-    private void drawGrassTiles(GraphicsContext draw, double scale) {
-        Image grassTile = spriteManager.getGrassTile();
-
-        if (grassTile != null) {
-            double startX = -this.cameraX % SPRITE_SIZE;
-            double startY = -this.cameraY % SPRITE_SIZE;
-
-            // For managing little changes.
-            if (startX > 0) {
-                startX -= SPRITE_SIZE;
-            }
-            if (startY > 0) {
-                startY -= SPRITE_SIZE;
-            }
-
-            double viewportWidth = INITIAL_CANVAS_WIDTH;
-            double viewportHeight = canvas.getHeight() / scale;
-
-            for (double x = startX; x < viewportWidth + SPRITE_SIZE; x += SPRITE_SIZE) {
-                for (double y = startY; y < viewportHeight + SPRITE_SIZE; y += SPRITE_SIZE) {
-                    draw.drawImage(grassTile, x, y, SPRITE_SIZE, SPRITE_SIZE);
-                }
-            }
-        }
-    }
-
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "This is intentional, as the referred canvas needs to be edited."
+    )
     @Override
-    public void setCanvas(Canvas c) {
+    public void setCanvas(final Canvas c) {
         canvas = c;
         this.canvas.getGraphicsContext2D().setImageSmoothing(false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clean() {
-        final var draw = canvas.getGraphicsContext2D();
-        draw.clearRect(0, 0, canvas.widthProperty().get(), canvas.heightProperty().get());
+        if (Objects.nonNull(canvas)) {
+            final var draw = canvas.getGraphicsContext2D();
+            draw.clearRect(0, 0, canvas.widthProperty().get(), canvas.heightProperty().get());
+        }
     }
 
-    @Override
-    public void updateCamera(MapObjViewData playerObj) {
-        double effectiveWidth = INITIAL_CANVAS_WIDTH;
-        double effectiveHeight = canvas.getHeight() / (canvas.getWidth() / INITIAL_CANVAS_WIDTH);
+    private void updateCamera(final MapObjViewData playerObj) {
+        final double effectiveWidth = INITIAL_CANVAS_WIDTH;
+        final double effectiveHeight = canvas.getHeight() / (canvas.getWidth() / INITIAL_CANVAS_WIDTH);
 
         this.cameraX = playerObj.x() - effectiveWidth / 2;
         this.cameraY = playerObj.y() - effectiveHeight / 2;
     }
 
-    public void setContainer(Region container) {
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "This is intentional, as the referred container needs to be edited."
+    )
+    @Override
+    public final void setStyleToContainer(final Region container, final String css) {
         this.backgroundContainer = container;
-        backgroundContainer.getStylesheets().add(ClassLoader.getSystemResource("css/style.css").toExternalForm());
+        container.getStylesheets().add(ClassLoader.getSystemResource(css).toExternalForm());
     }
 }

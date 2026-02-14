@@ -180,4 +180,93 @@ Armi così definite vengono specializzate per mezzo del \textit{design pattern} 
 \end{figure}
 \textbf{Problema}: vogliamo che le statistiche delle entità di gioco siano separate dal codice del gioco stesso, permettendo così la modifica di entità già esistenti o la creazione di nuove entità in modo semplice.\\
 \textbf{Soluzione}: inizialmente, la gestione delle statistiche dei personaggi, dei nemici e delle armi era completamente interna al codice. Al fine di separare le statistiche dalle implementazioni è stata utilizzata una classe \textit{StatLoader}, che sfrutta il \textit{design pattern} Singleton. Tale classe, carica da file in formato JSON le statistiche relative ad armi ed entità, memorizzandole nei record \textit{LoadedWeaponStats} e \textit{LoadedEntityStats}. Al momento della generazione di armi o entità, la classe può restituire questi record al fine di permettere la generazione tramite i dati letti da file. In questo modo è resa facile l'implementazione da parte di utenti esterni di nuove entità o nuove armi, specificandone semplicemente le statistiche (per le weapon va anche specificata la Factory con la quale vengono prodotte).
+%
+\subsubsection{Leonardo Mengozzi - Gestione nemici}
+%
+\subsubsection{Abstract Factory di enemy}
+%
+\begin{figure}[H]
+	\includegraphics[width=13cm]{FactoryEnemy}
+	\caption{UML rappresenta Abstract factory per gli enemys}\label{uml:factoryEnemy}
+\end{figure}
+%
+\textbf{Problema:} Wild Encounter ha diverse tipologie di nemici, ma la cui creazione richiede parametri simili e l'assegnamento delle armi fisso dopo la creazione delle istanze. 
+%
+\textbf{Soluzione}: Per rendere facile e sicura la creazione delle istanze di nemici si è adottato un \textit{Abstract factory} che espone un metodo con parametri necessari a ogni nemico per essere istanziato.
+% applicato il template method
+\subsubsection{Applicazione template method}
+%
+\begin{figure}[H]
+	\includegraphics[width=13cm]{TemplateMethodForEnemy}
+	\caption{UML rappresenta Abstract factory per gli enemys}\label{uml:templateMethodForEnemy}
+\end{figure}
+%
+\textbf{Problema:} Le implementazioni dei nemici differiscono solamenete per la specializzazione della logica di movimento e se possono o meno subire danno.
+%
+\textbf{Soluzione:} Applico il \textit{Template method} impostato nella Abstract Entity class col metodo astratto alterDirection e canTakeDamage per specificare il movimento specifico del nemico e per il Roaming enemy che può acuisire danno solo dopo un tempo specifico.
+
+\appendix
+\chapter{Guida utente}
+All'avvio dell'applicazione si può selezionare il personaggio da giocare e avviare una nuova partita o ovviare la partita con il personaggio selezionato di defaut. Dalla stesa interfaccia si può anche andare nel Pokédex, chiccando il rispettivo menu, per visualizzare i risultati totali delle partite precedenti. Al primo avvio il Pokédex si presenterà vuoto non avendo ancora effettua alcuna partita.
+
+Avviato il gioco si potrà muovere il personaggio con "WASD" e direzionare gli attacchi con il cursore del mouse. 
+
+Durante la partita a ogni nuovo livello del player apparità una interfaccia per selezionare un power-up. L'interfaccia sarà già selezionata e si potranno usare le frecette SU e GIU per selezionare il potenziamento e premere INVIO per applicarlo oppure con un doppio click del muose.
+
+Sempre durante la partita premendo ESC si mette il gioco in pausa e dalla interfaccia che appare si può riprendere la partita.
+
+A fine partita si visualizza l'interfaccia per tornare al menu di gioco o chiudere l'applicazione, in entrambi i casi si effettua il salvataggi dei risultati della parita consultabili nel Pokédex. 
+
+La chiusura della finestra in partita non comporta il salvataggio dei dati della partita.
+
+\chapter{Esercitazioni di laboratorio}
+
+\paragraph{Andrea Maria Castronovo} \begin{itemize}
+	\item Laboratorio 4 : 
+	\item Laboratorio 5 : 
+	\item Laboratorio 6 : 
+	\item Laboratorio 7 : 
+	\item Laboratorio 8 : 
+	\item Laboratorio 9 : 
+	\item Laboratorio 10 : 
+	\item Laboratorio 11 : 
+	\item Laboratorio 12 : 
+\end{itemize}
+
+\paragraph{Leonardo Mengozzi} \begin{itemize}
+	\item Laboratorio 4 : https://virtuale.unibo.it/mod/forum/discuss.php?d=206731\#p284046
+	\item Laboratorio 5 : 
+	\item Laboratorio 6 : 
+	\item Laboratorio 7 : 
+	\item Laboratorio 8 : 
+	\item Laboratorio 9 : 
+	\item Laboratorio 10 : 
+	\item Laboratorio 11 : 
+	\item Laboratorio 12 : 
+\end{itemize}
+
+\paragraph{Lorenzo Mazzini} \begin{itemize}
+	\item Laboratorio 4 : 
+	\item Laboratorio 5 : 
+	\item Laboratorio 6 : 
+	\item Laboratorio 7 : 
+	\item Laboratorio 8 : 
+	\item Laboratorio 9 : 
+	\item Laboratorio 10 : 
+	\item Laboratorio 11 : 
+	\item Laboratorio 12 : 
+\end{itemize}
+
+\paragraph{Kleo Rama} \begin{itemize}
+	\item Laboratorio 4 : 
+	\item Laboratorio 5 : 
+	\item Laboratorio 6 : 
+	\item Laboratorio 7 : 
+	\item Laboratorio 8 : 
+	\item Laboratorio 9 : 
+	\item Laboratorio 10 : 
+	\item Laboratorio 11 : 
+	\item Laboratorio 12 : 
+\end{itemize}
+
 \end{document}

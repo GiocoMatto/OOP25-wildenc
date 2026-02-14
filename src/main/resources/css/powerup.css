@@ -1,0 +1,9 @@
+.powerup {
+    -fx-padding: 15;
+    -fx-background-color: #AEC6CF;
+    -fx-alignment: center;
+}
+
+.vbox {
+    -fx-spacing: 10;
+}

@@ -1,10 +1,10 @@
 package it.unibo.wildenc.mvc.controller.api;
 
 import java.util.List;
-import java.util.Set;
 
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Game;
+import it.unibo.wildenc.mvc.model.Lobby;
 import it.unibo.wildenc.mvc.view.api.GameView;
 
 /**
@@ -12,7 +12,10 @@ import it.unibo.wildenc.mvc.view.api.GameView;
  */
 public interface Engine {
 
-    void start(Game.PlayerType pt);
+    /**
+     * Starts the engine for a specific player type.
+     */
+    void start();
 
     /**
      * Accept the movement of the player to add.
@@ -41,14 +44,16 @@ public interface Engine {
     void onLeveUpChoise(String choise);
 
     /**
-     * Start the game loopl.
+     * Start the game loop.
      */
     void startGameLoop();
 
     /**
      * Show the menu.
+     * 
+     * @param player the base player type selected in the lobby.
      */
-    void menu(Game.PlayerType pt);
+    void menu(Lobby.PlayerType player);
 
     /**
      * Show the shop.
@@ -61,9 +66,9 @@ public interface Engine {
     void pokedex();
 
     /**
-     * Close the game and save the data.
+     * Stops the engine.
      */
-    void close();
+    void stopEngine();
 
     /**
      * Register the views.
@@ -79,11 +84,27 @@ public interface Engine {
      */
     void unregisterView(GameView gv);
 
-    List<Game.PlayerType> getPlayerType();
-    
-    Game.PlayerType getPlayerTypeChoise();
+    /**
+     * Gets a list of selectable players.
+     * 
+     * @return A {@link List} of selectable players as {@link Game.PlayerType}.
+     */
+    List<Lobby.PlayerType> getSelectablePlayers();
 
+    /**
+     * Method for selecting a player in the main menu.
+     * 
+     * @return the selected player in form of a PlayerType.
+     */
+    Lobby.PlayerType getPlayerTypeChoise();
+
+    /**
+     * Show the view for set game in pause.
+     */
     void openViewPause();
 
+    /**
+     * Restart the game by the pause.
+     */
     void closeViewPause();
 }

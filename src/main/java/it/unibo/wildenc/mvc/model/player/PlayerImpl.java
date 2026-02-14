@@ -4,18 +4,20 @@ import java.util.LinkedHashSet;
 
 import org.joml.Vector2dc;
 
+import com.sun.media.jfxmedia.logging.Logger;
+
 import it.unibo.wildenc.mvc.model.Player;
 import it.unibo.wildenc.mvc.model.entities.AbstractEntity;
 
 /**
- * Implementation of the Player entity
+ * Implementation of the Player entity.
  */
-public class PlayerImpl extends AbstractEntity implements Player {
+public final class PlayerImpl extends AbstractEntity implements Player {
 
     private static final int BASE_EXP_STEP = 100; //costante per il calcolo
 
     // private final Vector2d inputDirection = new Vector2d(0, 0); //ultima direzione richiesta dall'utente
-    private String playerName;
+    private final String playerName;
     private int experience;
     private int level;
     private int expToNextLevel;
@@ -23,7 +25,9 @@ public class PlayerImpl extends AbstractEntity implements Player {
 
     /**
      * Creates a new Player.
-     * * @param startPos  Starting position on the map
+     * 
+     * @param name      the name of the player
+     * @param startPos  Starting position on the map
      * @param hitbox    Hitbox radius
      * @param speed     Movement speed
      * @param maxHealth Maximum health
@@ -33,7 +37,7 @@ public class PlayerImpl extends AbstractEntity implements Player {
         final Vector2dc startPos, 
         final double hitbox, 
         final double speed, 
-        final int maxHealth
+        final double maxHealth
     ) {
         // inizializzazione con valori iniziali
         super(startPos, hitbox, speed, maxHealth, new LinkedHashSet<>());
@@ -56,8 +60,9 @@ public class PlayerImpl extends AbstractEntity implements Player {
         return true; 
     }
 
+    @Override
     public void setDirection(final Vector2dc direction) {
-        //aggioro vetotre che alterDirection() legge al prossimo update
+        //aggiorno vettore che alterDirection() legge al prossimo update
         super.setDirection(direction);
     }
 
@@ -80,9 +85,9 @@ public class PlayerImpl extends AbstractEntity implements Player {
         final double newSpeed = this.getSpeed() * 1.005;
         this.setSpeed(newSpeed);
 
-        System.out.println("LEVEL UP, level: " + level);
+        Logger.logMsg(Logger.INFO, "LEVEL UP, level: " + level);
     }
-    
+
     @Override
     public int getExpToNextLevel() {
         return this.expToNextLevel;
@@ -104,7 +109,7 @@ public class PlayerImpl extends AbstractEntity implements Player {
     }
 
     @Override
-    public void addMoney(int amount) {
+    public void addMoney(final int amount) {
         this.money = this.money + amount;
     }
 
@@ -114,8 +119,8 @@ public class PlayerImpl extends AbstractEntity implements Player {
     }
 
     @Override
-    public void heal(int amount) {
-        double newHealth = Math.min(this.getMaxHealth(), this.getCurrentHealth() + amount);
+    public void heal(final int amount) {
+        final double newHealth = Math.min(this.getMaxHealth(), this.getCurrentHealth() + amount);
         this.setHealth(newHealth);
     }
 

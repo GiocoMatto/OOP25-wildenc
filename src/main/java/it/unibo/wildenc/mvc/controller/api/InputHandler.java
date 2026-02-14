@@ -8,42 +8,6 @@ import org.joml.Vector2dc;
  * Responsible of handling the input from the View and translating in such way that Model understands.
  */
 public interface InputHandler {
-
-    interface Input {
-
-    }
-
-
-    /**
-     * Movement commands the Engine knows.
-     * GO_UP decreases Y and GO_DOWN increases Y.
-     */
-    public enum MovementInput implements Input {
-        GO_UP(new Vector2d(0, -1)),
-        GO_RIGHT(new Vector2d(1, 0)),
-        GO_DOWN(new Vector2d(0, 1)),
-        GO_LEFT(new Vector2d(-1, 0));
-
-        private final Vector2dc vect;
-
-        private MovementInput(final Vector2dc v) {
-            this.vect = v;
-        }
- 
-        public Vector2dc getVector() {
-            return this.vect;
-        }
-    }
-
-    /**
-     * Commands the Engine knows.
-     */
-    public enum CommandInput implements Input {
-        PAUSE,
-        RESUME,
-        QUIT;
-    }
-
     /**
      * Whether the game is paused.
      * 
@@ -52,7 +16,7 @@ public interface InputHandler {
     boolean isPaused();
 
     /**
-     * Whether the game is ready to be closed
+     * Whether the game is ready to be closed.
      * 
      * @return true if the game is ready to be closed, false otherwise.
      */
@@ -81,4 +45,44 @@ public interface InputHandler {
      */
     Vector2dc handleAttackDirection(Vector2dc target);
 
+    /**
+     * Interface for grouping all types of inputs.
+     */
+    interface Input { }
+
+    /**
+     * Movement commands the Engine knows.
+     * GO_UP decreases Y and GO_DOWN increases Y.
+     */
+    enum MovementInput implements Input {
+        GO_UP(new Vector2d(0, -1)),
+        GO_RIGHT(new Vector2d(1, 0)),
+        GO_DOWN(new Vector2d(0, 1)),
+        GO_LEFT(new Vector2d(-1, 0));
+
+        private final Vector2dc vect;
+
+        MovementInput(final Vector2dc v) {
+            this.vect = v;
+        }
+
+        /**
+         * Method for getting the specific vector associated
+         * with a direction.
+         * 
+         * @return the {@link Vector2d} associated with the direction.
+         */
+        public Vector2dc getVector() {
+            return new Vector2d(this.vect);
+        }
+    }
+
+    /**
+     * Commands the Engine knows.
+     */
+    enum CommandInput implements Input {
+        PAUSE,
+        RESUME,
+        QUIT
+    }
 }

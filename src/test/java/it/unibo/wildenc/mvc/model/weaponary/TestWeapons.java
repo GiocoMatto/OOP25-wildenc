@@ -17,7 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.wildenc.mvc.model.Entity;
-
+import it.unibo.wildenc.mvc.model.MapObject;
+import it.unibo.wildenc.mvc.model.Movable;
 import it.unibo.wildenc.mvc.model.Projectile;
 import it.unibo.wildenc.mvc.model.Weapon;
 import it.unibo.wildenc.mvc.model.dataloaders.StatLoader;
@@ -25,7 +26,10 @@ import it.unibo.wildenc.mvc.model.player.PlayerImpl;
 import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats.ProjStatType;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 
-public class TestWeapons {
+/**
+ * Testing class for weapons.
+ */
+class TestWeapons {
     private static final int TEST_COOLDOWN = 1;
     private static final int TEST_DAMAGE = 10;
     private static final int TEST_HITBOX = 1;
@@ -42,29 +46,42 @@ public class TestWeapons {
         TEST_VELOCITY,
         TEST_MAX_HEALTH
     );
-
     private static final Vector2dc TEST_DIRECTION_VERSOR_RIGHT = new Vector2d(1, 0);
     private static final Vector2dc TEST_DIRECTION_VERSOR_UP = new Vector2d(0, 1);
+    private static final String TEST_OWNER_NAME = "player:TestPlayer";
+    private static final Vector2dc POSITION_TO_HIT = new Vector2d(30, 0);
+    private static final Vector2dc NEW_POSITION_TO_HIT = new Vector2d(0, 30);
+    private static final int TEST_TICKS = 30;
+    private static final double DELTA_NOMOV = 1E-9;
+    private static final int TEST_MULT = 5;
+
     private static final double TEST_TICK = 0.2;
     private static final Logger LOGGER = LogManager.getLogger("Ciao!");
 
     private Weapon myWeapon;
-    private Vector2dc positionToHit = new Vector2d(30, 0);
+    private Vector2dc currentPosToHit = POSITION_TO_HIT;
     private Set<Projectile> generatedProjectiles;
 
+    /**
+     * Setups a weapon before every test.
+     * A TestingPistol is here used.
+     */
     @BeforeEach
-    public void setup() {
+    void setup() {
         this.myWeapon = StatLoader.getInstance().getWeaponFactoryForWeapon(
             "testingpistol", 
             TEST_OWNER, 
-            () -> positionToHit
+            () -> currentPosToHit
         );
         this.generatedProjectiles = new LinkedHashSet<>();
         Configurator.setRootLevel(Level.DEBUG);
     }
 
+    /**
+     * Tests the weapon to be correctly initialized.
+     */
     @Test
-    public void testCorrectInitialization() {
+    void testCorrectInitialization() {
         final WeaponStats testWeaponStats = myWeapon.getStats();
         assertEquals(testWeaponStats.getProjStats().getStatValue(ProjStatType.DAMAGE), TEST_DAMAGE);
         assertEquals(testWeaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY), TEST_VELOCITY);
@@ -73,50 +90,59 @@ public class TestWeapons {
         assertEquals(testWeaponStats.getCooldown(), TEST_COOLDOWN);
         assertEquals(testWeaponStats.getCurrentBurstSize(), TEST_BURST_SIZE);
         assertEquals(testWeaponStats.getProjectilesShotAtOnce(), TEST_PROJ_AT_ONCE);
-        assertEquals(testWeaponStats.getProjStats().getOwner(), TEST_OWNER);
+        assertEquals(testWeaponStats.getProjStats().getOwnerName(), TEST_OWNER_NAME);
         assertFalse(testWeaponStats.getProjStats().isImmortal());
     }
 
+    /**
+     * Tests if the weapon can correctly shoot projectiles.
+     */
     @Test
-    public void testCorrectProjectileGeneration() {
+    void testCorrectProjectileGeneration() {
         this.generatedProjectiles.addAll(this.myWeapon.attack(TEST_TICK));
         assertFalse(this.generatedProjectiles.isEmpty());
         assertEquals(this.generatedProjectiles.size(), TEST_BURST_SIZE);
         assertTrue(
             this.generatedProjectiles.stream()
-                .map(proj -> proj.getDirection())
-                .allMatch(projDir -> projDir.equals(TEST_DIRECTION_VERSOR_RIGHT, 1E-9))
+                .map(Movable::getDirection)
+                .allMatch(projDir -> projDir.equals(TEST_DIRECTION_VERSOR_RIGHT, DELTA_NOMOV))
         );
         assertTrue(
             this.generatedProjectiles.stream()
-                .map(proj -> proj.getPosition())
-                .allMatch(projPos -> projPos.equals(TEST_OWNER.getPosition(), 1E-9))  
+                .map(MapObject::getPosition)
+                .allMatch(projPos -> projPos.equals(TEST_OWNER.getPosition(), DELTA_NOMOV))
         );
     }
 
+    /**
+     * Tests if a projectile is correctly generated, changing direction.
+     */
     @Test
-    public void testCorrectProjectileGenerationWithDirectionChange() {
+    void testCorrectProjectileGenerationWithDirectionChange() {
         this.generatedProjectiles.addAll(this.myWeapon.attack(TEST_TICK));
         assertFalse(this.generatedProjectiles.isEmpty());
         assertEquals(this.generatedProjectiles.size(), TEST_BURST_SIZE);
         assertTrue(
             this.generatedProjectiles.stream()
-                .map(proj -> proj.getDirection())
-                .allMatch(projDir -> projDir.equals(TEST_DIRECTION_VERSOR_RIGHT, 1E-9))
+                .map(Movable::getDirection)
+                .allMatch(projDir -> projDir.equals(TEST_DIRECTION_VERSOR_RIGHT, DELTA_NOMOV))
         );
         this.generatedProjectiles.clear();
-        this.positionToHit = new Vector2d(0, 30);
+        this.currentPosToHit = NEW_POSITION_TO_HIT;
         this.generatedProjectiles.addAll(this.myWeapon.attack(TEST_COOLDOWN));
         assertEquals(this.generatedProjectiles.size(), TEST_BURST_SIZE);
         assertTrue(
             this.generatedProjectiles.stream()
-                .map(proj -> proj.getDirection())
-                .allMatch(projDir -> projDir.equals(TEST_DIRECTION_VERSOR_UP, 1E-9))
+                .map(Movable::getDirection)
+                .allMatch(projDir -> projDir.equals(TEST_DIRECTION_VERSOR_UP, DELTA_NOMOV))
         );
     }
 
+    /**
+     * Tests if the weapon upgrades correctly.
+     */
     @Test
-    public void testCorrectUpgrade() {
+    void testCorrectUpgrade() {
         this.myWeapon.upgrade();
         assertEquals(this.myWeapon.getStats().getLevel(), LEVEL_2);
         assertEquals(this.myWeapon.getStats().getProjStats().getStatValue(ProjStatType.DAMAGE), LEVEL_2 * TEST_DAMAGE);
@@ -125,27 +151,34 @@ public class TestWeapons {
         assertEquals(this.myWeapon.getStats().getCurrentBurstSize(), LEVEL_2);
     }
 
+    /**
+     * Tests cooldown and burst of the weapon.
+     */
     @Test
-    public void testCorretBurstAndCooldown() {
+    void testCorretBurstAndCooldown() {
         this.myWeapon.upgrade();
         // 6 * TICK = 1.2s which is (0 + 200ms of burst + 1000ms of cooldown)
-        for(int i = 0; i < 30; i++) {
+        for (int i = 0; i < TEST_TICKS; i++) {
             this.generatedProjectiles.addAll(this.myWeapon.attack(TEST_TICK));
         }
-        assertEquals(this.generatedProjectiles.size(), TEST_BURST_SIZE * LEVEL_2 * 5);
+        assertEquals(this.generatedProjectiles.size(), TEST_BURST_SIZE * LEVEL_2 * TEST_MULT);
     }
 
+    /**
+     * Tests for multiple projectile attacks.
+     */
     @Test
-    public void testMultipleProjectileAttack() {
+    void testMultipleProjectileAttack() {
         this.generatedProjectiles.addAll(this.myWeapon.attack(TEST_TICK));
         assertEquals(this.generatedProjectiles.size(), TEST_PROJ_AT_ONCE);
-        for(int i = 0; i < 10; i++) {
-            LOGGER.info("Iterazione " + i);
+        for (int i = 0; i < 10; i++) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Iterazione " + i);
+            }
             this.generatedProjectiles.stream()
                 .peek(proj -> LOGGER.info("X: " + proj.getPosition().x() + " Y: " + proj.getPosition().y()))
                 .forEach(proj -> proj.updatePosition(TEST_TICK));
         }
-     
     }
 }
 

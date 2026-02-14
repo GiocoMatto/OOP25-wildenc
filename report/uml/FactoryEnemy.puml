@@ -1,0 +1,70 @@
+@startuml FactoryEnemy
+
+' =========================
+'  Style
+' =========================
+
+left to right direction
+
+skinparam shadowing false
+skinparam roundcorner 5
+skinparam dpi 150
+
+skinparam DefaultFontName "Inter"
+skinparam DefaultFontSize 12
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #F9F9F9
+  BorderColor #BFBFBF
+  FontColor #333333
+}
+
+skinparam Arrow {
+  Color #9E9E9E
+  Thickness 1
+}
+
+hide circle
+hide empty members
+
+' =========================
+'  Classes
+' =========================
+
+class EnemyFactory <<Interface>> {
+  +closeRangeEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
+  +closeRangeFastEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
+  +rangedEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
+  +rangedDoubleShotEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
+  +roamingEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
+  +roamingLongLifeEnemy(spawnPosition : Vector2d, healt : int, name : String) : Enemy
+}
+
+class Enemy <<Interface>> {
+    +getTarget() : Optional<MapObject>
+    +getLoot() : Set<Collectible>
+}
+
+class EnemyFactoryImpl {
+
+}
+
+class CloseRangeEnemy { }
+class RangedEnemy { }
+class RoamingEnemy { }
+
+' =========================
+'  Relations
+' =========================
+
+EnemyFactory <|-- EnemyFactoryImpl
+Enemy <|-- CloseRangeEnemy
+Enemy <|-- RangedEnemy
+Enemy <|-- RoamingEnemy
+EnemyFactory ..> Enemy
+EnemyFactoryImpl ..> CloseRangeEnemy
+EnemyFactoryImpl ..> RangedEnemy
+EnemyFactoryImpl ..> RoamingEnemy
+
+@enduml

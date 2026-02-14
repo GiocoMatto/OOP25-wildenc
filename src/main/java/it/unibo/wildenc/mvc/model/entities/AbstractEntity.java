@@ -58,7 +58,7 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
     public double getMaxHealth() {
         return maxHealth;
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -66,7 +66,7 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
     public Set<Weapon> getWeapons() {
         return Collections.unmodifiableSet(weapons);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -93,7 +93,7 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
     public void addWeapon(final Weapon p) {
         weapons.add(p);
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -117,6 +117,7 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
 
     /**
      * Protected to allow subclasses (like Player) to modify health directly.
+     * 
      * @param health the new health value
      */
     protected void setHealth(final double health) {
@@ -124,15 +125,8 @@ public abstract class AbstractEntity extends AbstractMovable implements Entity {
     }
 
     /**
-     * setter for speed (used for Level)
-     * @param speed the new speed
-     */
-    protected void setSpeed(final double speed) {
-        this.speed = speed;
-    }
-
-    /**
-     * setter for maxHealth (used for level up)
+     * Setter for maxHealth (used for level up).
+     * 
      * @param maxHealth the new max health
      */
     protected void setMaxHealth(final double maxHealth) {

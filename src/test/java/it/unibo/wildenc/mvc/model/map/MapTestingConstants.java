@@ -27,22 +27,25 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.factories.FixedFactory;
  * Testing constants for the map.
  */
 public final class MapTestingConstants {
-    /* Collectible */
-    private static final int VALUE_COLLECTIBLE = 34;
 
     /**
      * 1 second in nanoseconds.
      */
     public static final int TEST_TIME_NANOSECONDS = 1_000_000_000;
+
     /**
      * 1 second.
      */
     public static final double TEST_TIME_SECONDS = 1.0;
+
     /**
      * 20 ticks of 1 second each, 20 seconds.
      */
     public static final int TEST_SIMULATION_TICKS = 20;
 
+    /* Collectible */
+    private static final int VALUE_COLLECTIBLE = 34;
+ 
     private MapTestingConstants() { }
 
     /**
@@ -133,12 +136,12 @@ public final class MapTestingConstants {
      * Some default objects for testing purposes.
      */
     public enum TestObject {
-        StaticObject(0, 10, 5, 0, 0),
-        MovableObject(0, 10, 5, 1, 0),
-        MovableObject2(10, 10, 5, 1, 0),
-        PlayerObject(0, 0, 5, 1, 100),
-        EnemyObject(0, 30, 5, 1, 100),
-        FarEnemyObject(2000, 30, 5, 1, 100);
+        STATICOBJECT(0, 10, 5, 0, 0),
+        MOVABLEOBJECT(0, 10, 5, 1, 0),
+        MOVABLEOBJECT2(10, 10, 5, 1, 0),
+        PLAYEROBJECT(0, 0, 5, 1, 100),
+        ENEMYOBJECT(0, 30, 5, 1, 100),
+        FARENEMYOBJECT(10_000, 30, 5, 1, 100);
 
         private final Vector2dc pos;
         private final double hitbox;
@@ -158,7 +161,7 @@ public final class MapTestingConstants {
          * @return the starting point as a {@link Vector2dc}.
          */
         public Vector2dc getPos() {
-            return pos;
+            return new Vector2d(pos);
         }
 
         /**
@@ -234,7 +237,6 @@ public final class MapTestingConstants {
                 name, 
                 target, 
                 Set.of(m -> Optional.of(new ExperienceGem(m.getPosition(), VALUE_COLLECTIBLE)))));
-                
             for (final var w : weapons) {
                 e.addWeapon(w);
             }
@@ -248,13 +250,13 @@ public final class MapTestingConstants {
     public enum TestWeapon {
         DEFAULT_WEAPON(21, 10, 2, 2, 99, 1, 1);
 
-        private double baseCooldown;
-        private double baseDamage;
-        private double hbRadius;
-        private double baseVelocity;
-        private double baseTTL;
-        private int baseBurst;
-        private int baseProjAtOnce;
+        private final double baseCooldown;
+        private final double baseDamage;
+        private final double hbRadius;
+        private final double baseVelocity;
+        private final double baseTTL;
+        private final int baseBurst;
+        private final int baseProjAtOnce;
 
         TestWeapon(final double baseCooldown, final double baseDamage, final double hbRadius, 
             final double baseVelocity, final double baseTTL, final int baseBurst, final int baseProjAtOnce) {
@@ -266,9 +268,8 @@ public final class MapTestingConstants {
             this.baseBurst = baseBurst;
             this.baseProjAtOnce = baseProjAtOnce;
         }
-        
+
         Weapon getAsWeapon(final Entity owner, final Supplier<Vector2dc> target) {
-            
             return new FixedFactory().createWeapon(
                 "testWeapon", 
                 baseCooldown, 
@@ -307,7 +308,7 @@ public final class MapTestingConstants {
          * @return the vector.
          */
         public Vector2dc getVect() {
-            return vect;
+            return new Vector2d(vect);
         }
     }
 

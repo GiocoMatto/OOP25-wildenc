@@ -3,6 +3,7 @@ package it.unibo.wildenc.mvc.model.map.objects;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
+import it.unibo.wildenc.mvc.model.GameMap;
 import it.unibo.wildenc.mvc.model.MapObject;
 
 /**
@@ -30,7 +31,7 @@ public abstract class AbstractMapObject implements MapObject {
      */
     @Override
     public Vector2dc getPosition() {
-        return position; // Vector2dc exposes only read methods.
+        return new Vector2d(this.position);
     }
 
     /**
