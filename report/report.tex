@@ -236,27 +236,46 @@ Si è deciso di sottoporre a Testing il model di Wild-Enc, ossia:
 \paragraph{Leonardo Mengozzi} 
 \begin{itemize}
 	\item Gestione della concorrenza con semafori per stoppare il gameLoop:
-https://github.com/GiocoMatto/wild-enc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L75
-https://github.com/GiocoMatto/wild-enc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L267
+	https://github.com/GiocoMatto/OOP25-wildenc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L75
+	https://github.com/GiocoMatto/OOP25-wildenc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L267
 	\item Esempio di uso di optional: 
 	
-	https://github.com/GiocoMatto/wild-enc/blob/c2c09abddaf900255b5bd60e0b6a763abe26b2ce/src/main/java/it/unibo/wildenc/mvc/model/enemies/AbstractEnemy.java\#L54
+	https://github.com/GiocoMatto/OOP25-wildenc/blob/c2c09abddaf900255b5bd60e0b6a763abe26b2ce/src/main/java/it/unibo/wildenc/mvc/model/enemies/AbstractEnemy.java\#L54
 
 	\item Uso di generic: 
 	
-	https://github.com/GiocoMatto/wild-enc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/util/Utilities.java\#L30
+	https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/util/Utilities.java\#L30
 	
 	\item Uso di stream: 
 	
-	https://github.com/GiocoMatto/wild-enc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L124
+	https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L124
 	
-	https://github.com/GiocoMatto/wild-enc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L139
+	https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L139
 	
 	\item Esempio di uso di lambda: 
 	
-	https://github.com/GiocoMatto/wild-enc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L40
+	https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L40
+
 \end{itemize}
 
+\paragraph{Lorenzo Mazzini}
+\begin{itemize}
+	\item Utilizzo di Supplier, Consumer e Function per la gestione delle armi:
+		upgrade (\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/model/weaponary/weapons/GenericWeapon.java\#L31}{permalink}), 
+		generazione proiettili (\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/model/weaponary/weapons/WeaponStats.java\#L21}{permalink}),
+		esempio d'uso pratico (\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/model/weaponary/weapons/factories/FixedFactory.java\#L57}{permalink}).
+
+	\item Utilizzo di Serializable per salvataggio dati
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/controller/impl/SavedDataImpl.java\#L15C50-L15C63}{permalink}.
+
+	\item Uso di stream in varie occasioni:
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L312}{permalink 1},
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/controller/impl/InputHandlerImpl.java\#L56}{permalink 2},
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/view/impl/ViewRendererImpl.java\#L75}{permalink 3}.
+
+	\item Uso della libreria Jackson per la lettura da .json:
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/model/dataloaders/StatLoader.java\#L12}{permalink}.
+\end{itemize}
 \appendix
 \chapter{Guida utente}
 All'avvio dell'applicazione si può selezionare il personaggio da giocare e avviare una nuova partita o ovviare la partita con il personaggio selezionato di defaut. Dalla stesa interfaccia si può anche andare nel Pokédex, chiccando il rispettivo menu, per visualizzare i risultati totali delle partite precedenti. Al primo avvio il Pokédex si presenterà vuoto non avendo ancora effettua alcuna partita.
