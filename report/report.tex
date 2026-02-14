@@ -347,23 +347,58 @@ La classe distingue due tipologie di riproduzione:
     \item \textbf{LoseStackPane}: Una schermata di "Game Over" che presenta le statistiche finali della partita. Utilizza mappe chiave-valore per mostrare le etichette dei punteggi e offre opzioni di navigazione.
 \end{itemize}
 Entrambi i componenti sono gestiti dalla \texttt{GameViewImpl} che ne controlla la visibilità e il focus, garantendo che le interazioni da tastiera (es. tasto ESC) siano correttamente indirizzate.
-\end{document}
 
 L'implementazione differisce dal modello standr per l'aggiunta della possibilità di disiscrivere un Observer dall'Observable e diversi metodi di notifica.
 
 \chapter{Sviluppo}
 
 \section{Testing automatizzato}
-Si è deciso di sottoporre a Testing il model di Wild-Enc, ossia:
+Sono stati sviluppati dei test automatizzati per assicurare il funzionamento e la qualità del codice nel tempo, utili soprattutto in caso di operazioni di refactoring
+di alcune parti del codice (avvenute e future).
+%
+È stata presa la scelta di non testare view e controller, ma di concentrarsi a fare solidi test del model in modo da garantire un corretto funzionamento delle fondamenta
+del software.
+A tale scopo è stata utilizzata la libreria di testing \textit{JUnit}.
+%
 \begin{itemize}
 	\item Implementazioni delle armi 
 	\item Implementazione dei proiettili 
-	\item Implementazione dei nemici. I nemici close ranged devono avvicinarsi al player fino a toccarlo (entrare nella hitbox). I ranged devono stare fermi dentro una fascia (distanza minima e massima) dal player. I roaming devono vagare per la mappa senza dirigersi verso il player.
+	\item Implementazione dei nemici.\\
+	I nemici close ranged devono avvicinarsi al player fino a toccarlo (entrare nella hitbox). I ranged devono stare fermi dentro una fascia (distanza minima e massima) dal player. I roaming devono vagare per la mappa senza dirigersi verso il player.
 	\item Implementazione del player
-	\item Implementazione dell'ambiente di gioco (la mappa)
+	\item Implementazione dell'ambiente di gioco (la mappa)\\
+	Sono stati testati vari compiti della mappa quali la gestione delle collisioni, l'aggiunta di nuovi elementi e la pulizia di elementi non più utili alla mappa.
 \end{itemize}
-
+%
+\section{Librerie esterne}
+Al fine di facilitare lo sviluppo sono state ricercate ed implementate delle librerie esterne per semplificare determinati compiti.
+%
+\subsection{JUnit}
+Già esposto precedentemente, è stato utilizzato per stilare i test automatici del software.
+%
+\subsection{JOML}
+La gestione delle posizioni di ogni elemento è stata facilitata di molto grazie alla libreria JOML, la quale si occupa di 
+tutto ciò che riguarda il lato matematico del movimento di oggetti, ciò grazie ai suoi Vector2d.
+%
+\subsection{Jackson}
+%
+\subsection{JavaFX}
+La grafica è stata creata grazie a JavaFX, la quale si occupa di fornire un moderno API per lo sviluppo di interfacce grafiche in Java.
 \section{Note di sviluppo}
+
+\paragraph{Andrea Maria Castronovo}
+\begin{itemize}
+	\item Gestione delle collisioni tramite Stream 
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L159C9-L159C15}{permalink 1}, 
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L226}{permalink 2}
+	\item Enum di Java 
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/76a93999af86865b827408da01535fbad8ae6eb9/src/test/java/it/unibo/wildenc/mvc/model/map/MapTestingConstants.java#L138C25-L138C25}{permalink 1}
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/76a93999af86865b827408da01535fbad8ae6eb9/src/test/java/it/unibo/wildenc/mvc/model/map/MapTestingConstants.java#L292}{permalink 2}
+	\item Optional
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/76a93999af86865b827408da01535fbad8ae6eb9/src/test/java/it/unibo/wildenc/mvc/model/map/MapTestingConstants.java#L231}{permalink}
+	\item Method reference lambda
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L83}{permalink}
+\end{itemize}
 
 \paragraph{Leonardo Mengozzi} 
 \begin{itemize}
