@@ -24,7 +24,7 @@ import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
 /**
  * Test class for Enemies.
  */
-public class EnemyTest {
+class EnemyTest {
     private static final double DELTA_SECONDS = 0.1;
     private static final Vector2d SPAWN_POSITION = new Vector2d(0, 0);
     private static final int HITBOX = 2;
@@ -32,7 +32,7 @@ public class EnemyTest {
     private static final int HEALTH = 500;
     private static final String NAME = "Pikachu";
     /* Collectible */
-    private static final double HITBOX_COLLECTIBLE = 5;
+    // private static final double HITBOX_COLLECTIBLE = 5;
     private static final int VALUE_COLLECTIBLE = 34;
     private static final String UNIMPLEMENTED_MSG = "Unimplemented method 'getName'";
     private static final double TARGET_1_POS_X = 5;
@@ -121,7 +121,7 @@ public class EnemyTest {
      * Test logic for CloseRangeEnemy.
      */
     @Test
-    public void closeRangeEnemyTest() {
+    void closeRangeEnemyTest() {
         this.enemy = new CloseRangeEnemy(new AbstractEnemyField(
             SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_1),
             Set.of(e -> experienceLoot(e.getPosition()))
@@ -138,7 +138,7 @@ public class EnemyTest {
      * Test logic for RangedEnemy.
      */
     @Test
-    public void rangedEnemyTest() {
+    void rangedEnemyTest() {
         /* enemy is fare away the player */
         this.enemy = new RangedEnemy(new AbstractEnemyField(
             SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_2),
@@ -167,7 +167,7 @@ public class EnemyTest {
      * Test logic for RoamingEnemy.
      */
     @Test
-    public void roamingEnemyTest() {
+    void roamingEnemyTest() {
         /* Try enemy is immortal for 5s */
         this.enemy = new RoamingEnemy(new AbstractEnemyField(
             SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.empty(),

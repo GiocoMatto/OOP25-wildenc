@@ -136,12 +136,12 @@ public final class MapTestingConstants {
      * Some default objects for testing purposes.
      */
     public enum TestObject {
-        StaticObject(0, 10, 5, 0, 0),
-        MovableObject(0, 10, 5, 1, 0),
-        MovableObject2(10, 10, 5, 1, 0),
-        PlayerObject(0, 0, 5, 1, 100),
-        EnemyObject(0, 30, 5, 1, 100),
-        FarEnemyObject(2000, 30, 5, 1, 100);
+        STATICOBJECT(0, 10, 5, 0, 0),
+        MOVABLEOBJECT(0, 10, 5, 1, 0),
+        MOVABLEOBJECT2(10, 10, 5, 1, 0),
+        PLAYEROBJECT(0, 0, 5, 1, 100),
+        ENEMYOBJECT(0, 30, 5, 1, 100),
+        FARENEMYOBJECT(2000, 30, 5, 1, 100);
 
         private final Vector2dc pos;
         private final double hitbox;
@@ -161,7 +161,7 @@ public final class MapTestingConstants {
          * @return the starting point as a {@link Vector2dc}.
          */
         public Vector2dc getPos() {
-            return pos;
+            return new Vector2d(pos);
         }
 
         /**
@@ -250,13 +250,13 @@ public final class MapTestingConstants {
     public enum TestWeapon {
         DEFAULT_WEAPON(21, 10, 2, 2, 99, 1, 1);
 
-        private double baseCooldown;
-        private double baseDamage;
-        private double hbRadius;
-        private double baseVelocity;
-        private double baseTTL;
-        private int baseBurst;
-        private int baseProjAtOnce;
+        private final double baseCooldown;
+        private final double baseDamage;
+        private final double hbRadius;
+        private final double baseVelocity;
+        private final double baseTTL;
+        private final int baseBurst;
+        private final int baseProjAtOnce;
 
         TestWeapon(final double baseCooldown, final double baseDamage, final double hbRadius, 
             final double baseVelocity, final double baseTTL, final int baseBurst, final int baseProjAtOnce) {
@@ -308,7 +308,7 @@ public final class MapTestingConstants {
          * @return the vector.
          */
         public Vector2dc getVect() {
-            return vect;
+            return new Vector2d(vect);
         }
     }
 

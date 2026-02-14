@@ -23,6 +23,7 @@ import it.unibo.wildenc.mvc.model.map.objects.MoneyCoin;
 public class EnemyFactoryImpl implements EnemyFactory {
     private static final int VALUE_COLLECTIBLE = 34;
     private static final int RANGE_PROBABILITY = 100;
+    private static final Random RANDOM = new Random();
 
     private final MapObject target;
     private final StatLoader statLoader = StatLoader.getInstance();
@@ -37,11 +38,13 @@ public class EnemyFactoryImpl implements EnemyFactory {
     }
 
     private void addDefaultWeaponTo(final Enemy e) {
-        e.addWeapon(statLoader.getWeaponFactoryForWeapon("enemyranged", e, () -> target.getPosition()));
+        e.addWeapon(statLoader.getWeaponFactoryForWeapon("enemyranged", e, () -> target.getPosition())); // NOPMD
+        // Lambda cannot be written like that - false positive.
     }
 
     private void addMeleeWeaponTo(final Enemy e) {
-        e.addWeapon(statLoader.getWeaponFactoryForWeapon("enemymelee", e, () -> e.getPosition()));
+        e.addWeapon(statLoader.getWeaponFactoryForWeapon("enemymelee", e, () -> e.getPosition())); // NOPMD
+        // Lambda cannot be written like that - false positive.
     }
 
     private Function<MapObject, Optional<Collectible>> experienceLoot() {
@@ -65,8 +68,7 @@ public class EnemyFactoryImpl implements EnemyFactory {
     }
 
     private boolean hasPercentageHit(final double percent) {
-        final Random r = new Random();
-        return r.nextInt(RANGE_PROBABILITY) <= percent * RANGE_PROBABILITY;
+        return RANDOM.nextInt(RANGE_PROBABILITY) <= percent * RANGE_PROBABILITY;
     }
 
     /**

@@ -36,7 +36,7 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
         );
         this.name = abf.name;
         this.target = abf.target;
-        this.loot = abf.loot;
+        this.loot = Set.copyOf(abf.loot);
     }
 
     /**
@@ -80,7 +80,11 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
      */
     @Override
     public Set<Collectible> getLoot() {
-        return this.loot.stream().map(f -> f.apply(this)).filter(o -> !o.isEmpty()).map(o -> o.get()).collect(Collectors.toSet());
+        return this.loot.stream()
+            .map(f -> f.apply(this))
+            .filter(o -> !o.isEmpty())
+            .map(Optional::get)
+            .collect(Collectors.toSet());
     }
 
     /**
@@ -102,6 +106,31 @@ public abstract class AbstractEnemy extends AbstractEntity implements Enemy {
         String name, 
         Optional<MapObject> target, 
         Set<Function<MapObject, Optional<Collectible>>> loot
-    ) { }
+    ) {
+        /**
+         * Parameters for a general enemy.
+         * 
+         * @param spawnPosition The position of spawn.
+         * @param hitbox The area of map where the player can hit the nemey.
+         * @param movementSpeedfinal the speed of movement of the enemy.
+         * @param health The health of the enemy.
+         * @param name The name of the enemy.
+         * @param target The Optional Position of the player to hit.
+         * @param loot The value enemy realse at his death.
+         */
+        public AbstractEnemyField {
+            loot = Set.copyOf(loot);
+            spawnPosition = new Vector2d(spawnPosition);
+        }
+
+        /**
+         * Protective copy for spawnPos.
+         * 
+         * @return the protected spawn position.
+         */
+        public Vector2dc spawnPosition() {
+            return new Vector2d(spawnPosition);
+        }
+    }
 
 }

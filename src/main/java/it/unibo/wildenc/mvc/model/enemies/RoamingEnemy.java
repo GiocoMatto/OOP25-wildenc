@@ -14,7 +14,7 @@ public class RoamingEnemy extends AbstractEnemy {
     public static final int STEP_FOR_CHANGE_DIRECTION = 150;
     public static final long TIME_SAFE = 5000;
     private int steps;
-    private long startTime;
+    private final long startTime;
     private final Random rand;
     private Vector2d actualTarget;
 
@@ -26,7 +26,8 @@ public class RoamingEnemy extends AbstractEnemy {
     public RoamingEnemy(final AbstractEnemyField abf) {
         super(abf);
         this.rand = new Random();
-        updateDirection();
+        // First direction change during initialization
+        this.actualTarget = new Vector2d(0, 0);
         this.steps = 0;
         this.startTime = System.currentTimeMillis();
     }
@@ -57,10 +58,7 @@ public class RoamingEnemy extends AbstractEnemy {
     @Override
     public boolean canTakeDamage() {
         final long now = System.currentTimeMillis();
-        if (now - this.startTime >= TIME_SAFE) {
-            return true;
-        }
-        return false;
+        return now - this.startTime >= TIME_SAFE;
     }
 
 }

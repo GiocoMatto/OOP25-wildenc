@@ -4,9 +4,14 @@ import java.util.LinkedHashSet;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.joml.Vector2d;
+import org.joml.Vector2dc;
 
+import com.google.errorprone.annotations.Immutable;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
 
@@ -14,12 +19,14 @@ import it.unibo.wildenc.mvc.model.weaponary.AttackContext;
  * Class for managing the statistics for a Projectile. This is made for mantaining SRP and
  * making a Projectile fully customizable on declaration of a specific weapon.
  */
+@Immutable
 public class ProjectileStats {
 
     private final Set<ProjStat> projStats = new LinkedHashSet<>();
-    private double timeToLive;
+    private final double timeToLive;
     private final String projID;
-    private final Entity projOwner;
+    private final Supplier<Vector2d> ownerPosition;
+    private final String ownerName;
     private final boolean immortal;
     private final BiFunction<Double, AttackContext, Vector2d> projMovementFunction;
 
@@ -52,7 +59,8 @@ public class ProjectileStats {
         projStats.add(new ProjStat(ProjStatType.VELOCITY, baseVelocity));
         this.timeToLive = ttl;
         this.projID = id;
-        this.projOwner = ownedBy;
+        this.ownerPosition = () -> (Vector2d) ownedBy.getPosition();
+        this.ownerName = ownedBy.getName();
         this.immortal = areProjImmortal;
         this.projMovementFunction = moveFunc;
     }
@@ -109,29 +117,30 @@ public class ProjectileStats {
     }
 
     /**
-     * Setter method for the TTL.
-     * 
-     * @param newTTL the new time to live to be set.
-     */
-    public void setTTL(final double newTTL) {
-        this.timeToLive = newTTL;
-    }
-    /**
-     * Getter method for the owner of the projectile.
-     * 
-     * @return the {@link Entity} that generated this Projectile.
-     */
-    public Entity getOwner() {
-        return this.projOwner;
-    }
-
-    /**
      * Method for knowing a projectile is immortal.
      * 
      * @return true if the projectile is immortal, false otherwise. 
      */
     public boolean isImmortal() {
         return this.immortal;
+    }
+
+    /**
+     * Method for getting the position of the owner of the projectile.
+     * 
+     * @return the position of the owner of the projectile.
+     */
+    public Vector2dc getOwnerPosition() {
+        return ownerPosition.get();
+    }
+
+    /**
+     * Method for getting the name of the owner of the projectile.
+     * 
+     * @return the name of the owner of the projectile.
+     */
+    public String getOwnerName() {
+        return ownerName;
     }
 
     /**
@@ -164,7 +173,8 @@ public class ProjectileStats {
     public enum ProjStatType {
         DAMAGE("Damage"),
         VELOCITY("Velocity"),
-        HITBOX("Hitbox Radius");
+        HITBOX("Hitbox Radius"),
+        TTL("Time to Live");
 
         private final String statName;
 
@@ -323,6 +333,10 @@ public class ProjectileStats {
          * @param owned the owner of the projectile.
          * @return this builder.
          */
+        @SuppressFBWarnings(
+            value = "EI_EXPOSE_REP2", 
+            justification = "The builder won't modify/expose the owner."
+        )
         public ProjStatsBuilder owner(final Entity owned) {
             this.owner = owned;
             return this;

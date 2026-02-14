@@ -1,6 +1,7 @@
 package it.unibo.wildenc.mvc.view.impl;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.view.api.SpriteManager;
@@ -8,7 +9,6 @@ import it.unibo.wildenc.mvc.view.api.SpriteManager.Sprite;
 import it.unibo.wildenc.mvc.view.api.ViewRenderer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Region;
 
 /**
@@ -41,6 +41,9 @@ public class ViewRendererImpl implements ViewRenderer {
      */
     @Override
     public void renderAll(final Collection<MapObjViewData> objectDatas) {
+        if (Objects.isNull(canvas) || Objects.isNull(backgroundContainer)) {
+            return;
+        }
         final GraphicsContext draw = canvas.getGraphicsContext2D();
         final double scale = canvas.getWidth() / INITIAL_CANVAS_WIDTH;
 
@@ -53,17 +56,17 @@ public class ViewRendererImpl implements ViewRenderer {
                 .findFirst()
                 .orElse(null)
         );
-        
-        drawGrassTiles(draw, scale);
 
         final double bgX = -this.cameraX % SPRITE_SIZE * scale;
         final double bgY = -this.cameraY % SPRITE_SIZE * scale;
         final double scaledTileSize = SPRITE_SIZE * scale;
 
-        backgroundContainer.setStyle(
-            "-fx-background-position: " + bgX + "px " + bgY + "px;" 
-            + "-fx-background-size: " + scaledTileSize + "px " + scaledTileSize + "px;"
-        );
+        if (Objects.nonNull(backgroundContainer)) {
+            backgroundContainer.setStyle(
+                "-fx-background-position: " + bgX + "px " + bgY + "px;" 
+                + "-fx-background-size: " + scaledTileSize + "px " + scaledTileSize + "px;"
+            );
+        }
 
         objectDatas.stream()
             .forEach(objectData -> {
@@ -98,32 +101,6 @@ public class ViewRendererImpl implements ViewRenderer {
         frameCount++;
     }
 
-    private void drawGrassTiles(GraphicsContext draw, double scale) {
-        Image grassTile = spriteManager.getGrassTile();
-
-        if (grassTile != null) {
-            double startX = -this.cameraX % SPRITE_SIZE;
-            double startY = -this.cameraY % SPRITE_SIZE;
-
-            // For managing little changes.
-            if (startX > 0) {
-                startX -= SPRITE_SIZE;
-            }
-            if (startY > 0) {
-                startY -= SPRITE_SIZE;
-            }
-
-            double viewportWidth = INITIAL_CANVAS_WIDTH;
-            double viewportHeight = canvas.getHeight() / scale;
-
-            for (double x = startX; x < viewportWidth + SPRITE_SIZE; x += SPRITE_SIZE) {
-                for (double y = startY; y < viewportHeight + SPRITE_SIZE; y += SPRITE_SIZE) {
-                    draw.drawImage(grassTile, x, y, SPRITE_SIZE, SPRITE_SIZE);
-                }
-            }
-        }
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -138,8 +115,10 @@ public class ViewRendererImpl implements ViewRenderer {
      */
     @Override
     public void clean() {
-        final var draw = canvas.getGraphicsContext2D();
-        draw.clearRect(0, 0, canvas.widthProperty().get(), canvas.heightProperty().get());
+        if (Objects.nonNull(canvas)) {
+            final var draw = canvas.getGraphicsContext2D();
+            draw.clearRect(0, 0, canvas.widthProperty().get(), canvas.heightProperty().get());
+        }
     }
 
     /**

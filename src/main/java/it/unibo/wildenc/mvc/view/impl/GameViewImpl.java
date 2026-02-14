@@ -16,6 +16,7 @@ import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Lobby;
 import it.unibo.wildenc.mvc.view.api.GamePointerView;
 import it.unibo.wildenc.mvc.view.api.GameView;
+import it.unibo.wildenc.mvc.view.api.SoundManager;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -61,7 +62,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     private VBox pauseMenu = new VBox();
     private Stage gameStage = new Stage(StageStyle.DECORATED);
     private Collection<MapObjViewData> backupColl = List.of();
-    private boolean gameStarted = false;
+    private boolean gameStarted;
     private Rectangle2D rec = Screen.getPrimary().getVisualBounds();
     private final SoundManager soundManager;
 
@@ -76,8 +77,8 @@ public class GameViewImpl implements GameView, GamePointerView {
     private volatile double mouseY;
 
     public GameViewImpl() {
-        renderer = new ViewRendererImpl();    
-        this.soundManager = new SoundManager();    
+        renderer = new ViewRendererImpl();
+        this.soundManager = new SoundManagerImpl();
     }
 
     @Override
@@ -203,10 +204,10 @@ public class GameViewImpl implements GameView, GamePointerView {
      */
     @Override
     public void lost(final Map<String, Integer> lostInfo) {
-        
+
         Platform.runLater(() -> {
             soundManager.stopMusic();
-            
+
             VBox root = new VBox(20); //per il layout
             root.setAlignment(Pos.CENTER);
             root.setStyle("-fx-background-color: rgba(0, 0, 0, 0.7);");
@@ -503,7 +504,7 @@ public class GameViewImpl implements GameView, GamePointerView {
             exitBtn.setStyle("-fx-font-size: 20px; -fx-padding: 10 20;");
             exitBtn.setOnAction(e -> {
                 soundManager.stopMusic(); //ferma musica background
-                engine.close();
+                engine.stopEngine();
                 engine.menu(engine.getPlayerTypeChoise()); //torna al menu principale
             });
 

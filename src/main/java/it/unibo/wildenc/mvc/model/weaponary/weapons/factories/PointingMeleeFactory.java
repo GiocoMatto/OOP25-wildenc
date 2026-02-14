@@ -23,7 +23,9 @@ import it.unibo.wildenc.util.Utilities;
  */
 public class PointingMeleeFactory implements WeaponFactory {
 
-    private double fromPlayer = 60;
+    private static final double INITIAL_FROM_PLAYER = 60;
+
+    private double fromPlayer = INITIAL_FROM_PLAYER;
 
     /**
      * {@inheritDoc}
@@ -50,9 +52,7 @@ public class PointingMeleeFactory implements WeaponFactory {
             posToHit,
             ProjectileStats.getBuilder()
                 .damage(baseDamage)
-                .physics((dt, atkInfo) -> still(dt, atkInfo))
-                // FISICA: Usiamo una lambda che mantiene l'offset rispetto all'owner
-                .physics(this::still)
+                .physics((dt, atkInfo) -> still(atkInfo))
                 .radius(hbRadius)
                 .velocity(0)
                 .ttl(baseTTL)
@@ -62,19 +62,19 @@ public class PointingMeleeFactory implements WeaponFactory {
                 .build(),
             (level, weaponStats) -> {
                 weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, level);
-                weaponStats.getProjStats().setMultiplier(ProjStatType.HITBOX, 1 + level / 100);
-                this.fromPlayer += level / 10;
+                weaponStats.getProjStats().setMultiplier(ProjStatType.HITBOX, 1 + ((double) level / 100));
+                this.fromPlayer += (double) level / 10;
             },
             this::meleeSpawn
         );
     }
 
-    private Vector2d still(final double deltaTime, final AttackContext atkInfo) {
+    private Vector2d still(final AttackContext atkInfo) {
         return new Vector2d(atkInfo.getLastPosition());
     }
 
     private List<AttackContext> meleeSpawn(final WeaponStats weaponStats) {
-        final Vector2dc origin = weaponStats.getProjStats().getOwner().getPosition();
+        final Vector2dc origin = weaponStats.getProjStats().getOwnerPosition();
         final double velocity = weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY);
 
         final Vector2d direction = new Vector2d(

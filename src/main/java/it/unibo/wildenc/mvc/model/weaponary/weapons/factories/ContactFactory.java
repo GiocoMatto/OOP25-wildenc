@@ -13,21 +13,30 @@ import it.unibo.wildenc.mvc.model.weaponary.projectiles.ProjectileStats;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.GenericWeapon;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 
+/**
+ * Factory for Contact weapons. Contact weapons are an implementation
+ * of {@link GenericWeapons} which generates a still projectile 
+ * with hitbox the hitbox of the owner. This was planned as a
+ * contact-damage weapon. 
+ */
 public class ContactFactory implements WeaponFactory {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Weapon createWeapon(
-        String weaponName, 
-        double baseCooldown, 
-        double baseDamage, 
-        double hbRadius,
-        double baseVelocity, 
-        double baseTTL,
-        int baseProjAtOnce, 
-        int baseBurst, 
-        Entity ownedBy, 
-        boolean immortal,
-        Supplier<Vector2dc> posToHit) {
+        final String weaponName, 
+        final double baseCooldown, 
+        final double baseDamage, 
+        final double hbRadius,
+        final double baseVelocity, 
+        final double baseTTL,
+        final int baseProjAtOnce, 
+        final int baseBurst, 
+        final Entity ownedBy, 
+        final boolean immortal,
+        final Supplier<Vector2dc> posToHit) {
             return new GenericWeapon(
                 weaponName, 
                 baseCooldown, 
@@ -36,7 +45,7 @@ public class ContactFactory implements WeaponFactory {
                 posToHit,
                 ProjectileStats.getBuilder()
                 .damage(baseDamage)
-                    .physics(this::still)
+                    .physics((dt, atkInfo) -> still(atkInfo))
                     .radius(hbRadius)
                     .velocity(0)
                     .ttl(baseTTL)
@@ -44,12 +53,12 @@ public class ContactFactory implements WeaponFactory {
                     .id(weaponName)
                     .immortal(immortal)
                     .build(),
-                (lvl, ws) -> {}, 
+                (lvl, ws) -> { }, 
                 weaponStats -> spawnOn(ownedBy.getPosition())
             );
     }
 
-    private Vector2d still(final double deltaTime, final AttackContext atkInfo) {
+    private Vector2d still(final AttackContext atkInfo) {
         return new Vector2d(atkInfo.getLastPosition());
     }
 

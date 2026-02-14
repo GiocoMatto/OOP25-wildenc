@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 
 import org.joml.Vector2dc;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Implementation of a generic {@link Weapon}. This will be used as a 
  * schematic to model all {@link Weapons}s each with different characteristics.
@@ -27,7 +29,7 @@ public class GenericWeapon implements Weapon {
 
     private final String weaponName;
     private final Function<WeaponStats, List<AttackContext>> attackInfoGenerator;
-    private double timeSinceLastAtk = 0;
+    private double timeSinceLastAtk;
     private int currentBullet;
 
     /**
@@ -92,6 +94,10 @@ public class GenericWeapon implements Weapon {
     /**
      * {@inheritDoc}
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "WeaponStats has to be mutable to allow sharing real-time information."
+    )
     @Override
     public WeaponStats getStats() {
         return this.weaponStats;

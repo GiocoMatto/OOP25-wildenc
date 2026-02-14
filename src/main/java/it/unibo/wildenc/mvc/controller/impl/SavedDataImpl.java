@@ -1,6 +1,7 @@
 package it.unibo.wildenc.mvc.controller.impl;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,6 +13,8 @@ import it.unibo.wildenc.mvc.controller.api.SavedData;
  * from previous games.
  */
 public class SavedDataImpl implements SavedData, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private int totalCoins;
     private final Map<String, Integer> pokedexMap = new LinkedHashMap<>();
@@ -52,7 +55,7 @@ public class SavedDataImpl implements SavedData, Serializable {
      */
     @Override
     public Map<String, Integer> getPokedex() {
-        return this.pokedexMap;
+        return Collections.unmodifiableMap(this.pokedexMap);
     }
 
 }

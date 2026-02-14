@@ -39,7 +39,7 @@ public abstract class AbstractMovable extends AbstractMapObject implements Movab
      */
     @Override
     public Vector2dc getDirection() {
-        return direction;
+        return new Vector2d(direction);
     }
 
     /**

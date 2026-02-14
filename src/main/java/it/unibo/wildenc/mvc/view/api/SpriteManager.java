@@ -1,5 +1,6 @@
 package it.unibo.wildenc.mvc.view.api;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import javafx.scene.image.Image;
 
@@ -17,6 +18,12 @@ public interface SpriteManager {
      */
     Sprite getSprite(int frameCount, MapObjViewData objData);
 
+    /**
+     * Gets the grass tile from the loaded file. This was made
+     * to easily separate sprites to the background.
+     * 
+     * @return an {@link Image} corresponding to the grass tile.
+     */
     Image getGrassTile();
 
     /**
@@ -28,5 +35,9 @@ public interface SpriteManager {
      * @param rotationFrame the rotation frame which the sprite is currently referring.
      * @param currentFrame the current frame for the animation.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP", 
+        justification = "There is no need to create defensive copy of an Image, as it is heavy and useless in this case."
+    )
     record Sprite(Image spriteImage, int rotationFrame, int currentFrame) { }
 }

@@ -53,7 +53,7 @@ public class RandomPatternFactory implements WeaponFactory {
             posToHit,
             ProjectileStats.getBuilder()
                 .damage(baseDamage)
-                .physics(this::still)
+                .physics((dt, atkInfo) -> still(atkInfo))
                 .radius(hbRadius)
                 .velocity(baseVelocity)
                 .ttl(baseTTL)
@@ -62,11 +62,9 @@ public class RandomPatternFactory implements WeaponFactory {
                 .immortal(immortal)
                 .build(),
             (level, weaponStats) -> {
-                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, (level / 10) + 1);
-                weaponStats.getProjStats().setMultiplier(ProjStatType.HITBOX, (level / 10) + 1);
-                weaponStats.getProjStats().setTTL(
-                    weaponStats.getProjStats().getTTL() + level / 20
-                );
+                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, ((double) level / 10) + 1);
+                weaponStats.getProjStats().setMultiplier(ProjStatType.HITBOX, ((double) level / 10) + 1);
+                weaponStats.getProjStats().setMultiplier(ProjStatType.TTL, ((double) level / 10) + 1);
                 if (level % LV_5 == 0) {
                     weaponStats.setBurstSize(
                         weaponStats.getCurrentBurstSize() + 1
@@ -77,15 +75,13 @@ public class RandomPatternFactory implements WeaponFactory {
         );
     }
 
-    private Vector2d still(final double deltaTime, final AttackContext atkInfo) {
+    private Vector2d still(final AttackContext atkInfo) {
         return new Vector2d(atkInfo.getLastPosition());
     }
 
     private List<AttackContext> randomSpawn(final WeaponStats weaponStats) {
         final Vector2d randomDir = generateRandomPositionFrom(
-            weaponStats.getProjStats()
-                .getOwner()
-                .getPosition()
+            weaponStats.getProjStats().getOwnerPosition()
         );
         return List.of(
             new AttackContext(

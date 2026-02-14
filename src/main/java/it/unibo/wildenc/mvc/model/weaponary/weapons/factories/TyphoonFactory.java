@@ -75,14 +75,14 @@ public class TyphoonFactory implements WeaponFactory {
                     weaponstats.getProjStats().setMultiplier(ProjStatType.DAMAGE, 1 + Math.log(lvl));
                     if (lvl % LV_2 == 0) {
                         weaponstats.setCooldown(
-                            weaponstats.getCooldown() - lvl / 100
+                            weaponstats.getCooldown() - ((double) lvl / 100)
                         );
                     }
                     if (lvl % LV_5 == 0) {
                         weaponstats.increaseProjectilesShotAtOnce();
                     }
                 },
-                wStats -> circularSpawn(wStats)
+                TyphoonFactory::circularSpawn
         );
     }
 
@@ -96,10 +96,10 @@ public class TyphoonFactory implements WeaponFactory {
             final Vector2d offsetDir = new Vector2d(Math.cos(currentAngle), Math.sin(currentAngle));
 
             projContext.add(new AttackContext(
-                weaponStats.getProjStats().getOwner().getPosition(), 
+                weaponStats.getProjStats().getOwnerPosition(), 
                 velocity, 
                 () -> {
-                    return new Vector2d(weaponStats.getProjStats().getOwner().getPosition()).add(offsetDir);
+                    return new Vector2d(weaponStats.getProjStats().getOwnerPosition()).add(offsetDir);
                 }
             ).protectiveCopy());
         }

@@ -71,7 +71,7 @@ public class FixedFactory implements WeaponFactory {
         final List<AttackContext> toRet = new ArrayList<>();
         for (int i = 0; i < weaponStats.getProjectilesShotAtOnce(); i++) {
             toRet.add(new AttackContext(
-                new Vector2d(weaponStats.getProjStats().getOwner().getPosition()), 
+                new Vector2d(weaponStats.getProjStats().getOwnerPosition()), 
                 weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY), 
                 weaponStats.getPosToHit()
             ));

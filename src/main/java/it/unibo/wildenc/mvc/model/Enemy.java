@@ -13,6 +13,7 @@ public interface Enemy extends Entity {
      * 
      * @return the name of enemy.
      */
+    @Override
     String getName();
 
     /**

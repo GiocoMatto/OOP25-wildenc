@@ -7,8 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Locale;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.wildenc.mvc.controller.api.SavedData;
 import it.unibo.wildenc.mvc.controller.api.SavedDataHandler;
 
@@ -47,11 +49,13 @@ public class SavedDataHandlerImpl implements SavedDataHandler {
         }
     }
 
+    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED_BAD_PRACTICE",
+        justification = "saveFileDir.mkdirs() value not needed")
     private static File getSaveDirBasedOffOS() {
         final String osType = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
         final String userHome = System.getProperty("user.home");
         final String gameFolder = ".wildenc";
-        File saveFileDir;
+        final File saveFileDir;
 
         if (osType.contains("win")) {
             saveFileDir = new File(System.getenv("APPDATA"), gameFolder);

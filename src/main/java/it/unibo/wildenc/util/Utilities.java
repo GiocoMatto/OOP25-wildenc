@@ -8,11 +8,14 @@ import org.joml.Vector2d;
 import org.joml.Vector2dc;
 
 import it.unibo.wildenc.mvc.model.dataloaders.StatLoader;
+import it.unibo.wildenc.mvc.model.dataloaders.StatLoader.LoadedEntityStats;
 
 /**
  * Class containing utilities for the project.
  */
 public final class Utilities {
+
+    private static final double EPSILON = 1E-9;
     private static final Random RAND = new Random();
 
     private Utilities() { }
@@ -37,9 +40,9 @@ public final class Utilities {
      */
     public static String randomNameForRarity(final String rarity) {
         return pickRandom(StatLoader.getInstance().getAllEnemyData().stream()
-            .filter(e -> e.rarity().equals(rarity.toLowerCase(Locale.ITALIAN)))
-            .map(e -> e.entityName())
-            .toList()).toLowerCase();
+            .filter(e -> e.rarity().equals(rarity.toLowerCase(Locale.ENGLISH)))
+            .map(LoadedEntityStats::entityName)
+            .toList()).toLowerCase(Locale.ENGLISH);
     }
 
     /**
@@ -54,7 +57,24 @@ public final class Utilities {
         return norm.isFinite() ? norm : new Vector2d(0, 0);
     }
 
+    /**
+     * Method to capitalize a string.
+     * 
+     * @param toCap the string to be capitalized.
+     * @return the capitalized string.
+     */
     public static String capitalize(final String toCap) {
-        return toCap.substring(0, 1).toUpperCase() + toCap.substring(1);
+        return toCap.substring(0, 1).toUpperCase(Locale.ENGLISH) + toCap.substring(1);
+    }
+
+    /**
+     * Method for checking if two floating point numbers are equal.
+     * 
+     * @param n1 the first number
+     * @param n2 the second number
+     * @return if the two numbers are equal, false otherwise.
+     */
+    public static boolean testFloatingPointEqual(final double n1, final double n2) {
+        return Math.abs(n1 - n2) < EPSILON;
     }
 }

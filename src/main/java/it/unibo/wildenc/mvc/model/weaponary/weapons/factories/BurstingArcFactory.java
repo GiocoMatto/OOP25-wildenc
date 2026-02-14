@@ -60,8 +60,8 @@ public class BurstingArcFactory implements WeaponFactory {
                 .id(weaponName)
                 .build(),
             (level, weaponStats) -> {
-                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, level / 2);
-                weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, level / 2);
+                weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, (double) (level + 1) / 2);
+                weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, (double) (level + 1) / 2);
                 if (level % LV_5 == 0) {
                     weaponStats.increaseProjectilesShotAtOnce();
                 }
@@ -79,7 +79,7 @@ public class BurstingArcFactory implements WeaponFactory {
         final int pelletNumber = weaponStats.getProjectilesShotAtOnce();
         final double totalArc = Math.toRadians(45);
 
-        final Vector2dc origin = weaponStats.getProjStats().getOwner().getPosition();
+        final Vector2dc origin = weaponStats.getProjStats().getOwnerPosition();
         final double velocity = weaponStats.getProjStats().getStatValue(ProjStatType.VELOCITY);
         final Vector2dc targetPos = weaponStats.getPosToHit().get();
 

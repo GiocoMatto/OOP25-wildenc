@@ -73,7 +73,7 @@ public interface InputHandler {
          * @return the {@link Vector2d} associated with the direction.
          */
         public Vector2dc getVector() {
-            return this.vect;
+            return new Vector2d(this.vect);
         }
     }
 

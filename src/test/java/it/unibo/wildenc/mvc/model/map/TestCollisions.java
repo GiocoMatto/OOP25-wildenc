@@ -14,7 +14,7 @@ import it.unibo.wildenc.mvc.model.map.MapTestingConstants.MovableObjectTest;
 /**
  * Testing for {@link CollisionLogic}.
  */
-public class TestCollisions {
+class TestCollisions {
 
     @Test
     void twoObjectsWithSameCenterShouldCollide() {

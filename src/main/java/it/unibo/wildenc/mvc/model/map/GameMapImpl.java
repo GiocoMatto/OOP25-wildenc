@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 import org.jetbrains.annotations.TestOnly;
 import org.joml.Vector2dc;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.wildenc.mvc.model.Collectible;
 import it.unibo.wildenc.mvc.model.Enemy;
 import it.unibo.wildenc.mvc.model.EnemySpawner;
@@ -42,6 +43,8 @@ public class GameMapImpl implements GameMap {
      * 
      * @param p the player.
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP",
+        justification = "Player direct access is needed only in model and it is correctly handled.")
     public GameMapImpl(final Player p) {
         player = p;
         this.es = new EnemySpawnerImpl(p);
@@ -88,14 +91,6 @@ public class GameMapImpl implements GameMap {
      */
     protected boolean removeObject(final MapObject mObj) {
         return mapObjects.remove(mObj);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Player getPlayer() {
-        return this.player;
     }
 
     /**
@@ -164,7 +159,7 @@ public class GameMapImpl implements GameMap {
         final List<Projectile> projectiles = getAllObjects().parallelStream()
             .filter(e -> e instanceof Projectile)
             .map(e -> (Projectile) e)
-            .filter(p -> p.getOwner() instanceof Player)
+            .filter(p -> p.getOwnerName().startsWith("player"))
             .toList();
         final List<Enemy> enemies = getAllObjects().parallelStream()
             .filter(e -> e instanceof Enemy)
@@ -183,7 +178,7 @@ public class GameMapImpl implements GameMap {
         mapObjects.parallelStream()
             .filter(e -> e instanceof Projectile)
             .map(o -> (Projectile) o)
-            .filter(p -> p.getOwner() instanceof Enemy) // check only Projectiles shot by enemies
+            .filter(p -> p.getOwnerName().startsWith("enemy")) // check only Projectiles shot by enemies
             .filter(o -> CollisionLogic.areColliding(player, o))
             .forEach(o -> projectileHit(o, player, objToRemove));
     }

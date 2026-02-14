@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +11,9 @@ import java.util.Set;
 import java.util.function.Consumer;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
+
+import com.sun.media.jfxmedia.logging.Logger;
+
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.InputHandler;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
@@ -21,7 +23,6 @@ import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
 import it.unibo.wildenc.mvc.model.Entity;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Lobby.PlayerType;
-import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import it.unibo.wildenc.mvc.model.Lobby;
 import it.unibo.wildenc.mvc.model.Game.PlayerInfos;
 import it.unibo.wildenc.mvc.model.game.GameImpl;
@@ -38,7 +39,6 @@ public class EngineImpl implements Engine {
     private final Set<MovementInput> activeMovements = Collections.synchronizedSet(new HashSet<>());
     private final List<GameView> views = Collections.synchronizedList(new ArrayList<>());
     private final SavedDataHandler dataHandler = new SavedDataHandlerImpl();
-    private GameLoop loop;
     private final Object pauseLock = new Object();
     private volatile STATUS gameStatus;
     private volatile Game model;
@@ -52,12 +52,6 @@ public class EngineImpl implements Engine {
      */
     public enum STATUS { RUNNING, PAUSE, END }
 
-    @Override
-    public void start() {
-        playerType = lobby.getSelectablePlayers().getFirst();
-        this.views.forEach(e -> e.start(playerType));
-    }
-
     /**
      * Create a Engine.
      */
@@ -67,6 +61,15 @@ public class EngineImpl implements Engine {
         } catch (final ClassNotFoundException | IOException e) {
             this.data = new SavedDataImpl();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void start() {
+        playerType = lobby.getSelectablePlayers().getFirst();
+        this.views.forEach(e -> e.start(playerType));
     }
 
     private void setPause(final boolean status) {
@@ -90,12 +93,21 @@ public class EngineImpl implements Engine {
      * {@inheritDoc}
      */
     @Override
+    public void stopEngine() {
+        gameStatus = STATUS.END;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void startGameLoop() {
+        final GameLoop loop;
         this.model = new GameImpl(playerType);
         this.views.forEach(v -> v.switchRoot(v.game()));
-        this.loop = new GameLoop();
-        this.loop.setDaemon(true);
-        this.loop.start();
+        loop = new GameLoop();
+        loop.setDaemon(true);
+        loop.start();
         this.gameStatus = STATUS.RUNNING;
     }
 
@@ -145,14 +157,6 @@ public class EngineImpl implements Engine {
      * {@inheritDoc}
      */
     @Override
-    public void close() {
-        gameStatus = STATUS.END;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void menu(final Lobby.PlayerType pt) {
         this.playerType = pt;
         this.views.forEach(e -> e.switchRoot(e.menu(pt)));
@@ -163,7 +167,7 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void shop() {
-        this.views.forEach(e -> e.shop());
+        this.views.forEach(GameView::shop);
     }
 
     /**
@@ -182,7 +186,7 @@ public class EngineImpl implements Engine {
     public void unregisterView(final GameView gv) {
         this.views.remove(gv);
         if (this.views.isEmpty()) {
-            this.close();
+            this.stopEngine();
         }
     }
 
@@ -214,7 +218,7 @@ public class EngineImpl implements Engine {
     }
 
     /**
-     * {@hineritDoc}
+     * {@inheritDoc}
      */
     @Override
     public void closeViewPause() {
@@ -232,13 +236,16 @@ public class EngineImpl implements Engine {
                 .forEach(entry -> data.updatePokedex(entry.getKey(), entry.getValue()));
             data.updateCoins(model.getPlayerInfos().coins());
             dataHandler.saveData(data);
-        } catch (final IOException e) { }
+        } catch (final IOException e) {
+            Logger.logMsg(Logger.WARNING, "No data found to be saved!");
+            // If something happens, no data will be saved.
+        }
     }
 
     /**
      * The game loop.
      */
-    public final class GameLoop extends Thread {
+    private final class GameLoop extends Thread {
         private static final long SLEEP_TIME = 20;
         private static final long DIVISOR = 1_000_000;
         private static final long LIMIT = 350;
@@ -246,12 +253,13 @@ public class EngineImpl implements Engine {
         @Override
         public void run() {
             try {
+                final PlayerInfos playerInfos = model.getPlayerInfos();
                 //variabili per i suoni
                 long lastStepTime = 0; //per il ritmo dei passi
                 int lastExp = 0;
 
                 if (model != null) {
-                    lastExp = model.getPlayer().getExp();
+                    lastExp = playerInfos.experience();
                 }
                 long lastTime = System.nanoTime();
                 while (STATUS.END != gameStatus) {
@@ -267,21 +275,18 @@ public class EngineImpl implements Engine {
                     //passo il nuovo vettore calcolato
                     model.updateEntities(dt, ih.handleMovement(activeMovements));
 
-                    if (!activeMovements.isEmpty()) {
+                    if (!activeMovements.isEmpty() && (now - lastStepTime) / DIVISOR > LIMIT) {
                         // Suona ogni 350ms per simulare il passo
-                        if ((now - lastStepTime) / DIVISOR > LIMIT) {
-                            views.forEach(v -> v.playSound("walk"));
-                            lastStepTime = now;
-                        }
+                        views.forEach(v -> v.playSound("walk"));
+                        lastStepTime = now;
                     }
-                    final int currentExp = model.getPlayer().getExp();
+                    final int currentExp = playerInfos.experience();
 
                     if (currentExp != lastExp) {
                         views.forEach(v -> v.playSound("collect"));
                         lastExp = currentExp;
                     }
 
-                    final PlayerInfos playerInfos = model.getPlayerInfos();
                     if (model.hasPlayerLevelledUp()) {
                         open(e -> e.openPowerUp(model.weaponToChooseFrom()));
                     }
@@ -324,15 +329,15 @@ public class EngineImpl implements Engine {
                         .forEach(view -> {
                             view.updateSprites(mapDataColl);
                             view.updateExpBar(
-                                (int) model.getPlayer().getCurrentHealth(), 
+                                playerInfos.experience(), 
                                 playerInfos.level(), 
-                                (int) model.getPlayer().getMaxHealth()
+                                playerInfos.neededExp()
                             );
                         });
                     sleep(SLEEP_TIME);
                 }
             } catch (final InterruptedException e) {
-                System.out.println(e.toString());
+                Logger.logMsg(Logger.ERROR, e.toString());
                 currentThread().interrupt();
             }
         }

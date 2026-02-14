@@ -14,6 +14,7 @@ import it.unibo.wildenc.mvc.model.map.objects.MoneyCoin;
  * Utility class for generating enemies loot drop.
  */
 public final class CollectibleLoot {
+    private static final Random RANDOM = new Random();
     private static final int VALUE_COLLECTIBLE = 34;
     private static final int RANGE_PROBABILITY = 100;
 
@@ -61,9 +62,8 @@ public final class CollectibleLoot {
         return hasPercentageHit(percent) ? loot : e -> Optional.empty();
     }
 
-    private static boolean hasPercentageHit(double percent) {
-        Random r = new Random();
-        return r.nextInt(RANGE_PROBABILITY) <= percent * RANGE_PROBABILITY;
+    private static boolean hasPercentageHit(final double percent) {
+        return RANDOM.nextInt(RANGE_PROBABILITY) <= percent * RANGE_PROBABILITY;
     }
 
 }

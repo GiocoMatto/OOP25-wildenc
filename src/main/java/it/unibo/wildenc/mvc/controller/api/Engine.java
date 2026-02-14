@@ -44,14 +44,14 @@ public interface Engine {
     void onLeveUpChoise(String choise);
 
     /**
-     * Start the game loopl.
+     * Start the game loop.
      */
     void startGameLoop();
 
     /**
      * Show the menu.
      * 
-     * @param pt the player type.
+     * @param player the base player type selected in the lobby.
      */
     void menu(Lobby.PlayerType player);
 
@@ -66,9 +66,9 @@ public interface Engine {
     void pokedex();
 
     /**
-     * Close the game and save the data.
+     * Stops the engine.
      */
-    void close();
+    void stopEngine();
 
     /**
      * Register the views.
@@ -91,6 +91,11 @@ public interface Engine {
      */
     List<Lobby.PlayerType> getSelectablePlayers();
 
+    /**
+     * Method for selecting a player in the main menu.
+     * 
+     * @return the selected player in form of a PlayerType.
+     */
     Lobby.PlayerType getPlayerTypeChoise();
 
     /**

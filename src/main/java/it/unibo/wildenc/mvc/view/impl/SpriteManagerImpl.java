@@ -1,6 +1,5 @@
 package it.unibo.wildenc.mvc.view.impl;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -12,10 +11,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import com.sun.media.jfxmedia.logging.Logger;
 
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.view.api.SpriteManager;
@@ -25,7 +27,7 @@ import javafx.scene.image.Image;
  * Implementation of SpriteManager. This class manages sprites, reading them
  * as images and processing them on screen to the views.
  */
-public class SpriteManagerImpl implements SpriteManager {
+public final class SpriteManagerImpl implements SpriteManager {
 
     private static final int SPRITE_SIZE = 64;
     private static final int DOT_PNG_PREFIX_LENGHT = 4;
@@ -36,7 +38,7 @@ public class SpriteManagerImpl implements SpriteManager {
 
     private static final List<Integer> SPRITE_MAP = List.of(2, 1, 0, 7, 6, 5, 4, 3);
 
-    private Map<String, Image> loadedSpriteMap = new LinkedHashMap<>();
+    private final Map<String, Image> loadedSpriteMap = new LinkedHashMap<>();
     private double playerPosX; // Needed for calculating versor when idle.
     private double playerPosY;
 
@@ -55,17 +57,19 @@ public class SpriteManagerImpl implements SpriteManager {
     public Sprite getSprite(final int frameCount, final MapObjViewData objData) {
         if (objData.name().contains("projectile") || objData.name().contains("collectible")) {
             return new Sprite(
-                this.loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1]),
+                this.loadedSpriteMap.get(objData.name().toLowerCase(Locale.ENGLISH).split(":")[1]),
                 0, 0
             );
         } else {
-            if (loadedSpriteMap.containsKey(objData.name().toLowerCase().split(":")[1])) {
-                final int totalFrames = (int) loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1])
+            if (loadedSpriteMap.containsKey(objData.name().toLowerCase(Locale.ENGLISH).split(":")[1])) {
+                final int totalFrames = (int) loadedSpriteMap.get(objData.name().toLowerCase(Locale.ENGLISH).split(":")[1])
                     .getWidth() / SPRITE_SIZE;
+                final int currentFrameIndex = (frameCount / FRAME_LENGTH) % totalFrames; // NOPMD: Parenthesis needed.
+                final int offset = currentFrameIndex * SPRITE_SIZE;
                 return new Sprite(
-                    loadedSpriteMap.get(objData.name().toLowerCase().split(":")[1]),
+                    loadedSpriteMap.get(objData.name().toLowerCase(Locale.ENGLISH).split(":")[1]),
                     convertVersorToDominant(objData),
-                    frameCount / FRAME_LENGTH % totalFrames * SPRITE_SIZE
+                    offset
                 );
             } else {
                 return new Sprite(
@@ -120,15 +124,18 @@ public class SpriteManagerImpl implements SpriteManager {
             try (Stream<Path> paths = Files.list(Paths.get(resourceFolder.toURI()))) {
                 paths.filter(p -> p.toString().endsWith(DOT_PNG))
                     .forEach(p -> {
-                        final String key = p.getFileName().toString().replace(DOT_PNG, "");
+                        final Path filename = p.getFileName();
+                        if (filename != null) {
+                        final String key = filename.toString().replace(DOT_PNG, "");
                         loadedSpriteMap.put(key, new Image(p.toUri().toString()));
+                        }
                     });
             } catch (IOException | URISyntaxException e) {
-                e.printStackTrace();
+                Logger.logMsg(Logger.ERROR, e.toString());
             }
         } else if ("jar".equals(resourceFolder.getProtocol())) {
             try {
-                final String jarPath = decodedPath.substring(5, decodedPath.indexOf("!"));
+                final String jarPath = decodedPath.substring(5, decodedPath.indexOf('!'));
                 try (ZipInputStream zip = new ZipInputStream(new FileInputStream(jarPath))) {
                     ZipEntry entry;
                     while ((entry = zip.getNextEntry()) != null) {
@@ -143,10 +150,9 @@ public class SpriteManagerImpl implements SpriteManager {
                     }
                 }
             } catch (final IOException e) { 
-                e.printStackTrace(); 
+                Logger.logMsg(Logger.ERROR, e.toString());
             }
         }
     }
-    
 }
 

@@ -10,6 +10,7 @@ import it.unibo.wildenc.mvc.model.Weapon;
 /**
  * Interface for modelling a factory for a weapons.
  */
+@FunctionalInterface
 public interface WeaponFactory {
     /**
      * Method for creating a weapon based off its statistics.

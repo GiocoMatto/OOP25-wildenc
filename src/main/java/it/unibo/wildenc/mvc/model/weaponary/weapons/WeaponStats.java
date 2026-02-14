@@ -16,7 +16,7 @@ public class WeaponStats {
     private int burstSize;
     private int currentLevel = 1;
     private int projectilesAtOnce;
-    private ProjectileStats pStats;
+    private final ProjectileStats pStats;
     private Supplier<Vector2dc> posToHit;
     private final BiConsumer<Integer, WeaponStats> upgradeLogics;
 
@@ -146,3 +146,4 @@ public class WeaponStats {
         this.posToHit = newPosToHit;
     }
 }
+
