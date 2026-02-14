@@ -23,7 +23,7 @@ class PlayerTest {
     private static final int HEAL_50 = 50;
     private static final int MAX_HEALTH = 100;
 
-    private PlayerImpl player = MapTestingConstants.TestObject.PLAYEROBJECT.getAsPlayer();
+    private final PlayerImpl player = MapTestingConstants.TestObject.PLAYEROBJECT.getAsPlayer();
 
     /**
      * Test initialization values.

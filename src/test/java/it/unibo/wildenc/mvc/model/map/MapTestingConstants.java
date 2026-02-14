@@ -141,7 +141,7 @@ public final class MapTestingConstants {
         MOVABLEOBJECT2(10, 10, 5, 1, 0),
         PLAYEROBJECT(0, 0, 5, 1, 100),
         ENEMYOBJECT(0, 30, 5, 1, 100),
-        FARENEMYOBJECT(10000, 30, 5, 1, 100);
+        FARENEMYOBJECT(10_000, 30, 5, 1, 100);
 
         private final Vector2dc pos;
         private final double hitbox;

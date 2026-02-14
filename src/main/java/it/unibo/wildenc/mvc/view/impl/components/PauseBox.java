@@ -38,7 +38,7 @@ public class PauseBox extends VBox {
         });
 
         setOnKeyPressed(e -> {
-            if (e.getCode().equals(KeyCode.ESCAPE)) {
+            if (e.getCode() == KeyCode.ESCAPE) {
                 engine.closeViewPause();
             }
         });
