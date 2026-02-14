@@ -3,12 +3,17 @@ package it.unibo.wildenc.mvc.model.enemy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Optional;
 import java.util.Set;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 import org.junit.jupiter.api.Test;
-import it.unibo.wildenc.mvc.model.Entity;
+
 import it.unibo.wildenc.mvc.model.Collectible;
 import it.unibo.wildenc.mvc.model.Enemy;
 import it.unibo.wildenc.mvc.model.MapObject;
@@ -24,6 +29,7 @@ import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
  */
 class EnemyTest {
     private static final double DELTA_SECONDS = 0.1;
+    private static final Logger LOGGER = LogManager.getLogger("Ciao!");
     private static final Vector2d SPAWN_POSITION = new Vector2d(0, 0);
     private static final int HITBOX = 1;
     private static final int SPEED = 10;
@@ -193,9 +199,9 @@ class EnemyTest {
         )));
         try {
             Thread.sleep(RoamingEnemy.TIME_SAFE);
-            assertTrue(((Entity) enemy).canTakeDamage());
+            assertTrue(enemy.canTakeDamage());
         } catch (final InterruptedException e) {
-            System.out.println("ERROR: " + e.getMessage());
+            LOGGER.atLevel(Level.ERROR).log("ERROR: " + e.getMessage());
         }
         /* Verify enemy direction randomly change evry 11 hit */
         enemy.updatePosition(DELTA_SECONDS);

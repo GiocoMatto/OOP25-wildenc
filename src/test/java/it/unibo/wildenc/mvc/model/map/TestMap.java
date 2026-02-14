@@ -106,7 +106,7 @@ class TestMap {
         final TestObject enemyConf = TestObject.ENEMYOBJECT;
         final Player p = getEmptyPlayer();
         final Enemy enemy = enemyConf.getAsCloseRangeEnemy(new LinkedHashSet<>(), "testEnemy", Optional.of(p));
-        final var weapon = TestWeapon.DEFAULT_WEAPON.getAsWeapon(enemy, () -> p.getPosition());
+        final var weapon = TestWeapon.DEFAULT_WEAPON.getAsWeapon(enemy, p::getPosition);
         final GameMap map = getEmptyMapWithObjects(p, Set.of(enemy));
         enemy.addWeapon(weapon);
 
@@ -123,7 +123,7 @@ class TestMap {
     @Test
     void whenPlayerProjectileHitboxTouchesEnemyHitboxEnemyHealthShouldDecrease() {
         final TestObject enemyConf = TestObject.ENEMYOBJECT;
-        final Player p = getArmedPlayer(o -> TestWeapon.DEFAULT_WEAPON.getAsWeapon(o, () -> enemyConf.getPos()));
+        final Player p = getArmedPlayer(o -> TestWeapon.DEFAULT_WEAPON.getAsWeapon(o, enemyConf::getPos));
         final Enemy enemy = enemyConf.getAsCloseRangeEnemy(new LinkedHashSet<>(), "testEnemy", Optional.of(p));
         final GameMap map = getEmptyMapWithObjects(p, Set.of(enemy));
 
@@ -157,7 +157,7 @@ class TestMap {
 
         map.updateEntities(TEST_TIME_NANOSECONDS, TestDirections.STILL.getVect());
 
-        assertTrue(map.getAllObjects().size() == 0, "Object was not removed.");
+        assertTrue(map.getAllObjects().isEmpty(), "Object was not removed.");
 
     }
 }

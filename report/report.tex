@@ -126,6 +126,62 @@ Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura
 \end{figure}
 
 \section{Design Dettagliato}
+\subsection{Lorenzo Mazzini - Gestione armi e proiettili}
+
+\textbf{Introduzione:} All'interno del gioco dovranno essere disponibili varie tipologie di armi, ciascuna capace di generare diverse tipologie di attacchi con i quali sarà possibile colpire i nemici. Tali attacchi dovranno variare non solo dal punto di vista delle statistiche (quali danno, velocità...), ma anche dal punto di vista del loro comportamento relativo al movimento e alla generazione.
+
+\subsubsection*{Armi e proiettili}
+\begin{figure}[H]
+	\includegraphics[width=13cm]{Projectiles}
+	\caption{Schema UML rappresentante il funzionamento delle Weapon come factory di Projectile}\label{uml:projectiles}
+\end{figure}
+\textbf{Problema 1}: ogni arma dovrà essere differenziabile, sia dal punto di vista di come attacca, sia dal punto di vista di quando attacca.\\
+\textbf{Soluzione}: il concetto di arma è stato generalizzato in modo che ogni implementazione differisca sulla base di come l'arma si deve comportare; nello specifico è stata creata una classe
+\textit{GenericWeapon}, la quale ottiene le informazioni relative al suo comportamento nel momento in cui viene istanziata: in questo modo è ampiamente permessa la personalizzazione dei vari attacchi.
+%
+Ogni \textit{Weapon} è una \textit{factory} di \textit{Projectiles}; la tipologia di proiettile che l'arma sarà in grado di generare è specificato alla costruzione dell'arma stessa tramite le sue statistiche, nella forma di una classe \textit{ProjectileStats}. Ogni proiettile generato dall'arma otterrà tali statistiche, le quali definiscono sia come il proiettile è fatto concretamente, ma anche come esso deve muoversi. In questo modo si scorpora la dipendenza tra arma e proiettile dopo che il proiettile è stato generato. Oltre al tipo di proiettile, l'arma dovrà ottenere anche altre informazioni, come il nome dell'arma, il suo tempo di ricarica e il numero di proiettili sparati alla volta. Ultima, fondamentale, componente di cui l'arma ha bisogno è il metodo di generazione dei proiettili: ogni arma genererà i proiettili per mezzo di una classe \textit{AttackContext}, la quale contiene tutte le informazioni utili al proiettile per esitere (posizione, direzione, velocità e posizione da seguire).\\
+Armi così definite vengono specializzate per mezzo del \textit{design pattern} Factory Method: ogni Factory produce una specifica tipologia di arma, di cui cambiano solamente i parametri riguardanti le statistiche.
+\newline
+\begin{figure}[H]
+	\includegraphics[width=13cm]{Weapons}
+	\caption{Schema UML rappresentante il funzionamento delle WeaponFactory. In questo caso,
+		\ GenericFactory e PointerFactory sono due esempi di implementazione
+	}\label{uml:weapons}
+\end{figure}
+\textbf{Problema 2}: esistono delle armi che devono seguire la posizione del mouse al fine di selezionare il punto in cui i proiettili andranno.
+\newline
+\textbf{Soluzione}: è stata creata una sottoclasse di \textit{GenericWeapon}, la quale è \textit{PointerWeapon}. Tale tipologia di arma è in grado di cambiare la posizione a cui "si sta mirando", di fatto scegliendo dove i proiettili finiranno. All'interno del controller, ad ogni \textit{PointerWeapon} verrà associata la posizione "bersaglio".\\
+
+
+\subsubsection*{Salvataggio dei dati}
+\begin{figure}[H]
+	\includegraphics[width=13cm]{SaveData}
+	\caption{Schema UML rappresentante il modulo di salvataggio dati.
+	\ Si noti come Engine, ossia il controller, possieda sia i dati salvati
+	\ sia la componente per caricare/salvare i dati stessi.
+	}\label{uml:savedata}
+\end{figure}
+\textbf{Problema}: I dati relativi ai \textit{Pokemon} eliminati e le monete ottenute durante le varie partite devono essere salvati anche per le future partite.\\
+\textbf{Soluzione}: Sono state realizzate le classi \textit{SavedData} e \textit{SavedDataHandler} al fine di gestire i dati salvati. In particolare \textit{SavedData} mantiene il registro dei Pokemon eliminati in tutte le partite fatte, oltre al conteggio delle monete; \textit{SavedDataHandler} ha il compito di salvare i dati quando una partita termina o quando il gioco viene chiuso, e ricaricarli nel gioco quando esso viene aperto.\\
+
+\subsubsection*{Rendering di Sprite}
+\begin{figure}[H]
+	\includegraphics[width=13cm]{SpriteRendering}
+	\caption{Schema UML rappresentante il modulo di caricamento/rendering
+	\ di Sprite e immagini.
+	}\label{uml:spriterendering}
+\end{figure}
+\textbf{Problema}: ogni entità di gioco, possiede un aspetto diverso, che necessita di essere visualizzato correttamente.\\
+\textbf{Soluzione}: ogni \textit{MapObject}, quando deve essere processato all'interno della view, viene tradotto in un record \textit{MapObjViewData}, il quale contiene l'essenzialità del \textit{MapObject} di partenza: ID, posizione, direzione e grandezza della hitbox. Internamente alla view è stata creata una classe \textit{SpriteRenderer}, la quale, dato un \textit{MapObjectViewData}, compone un oggetto di tipo \textit{Sprite}, il quale contiene i dati necessari per mostrare l'immagine corrispondente a schermo. Tale immagine viene animata anche sulla base della direzione seguita dall'oggetto. Inoltre, la classe processa anche lo sfondo di gioco, permettendo un effetto a scorrimento.\\
+
+\subsubsection*{Caricamento statistiche da file}
+\begin{figure}[H]
+	\includegraphics[width=13cm]{StatLoader}
+	\caption{Schema UML che rappresenta il Singleton StatLoader.
+	}\label{uml:spriterendering}
+\end{figure}
+\textbf{Problema}: vogliamo che le statistiche delle entità di gioco siano separate dal codice del gioco stesso, permettendo così la modifica di entità già esistenti o la creazione di nuove entità in modo semplice.\\
+\textbf{Soluzione}: inizialmente, la gestione delle statistiche dei personaggi, dei nemici e delle armi era completamente interna al codice. Al fine di separare le statistiche dalle implementazioni è stata utilizzata una classe \textit{StatLoader}, che sfrutta il \textit{design pattern} Singleton. Tale classe, carica da file in formato JSON le statistiche relative ad armi ed entità, memorizzandole nei record \textit{LoadedWeaponStats} e \textit{LoadedEntityStats}. Al momento della generazione di armi o entità, la classe può restituire questi record al fine di permettere la generazione tramite i dati letti da file. In questo modo è resa facile l'implementazione da parte di utenti esterni di nuove entità o nuove armi, specificandone semplicemente le statistiche (per le weapon va anche specificata la Factory con la quale vengono prodotte).
 %
 \subsubsection{Leonardo Mengozzi - Gestione nemici e Controller}
 %

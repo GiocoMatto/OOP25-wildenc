@@ -10,7 +10,7 @@ import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Lobby;
 
 /** 
- * Game view
+ * Game view.
  */
 public interface GameView {
 
@@ -115,12 +115,12 @@ public interface GameView {
     void closePause();
 
     /**
-     * Pauses background music
+     * Pauses background music.
      */
     void pauseMusic();
 
     /**
-     * resumes background music
+     * resumes background music.
      */
     void resumeMusic();
 
