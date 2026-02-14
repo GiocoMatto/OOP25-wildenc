@@ -1,6 +1,5 @@
 package it.unibo.wildenc.mvc.model;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -16,13 +15,6 @@ public interface GameMap {
      * @return A {@link List} of all {@link MapObject}s on this Map.
      */
     List<MapObject> getAllObjects();
-
-    /**
-     * Adds all objects to this Map.
-     * 
-     * @param mObjs objects to add to the map.
-     */
-    void addAllObjects(Collection<? extends MapObject> mObjs);
 
     /**
      * Update every living object on this Map including collisions.

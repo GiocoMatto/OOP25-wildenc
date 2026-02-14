@@ -125,7 +125,67 @@ Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura
 
 \section{Design Dettagliato}
 %
-\subsubsection{Leonardo Mengozzi - Gestione nemici}
+\subsection*{Andrea Maria Castronovo - Gestione mappa ed entità}
+%
+\subsubsection{Oggetti di gioco}
+%
+\begin{figure}[H]
+	\includegraphics[width=13cm]{Objects}
+	\caption{Oggetti di gioco}\label{uml:objects}
+\end{figure}
+%
+\textbf{Problema}:
+%
+Devono esitere degli oggetti di gioco che possono o non possono muoversi.
+%
+\\\textbf{Soluzione}:
+%
+Per gestire correttamente tutti gli oggetti del gioco con una singola logica è stata creata 
+una gerarchia di oggetti astratti che vanno a specializzarsi man mano.
+%
+Nella gerarchia è presente un metodo astratto che consente di mantenere un comportamento
+controllato della classe, ma anche adattabile alle varie esigienze delle classi implementanti;
+ciò è reso possibile applicando il \textit{Template Pattern} sul metodo \textit{alterDirection} 
+di AbstractEntity.
+%
+\subsubsection{La mappa}
+%
+\begin{figure}[H]
+	\includegraphics[width=13cm]{GameMap}
+	\caption{Mappa di gioco}\label{uml:gamemap}
+\end{figure}
+%
+\textbf{Problema}: 
+%
+Deve esserci una mappa su cui gli oggetti devono coesistere ed interagire
+%
+\\\textbf{Soluzione}: 
+%
+blablabla % TODO
+%
+\subsubsection{Gestione della fase di gioco}
+%
+\begin{figure}[H]
+	\includegraphics[width=13cm]{Game}
+	\caption{Applicazione del pattern \textit{Facade} per proteggere la \textit{GameMap}.}\label{uml:game}
+\end{figure}
+%
+\textbf{Problema}: 
+%
+Il gioco deve essere comandato da un controller, deve quindi esporre determinate informazioni senza però 
+alterare la sicurezza e l'encapsulamento dei dati.
+%
+\\\textbf{Soluzione}: 
+%
+%
+È stata introdotta l'interfaccia \textit{Game}.
+Il suo scopo è quello di fornire all'esterno ciò che serve per interagire con il gioco; deve, ad esempio,
+occuparsi di ricevere informazioni riguardo al personaggio scelto e di generarlo per la mappa, deve inoltre
+fornire le armi che saranno sbloccate durante la progressione del gioco, ma anche comunicare alla mappa quando
+è il momento di aggiornare le entità. Tale flusso di informazioni è stato gestito applicando il pattern \textit{Facade}:
+L'interfaccia \textit{Game} è un Facade per \textit{GameMap}, in quanto si occupa di impacchettare e gestire i dati
+nei record, così facendo è possibile gestire gli oggetti della mappa in modo sicuro.
+\subsection*{Leonardo Mengozzi - Gestione nemici}
 %
 \subsubsection{Abstract Factory di enemy}
 %
@@ -166,19 +226,17 @@ La chiusura della finestra in partita non comporta il salvataggio dei dati della
 \chapter{Esercitazioni di laboratorio}
 
 \paragraph{Andrea Maria Castronovo} \begin{itemize}
-	\item Laboratorio 4 : 
-	\item Laboratorio 5 : 
-	\item Laboratorio 6 : 
-	\item Laboratorio 7 : 
-	\item Laboratorio 8 : 
-	\item Laboratorio 9 : 
-	\item Laboratorio 10 : 
-	\item Laboratorio 11 : 
-	\item Laboratorio 12 : 
+	\item Laboratorio 6 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=206731\#p284103}{permalink lab 6}
+	\item Laboratorio 7 :  \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=207193#p284592}{permalink lab 7}
+	\item Laboratorio 8 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=207921#p286066}{permalink lab 8}
+	\item Laboratorio 9 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=208718#p287147}{permalink lab 9}
+	\item Laboratorio 10 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=209589#p288299}{permalink lab 10}
+	\item Laboratorio 11 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=210617#p289591}{permalink lab 11}
+	\item Laboratorio 12 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=211539#p290768}{permalink lab 12}
 \end{itemize}
 
 \paragraph{Leonardo Mengozzi} \begin{itemize}
-	\item Laboratorio 4 : https://virtuale.unibo.it/mod/forum/discuss.php?d=206731#p284046
+	\item Laboratorio 4 : https://virtuale.unibo.it/mod/forum/discuss.php?d=206731\#p284046
 	\item Laboratorio 5 : 
 	\item Laboratorio 6 : 
 	\item Laboratorio 7 : 

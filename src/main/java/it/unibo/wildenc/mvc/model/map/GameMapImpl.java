@@ -73,13 +73,7 @@ public class GameMapImpl implements GameMap {
         mapObjects.add(mObj);
     }
 
-    /**
-     * Add every {@link MapObject} inside of a {@link Collection} to the GameMap.
-     * 
-     * @param mObjs the objects to add.
-     */
-    @Override
-    public void addAllObjects(final Collection<? extends MapObject> mObjs) {
+    private void addAllObjects(final Collection<? extends MapObject> mObjs) {
         mObjs.forEach(this::addObject);
     }
 
@@ -217,7 +211,7 @@ public class GameMapImpl implements GameMap {
     }
 
     private void onEnemyDeath(final Enemy e) {
-        addAllObjects(e.getLoot());
+        this.addAllObjects(e.getLoot());
         this.currentMapBestiary.merge(e.getName(), 1, Integer::sum);
     }
 
