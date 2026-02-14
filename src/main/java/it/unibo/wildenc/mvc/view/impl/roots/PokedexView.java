@@ -1,5 +1,7 @@
 package it.unibo.wildenc.mvc.view.impl.roots;
 
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import it.unibo.wildenc.mvc.controller.api.Engine;
@@ -18,7 +20,6 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -26,7 +27,7 @@ import javafx.stage.Screen;
 /**
  * View of the Pokedex.
  */
-public class PokedexView extends StackPane {
+public final class PokedexView extends StackPane {
     private static final Rectangle2D SCREEN = Screen.getPrimary().getVisualBounds();
     private static final String PATH = "/images/menu/";
     private static final double WIDTH_RATIO = 0.35;
@@ -44,7 +45,7 @@ public class PokedexView extends StackPane {
         goToMenu.setOnAction(e -> engine.menu(engine.getPlayerTypeChoise()));
         goToMenu.setMaxWidth(Double.MAX_VALUE);
         final ListView<Map.Entry<String, Integer>> listView = new ListView<>();
-        listView.getItems().addAll(pokedexView.entrySet());
+        listView.getItems().addAll(new LinkedHashSet<>(pokedexView.entrySet()));
         listView.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(final Map.Entry<String, Integer> entry, final boolean empty) {
@@ -68,7 +69,7 @@ public class PokedexView extends StackPane {
         box.setPadding(new Insets(PADDING));
         box.setStyle("-fx-background-color: #AEC6CF;");
         box.setMaxWidth(SCREEN.getWidth() * WIDTH_RATIO);
-        box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        box.setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
         box.prefWidthProperty().bind(widthProperty().multiply(WIDTH_RATIO));
         VBox.setVgrow(listView, Priority.ALWAYS);
         box.setMaxWidth(SCREEN.getWidth() * WIDTH_RATIO);
