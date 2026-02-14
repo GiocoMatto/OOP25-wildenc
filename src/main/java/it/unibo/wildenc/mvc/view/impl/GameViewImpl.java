@@ -35,6 +35,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -58,6 +59,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     private Collection<MapObjViewData> backupColl = List.of();
     private boolean gameStarted;
     private Rectangle2D rec = Screen.getPrimary().getVisualBounds();
+    private Region backgroundRegion;
     private final Canvas canvas = new Canvas(rec.getWidth(), rec.getHeight());
     private final SoundManager soundManager;
 
@@ -133,45 +135,59 @@ public class GameViewImpl implements GameView, GamePointerView {
     @Override
     public Parent game() {
         /* defining layout */
-        renderer.setCanvas(canvas);
         final StackPane root = new StackPane();
-        this.renderer.setStyleToContainer(root, "css/style.css");
+        
+        this.backgroundRegion = new Region();
+        backgroundRegion.getStyleClass().add("game-background");
+        backgroundRegion.setMouseTransparent(true);
+        backgroundRegion.prefWidthProperty().bind(root.widthProperty());
+        backgroundRegion.prefHeightProperty().bind(root.prefHeightProperty());
+        this.renderer.setStyleToContainer(backgroundRegion, "css/style.css");
+        root.getChildren().add(backgroundRegion);
+
+        renderer.setCanvas(canvas);
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
+        canvas.setManaged(false);
         root.getChildren().add(canvas);
 
         final BorderPane ui = new BorderPane();
-        root.getChildren().add(ui);
         ui.setPickOnBounds(false);
+        ui.setMouseTransparent(true);
+        root.getChildren().add(ui);
 
+        // Experience Box
         final HBox expBox = new HBox(10);
         expBox.setAlignment(Pos.TOP_CENTER);
-        expBox.setPadding(new Insets(Constants.Padding.getValue()));
-        ui.setTop(expBox);
         expBox.getChildren().addAll(levelText, experienceBar);
 
+        // HP Bar
         hpBar = new javafx.scene.control.ProgressBar(1.0);
         hpBar.setStyle("-fx-accent: red;");
         hpBar.setPrefWidth(200);
+        hpBar.setFocusTraversable(false);
 
         final VBox hud = new VBox(5);
-        hud.setFocusTraversable(false);
         hud.setAlignment(Pos.TOP_CENTER);
         hud.setPadding(new Insets(15));
-        hud.getChildren().addAll(expBox, hpBar); // prima l'exp poi gli HP sotto
+        hud.setPickOnBounds(false);
+        hud.getChildren().addAll(expBox, hpBar);
 
         ui.setTop(hud);
 
-        canvas.setManaged(false); // canvas should be indipendent
+        /*
+        * Action listeners 
+        */
         canvas.setFocusTraversable(true);
         canvas.requestFocus();
-        /*
-         * Action listeners 
-         */
+
         canvas.setOnMouseMoved(e -> {
-            mouseX = e.getSceneX() - (gameStage.getWidth() / 2);
-            mouseY = e.getSceneY() - (gameStage.getHeight() / 2);
+            // Calcolo del mouse relativo al centro del Canvas (corretto per resize/fullscreen)
+            double scale = canvas.getWidth() / 1600.0; 
+            mouseX = (e.getX() / scale) - (1600.0 / 2.0);
+            mouseY = (e.getY() / scale) - ((canvas.getHeight() / scale) / 2.0);
         });
+
         canvas.setOnKeyPressed(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
                 engine.addInput(keyToInputMap.get(event.getCode()));
@@ -180,17 +196,19 @@ public class GameViewImpl implements GameView, GamePointerView {
                 engine.openViewPause();
             }
         });
-        //listener tasto rilasciato
+
         canvas.setOnKeyReleased(event -> {
             if (keyToInputMap.containsKey(event.getCode())) {
                 engine.removeInput(keyToInputMap.get(event.getCode()));
             }
         });
+
         canvas.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (!isNowFocused) {
                 engine.removeAllInput();
             }
         });
+
         soundManager.playMusic("theme.mp3");
         return root;
     }
@@ -262,6 +280,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         Platform.runLater(() -> {
             root.getChildren().remove(powerUpWrapper);
             canvas.setFocusTraversable(true);
+            renderer.setStyleToContainer(backgroundRegion, "css/style.css");
         });
     }
 
@@ -344,6 +363,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         Platform.runLater(() -> {
             root.getChildren().remove(pauseMenu);
             canvas.setFocusTraversable(true);
+            renderer.setStyleToContainer(backgroundRegion, "css/style.css");
         });
     }
 

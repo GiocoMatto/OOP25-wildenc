@@ -329,13 +329,13 @@ public class EngineImpl implements Engine {
                         .forEach(view -> {
                             view.updateSprites(mapDataColl);
                             view.updateExpBar(
-                                playerInfos.experience(), 
-                                playerInfos.level(), 
-                                playerInfos.neededExp()
+                                model.getPlayerInfos().experience(), 
+                                model.getPlayerInfos().level(), 
+                                model.getPlayerInfos().neededExp()
                             );
                             view.updateHealthBar(
-                                playerInfos.currentHealth(),
-                                playerInfos.maxHealth()
+                                model.getPlayerInfos().currentHealth(),
+                                model.getPlayerInfos().maxHealth()
                             );
                         });
                     sleep(SLEEP_TIME);
