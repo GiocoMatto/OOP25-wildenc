@@ -22,8 +22,9 @@ public interface ViewRenderer {
      * Sets the container which the renderer has to work on.
      * 
      * @param cont the container to be set.
+     * @param css path.
      */
-    void setContainer(Region cont);
+    void setStyleToContainer(Region cont, String css);
 
     /**
      * Renders all sprites which needs to be loaded sequentially.

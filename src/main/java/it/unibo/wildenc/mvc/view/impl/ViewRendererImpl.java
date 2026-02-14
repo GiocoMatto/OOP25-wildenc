@@ -68,6 +68,7 @@ public class ViewRendererImpl implements ViewRenderer {
             );
         }
 
+
         objectDatas.stream()
             .forEach(objectData -> {
                 final Sprite currentSprite = spriteManager.getSprite(frameCount, objectData);
@@ -121,20 +122,16 @@ public class ViewRendererImpl implements ViewRenderer {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setContainer(final Region container) {
-        this.backgroundContainer = container;
-        backgroundContainer.getStylesheets().add(ClassLoader.getSystemResource("css/style.css").toExternalForm());
-    }
-
     private void updateCamera(final MapObjViewData playerObj) {
         final double effectiveWidth = INITIAL_CANVAS_WIDTH;
         final double effectiveHeight = canvas.getHeight() / (canvas.getWidth() / INITIAL_CANVAS_WIDTH);
 
         this.cameraX = playerObj.x() - effectiveWidth / 2;
         this.cameraY = playerObj.y() - effectiveHeight / 2;
+    }
+
+    public void setStyleToContainer(Region container, String css) {
+        this.backgroundContainer = container;
+        container.getStylesheets().add(ClassLoader.getSystemResource(css).toExternalForm());
     }
 }

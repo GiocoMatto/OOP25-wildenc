@@ -333,6 +333,10 @@ public class EngineImpl implements Engine {
                                 playerInfos.level(), 
                                 playerInfos.neededExp()
                             );
+                            view.updateHealthBar(
+                                playerInfos.currentHealth(),
+                                playerInfos.maxHealth()
+                            );
                         });
                     sleep(SLEEP_TIME);
                 }

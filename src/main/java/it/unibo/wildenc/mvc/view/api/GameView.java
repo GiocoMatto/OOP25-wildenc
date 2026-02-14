@@ -41,6 +41,14 @@ public interface GameView {
     void updateExpBar(int exp, int level, int neededExp);
 
     /**
+     * Update health bar during the game.
+     * 
+     * @param currentHealth player's current health.
+     * @param maxHealth player's max healt.
+     */
+    void updateHealthBar(double currentHealth, double maxHealth);
+
+    /**
      * Display the loss screen.
      */
     void lost(Map<String, Integer> lostInfo);

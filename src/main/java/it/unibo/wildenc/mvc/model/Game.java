@@ -89,7 +89,15 @@ public interface Game {
      * @param level player's level;
      * @param neededExp experience that player needs to level up;
      * @param coins player's earned coins in this game.
+     * @param currentHealth player's current health
+     * @param maxHealth player's max health
      */
-    record PlayerInfos(int experience, int level, int neededExp, int coins) {
-    }
+    record PlayerInfos(
+        int experience,
+        int level,
+        int neededExp,
+        int coins,
+        double currentHealth,
+        double maxHealth
+    ) { }
 }

@@ -185,6 +185,13 @@ public class GameImpl implements Game {
      */
     @Override
     public PlayerInfos getPlayerInfos() {
-        return new PlayerInfos(player.getExp(), player.getLevel(), player.getExpToNextLevel(), player.getMoney());
+        return new PlayerInfos(
+            player.getExp(),
+            player.getLevel(),
+            player.getExpToNextLevel(),
+            player.getMoney(),
+            player.getCurrentHealth(),
+            player.getMaxHealth()
+        );
     }
 }
