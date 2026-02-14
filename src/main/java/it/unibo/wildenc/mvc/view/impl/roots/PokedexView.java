@@ -23,14 +23,23 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 
+/**
+ * View of the Pokedex.
+ */
 public class PokedexView extends StackPane {
+    private static final Rectangle2D SCREEN = Screen.getPrimary().getVisualBounds();
+    private static final String PATH = "/images/menu/";
+    private static final double WIDTH_RATIO = 0.35;
+    private static final int CELLSIZE = 26;
+    private static final int PADDING = 15;
 
-    private final static String PATH = "/images/menu/";
-    private final static double WIDTH_RATIO = 0.35;
-    private final static int CELLSIZE = 26;
-    private final static Rectangle2D SCREEN = Screen.getPrimary().getVisualBounds();
-
-    public PokedexView(Engine engine, Map<String,Integer> pokedexView) {
+    /**
+     * Create the view Pokedex.
+     * 
+     * @param engine The controller
+     * @param pokedexView The data loeded by file
+     */
+    public PokedexView(final Engine engine, final Map<String, Integer> pokedexView) {
         final Button goToMenu = new Button("Torna al menu" + (pokedexView.isEmpty() ? " (Pokedex vuoto)" : ""));
         goToMenu.setOnAction(e -> engine.menu(engine.getPlayerTypeChoise()));
         goToMenu.setMaxWidth(Double.MAX_VALUE);
@@ -54,8 +63,9 @@ public class PokedexView extends StackPane {
         final VBox box = new VBox(goToMenu, listView);
         getChildren().add(box);
         listView.setFixedCellSize(CELLSIZE);
-        listView.setPrefHeight(pokedexView.size() * 26 + 2);
-        box.setPadding(new Insets(15));
+        listView.setFocusTraversable(false);
+        listView.setPrefHeight(pokedexView.size() * CELLSIZE + 2);
+        box.setPadding(new Insets(PADDING));
         box.setStyle("-fx-background-color: #AEC6CF;");
         box.setMaxWidth(SCREEN.getWidth() * WIDTH_RATIO);
         box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);

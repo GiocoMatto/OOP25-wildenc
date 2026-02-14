@@ -20,18 +20,29 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 
+/**
+ * View of menu.
+ */
 public class MenuView extends StackPane {
+    private static final Rectangle2D SCREEN = Screen.getPrimary().getVisualBounds();
+    private static final String PATH = "/images/menu/";
+    private static final double HEIGHT_RATIO = 0.6;
+    private static final double WIDTH_RATIO = 0.35;
+    private static final int FIT_WIDTH = 400;
+    private static final int PADDING = 30;
+    private static final int IMAGE_SIZE = 175;
+    private static final int HEIGHT_PLAY = 50;
 
-    private final static String PATH = "/images/menu/";
-    private final static double HEIGHT_RATIO = 0.6;
-    private final static double WIDTH_RATIO = 0.35;
-
-    private final static Rectangle2D SCREEN = Screen.getPrimary().getVisualBounds();
-
-    public MenuView(Engine engine, PlayerType pt) {
+    /**
+     * Create the view of menu.
+     * 
+     * @param engine The controller
+     * @param pt The player selected by default or by the user.
+     */
+    public MenuView(final Engine engine, final PlayerType pt) {
         final ImageView title = new ImageView(new Image(getClass().getResource(PATH + "title.png").toExternalForm()));
         title.setPreserveRatio(true);
-        title.setFitWidth(400);
+        title.setFitWidth(FIT_WIDTH);
         final VBox box = new VBox();
         getChildren().add(box);
         box.setPadding(new Insets(10));
@@ -45,11 +56,11 @@ public class MenuView extends StackPane {
         final ImageView avatar = new ImageView(new Image(getClass()
             .getResource(PATH + pt.name().toLowerCase() + ".png").toExternalForm()
         ));
-        avatar.setFitWidth(175);
-        avatar.setFitHeight(175);
+        avatar.setFitWidth(IMAGE_SIZE);
+        avatar.setFitHeight(IMAGE_SIZE);
         final HBox infoBar = new HBox(10);
         infoBar.setAlignment(Pos.CENTER);
-        infoBar.setPadding(new Insets(30));
+        infoBar.setPadding(new Insets(PADDING));
         infoBar.setStyle("-fx-background-color: #AEC6CF;");
         for (final var e : engine.getSelectablePlayers()) {
             final Button btnPoke = new Button(e.name());
@@ -59,7 +70,7 @@ public class MenuView extends StackPane {
             infoBar.getChildren().add(btnPoke);
         }
         final Button playBtn = new Button("Gioca");
-        playBtn.setPrefHeight(50);
+        playBtn.setPrefHeight(HEIGHT_PLAY);
         playBtn.setOnAction(e -> engine.startGameLoop());
         final VBox centerBox = new VBox(15, avatar, infoBar, playBtn);
         centerBox.setAlignment(Pos.CENTER);

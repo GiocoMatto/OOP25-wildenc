@@ -3,12 +3,9 @@ package it.unibo.wildenc.mvc.view.impl;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
-
 import java.util.Map;
-
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
@@ -26,13 +23,9 @@ import it.unibo.wildenc.mvc.view.impl.components.PauseBox;
 import it.unibo.wildenc.mvc.view.impl.components.PowerUpStackPane;
 import it.unibo.wildenc.mvc.view.impl.roots.MenuView;
 import it.unibo.wildenc.mvc.view.impl.roots.PokedexView;
-import it.unibo.wildenc.util.Utilities;
 import javafx.scene.Parent;
-
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.input.KeyCode;
@@ -207,7 +200,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     @Override
     public void lost(final Map<String, Integer> lostInfo) {
         final StackPane root = (StackPane) gameStage.getScene().getRoot();
-        var gameOverScreen = new LoseStackPane(engine, lostInfo);
+        final var gameOverScreen = new LoseStackPane(engine, lostInfo);
         renderer.setStyleToContainer(gameOverScreen, "css/game_over.css");
         Platform.runLater(() -> {
             soundManager.stopMusic();

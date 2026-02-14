@@ -2,7 +2,6 @@ package it.unibo.wildenc.mvc.view.impl.components;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
-
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import javafx.scene.layout.Priority;
@@ -14,18 +13,30 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 
+/**
+ * Power-up view.
+ */
 public class PowerUpStackPane extends StackPane {
-
-    private final static double WIDTH_RATIO = 0.4;
-    private final static double HEIGHT_RATIO = 0.2;
-    private final static int CELLSIZE = 26;
-    private final static int DOUBLE_CLICK = 2;
+    private static final double WIDTH_RATIO = 0.4;
+    private static final double HEIGHT_RATIO = 0.2;
+    private static final int CELLSIZE = 26;
+    private static final int DOUBLE_CLICK = 2;
 
     private final ListView<String> listView = new ListView<>();
 
-    public PowerUpStackPane(StackPane root, Set<WeaponChoice> powerUps, BiConsumer<Set<Game.WeaponChoice>, ListView<String>> handler) {
+    /**
+     * Create te power-up view.
+     * 
+     * @param root the parent that add this view
+     * @param powerUps the power-up options
+     * @param handler the andler of chose weapon
+     */
+    public PowerUpStackPane(
+        final StackPane root, 
+        final Set<WeaponChoice> powerUps, 
+        final BiConsumer<Set<Game.WeaponChoice>, ListView<String>> handler
+    ) {
         final Label text = new Label("Sblocca arma o potenziamento:");
-        
         final VBox box = new VBox(text, listView);
         box.getStyleClass().add("vbox");
         box.setAlignment(Pos.CENTER);

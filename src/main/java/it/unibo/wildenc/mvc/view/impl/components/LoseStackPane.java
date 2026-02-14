@@ -1,7 +1,6 @@
 package it.unibo.wildenc.mvc.view.impl.components;
 
 import java.util.Map;
-
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.util.Utilities;
 import javafx.application.Platform;
