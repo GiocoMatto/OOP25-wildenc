@@ -1,5 +1,7 @@
 package it.unibo.wildenc.mvc.view.impl.roots;
 
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 import it.unibo.wildenc.mvc.controller.api.Engine;
@@ -43,7 +45,7 @@ public final class PokedexView extends StackPane {
         goToMenu.setOnAction(e -> engine.menu(engine.getPlayerTypeChoise()));
         goToMenu.setMaxWidth(Double.MAX_VALUE);
         final ListView<Map.Entry<String, Integer>> listView = new ListView<>();
-        listView.getItems().addAll(pokedexView.entrySet());
+        listView.getItems().addAll(new LinkedHashSet<>(pokedexView.entrySet()));
         listView.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(final Map.Entry<String, Integer> entry, final boolean empty) {

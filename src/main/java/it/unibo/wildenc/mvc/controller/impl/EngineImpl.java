@@ -1,7 +1,7 @@
 package it.unibo.wildenc.mvc.controller.impl;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +36,7 @@ import it.unibo.wildenc.mvc.view.api.GameView;
  */
 public class EngineImpl implements Engine {
     //Set per i movimenti attivi, non piu queue
-    private final Set<MovementInput> activeMovements = Collections.synchronizedSet(new HashSet<>());
+    private final Set<MovementInput> activeMovements = Collections.synchronizedSet(EnumSet.noneOf(MovementInput.class));
     private final List<GameView> views = Collections.synchronizedList(new ArrayList<>());
     private final SavedDataHandler dataHandler = new SavedDataHandlerImpl();
     private final Object pauseLock = new Object();
@@ -104,7 +104,7 @@ public class EngineImpl implements Engine {
     public void startGameLoop() {
         final GameLoop loop;
         this.model = new GameImpl(playerType);
-        this.views.forEach(v -> v.showGame());
+        this.views.forEach(GameView::showGame);
         loop = new GameLoop();
         loop.setDaemon(true);
         loop.start();
