@@ -48,6 +48,11 @@ import javafx.stage.StageStyle;
  */
 public class GameViewImpl implements GameView, GamePointerView {
     private static final String PATH = "/images/menu/";
+    private static final String STYLE_CSS = "css/style.css";
+    private static final double HP_BAR_WIDTH = 200;
+    private static final int HUD_PADDING = 15;
+    private static final double BASE_RESOLUTION_WIDTH = 1600.0;
+
     private Engine engine;
     private final ViewRenderer renderer;
     private final ProgressBar experienceBar = new ProgressBar(0);
@@ -132,13 +137,13 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void showGame() {
         /* defining layout */
         final StackPane root = new StackPane();
-        
+
         this.backgroundRegion = new Region();
         backgroundRegion.getStyleClass().add("game-background");
         backgroundRegion.setMouseTransparent(true);
         backgroundRegion.prefWidthProperty().bind(root.widthProperty());
         backgroundRegion.prefHeightProperty().bind(root.prefHeightProperty());
-        this.renderer.setStyleToContainer(backgroundRegion, "css/style.css");
+        this.renderer.setStyleToContainer(backgroundRegion, STYLE_CSS);
         root.getChildren().add(backgroundRegion);
 
         renderer.setCanvas(canvas);
@@ -160,12 +165,12 @@ public class GameViewImpl implements GameView, GamePointerView {
         // HP Bar
         hpBar = new javafx.scene.control.ProgressBar(1.0);
         hpBar.setStyle("-fx-accent: red;");
-        hpBar.setPrefWidth(200);
+        hpBar.setPrefWidth(HP_BAR_WIDTH);
         hpBar.setFocusTraversable(false);
 
         final VBox hud = new VBox(5);
         hud.setAlignment(Pos.TOP_CENTER);
-        hud.setPadding(new Insets(15));
+        hud.setPadding(new Insets(HUD_PADDING));
         hud.setPickOnBounds(false);
         hud.getChildren().addAll(expBox, hpBar);
 
@@ -179,8 +184,8 @@ public class GameViewImpl implements GameView, GamePointerView {
 
         canvas.setOnMouseMoved(e -> {
             // Calcolo del mouse relativo al centro del Canvas (corretto per resize/fullscreen)
-            double scale = canvas.getWidth() / 1600.0; 
-            mouseX = (e.getX() / scale) - (1600.0 / 2.0);
+            final double scale = canvas.getWidth() / 1600.0; 
+            mouseX = (e.getX() / scale) - (BASE_RESOLUTION_WIDTH / 2.0);
             mouseY = (e.getY() / scale) - ((canvas.getHeight() / scale) / 2.0);
         });
 
@@ -206,7 +211,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         });
 
         soundManager.playMusic("theme.mp3");
-        
+
         Platform.runLater(() -> switchRoot(root));
     }
 
@@ -277,7 +282,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         Platform.runLater(() -> {
             root.getChildren().remove(powerUpWrapper);
             canvas.setFocusTraversable(true);
-            renderer.setStyleToContainer(backgroundRegion, "css/style.css");
+            renderer.setStyleToContainer(backgroundRegion, STYLE_CSS);
         });
     }
 
@@ -360,7 +365,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         Platform.runLater(() -> {
             root.getChildren().remove(pauseMenu);
             canvas.setFocusTraversable(true);
-            renderer.setStyleToContainer(backgroundRegion, "css/style.css");
+            renderer.setStyleToContainer(backgroundRegion, STYLE_CSS);
         });
     }
 

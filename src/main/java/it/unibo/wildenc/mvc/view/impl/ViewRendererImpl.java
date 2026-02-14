@@ -68,7 +68,6 @@ public class ViewRendererImpl implements ViewRenderer {
             );
         }
 
-
         objectDatas.stream()
             .forEach(objectData -> {
                 final Sprite currentSprite = spriteManager.getSprite(frameCount, objectData);
@@ -130,6 +129,10 @@ public class ViewRendererImpl implements ViewRenderer {
         this.cameraY = playerObj.y() - effectiveHeight / 2;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public final void setStyleToContainer(final Region container, final String css) {
         this.backgroundContainer = container;
         container.getStylesheets().add(ClassLoader.getSystemResource(css).toExternalForm());

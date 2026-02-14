@@ -7,27 +7,30 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 
+/**
+ * Custom VBox that displays the Pause Menu.
+ */
 public class PauseBox extends VBox {
 
     private final Button resumeBtn = new Button("Riprendi");
 
     /**
-     * todo.
+     * Creates a new PauseBox.
      * 
-     * @param engine abc
-     * @param sm abc
+     * @param engine the game engine to control state
+     * @param sm the sound manager to control music
      */
     public PauseBox(final Engine engine, final SoundManager sm) {
         getStyleClass().add("pauseMenu");
 
-        Label title = new Label("PAUSA");
+        final Label title = new Label("PAUSA");
 
         //pulsanti riprendi e torna al menu
         resumeBtn.setOnAction(e -> {
             engine.closeViewPause();
         });
 
-        Button exitBtn = new Button("Torna al Menu");
+        final Button exitBtn = new Button("Torna al Menu");
         exitBtn.setOnAction(e -> {
             sm.stopMusic(); //ferma musica background
             engine.stopEngine();
@@ -43,6 +46,9 @@ public class PauseBox extends VBox {
         getChildren().addAll(title, resumeBtn, exitBtn);
     }
 
+    /**
+     * 
+     */
     @Override
     public void requestFocus() {
         resumeBtn.requestFocus();
