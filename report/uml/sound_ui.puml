@@ -1,0 +1,82 @@
+@startuml Sound_UI
+
+' =========================
+'  Style
+' =========================
+
+skinparam shadowing false
+skinparam roundcorner 5
+skinparam dpi 150
+
+skinparam DefaultFontName "Inter"
+skinparam DefaultFontSize 12
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #F9F9F9
+  BorderColor #BFBFBF
+  FontColor #333333
+}
+
+skinparam Arrow {
+  Color #9E9E9E
+  Thickness 1
+}
+
+hide circle
+hide empty members
+
+' =========================
+'  Interfaces
+' =========================
+
+interface SoundManager {
+    + playClip(name : String)
+    + playMusic(name : String)
+    + pauseMusic()
+    + resumeMusic()
+}
+
+' =========================
+'  Classes
+' =========================
+
+class SoundManagerImpl {
+    - soundClips : Map<String, AudioClip>
+    - musicPlayer : MediaPlayer
+}
+
+class GameViewImpl {
+    - root : StackPane
+    - hpBar : ProgressBar
+    + pause()
+    + lost()
+}
+
+class PauseBox <<final>> {
+    + PauseBox(engine : Engine, sm : SoundManager)
+}
+
+class LoseStackPane <<final>> {
+    + LoseStackPane(engine : Engine, stats : Map)
+}
+
+class VBox <<JavaFX>>
+class StackPane <<JavaFX>>
+
+' =========================
+'  Relations
+' =========================
+
+SoundManager <|.. SoundManagerImpl
+
+GameViewImpl o-- SoundManager
+GameViewImpl ..> PauseBox
+GameViewImpl ..> LoseStackPane
+
+PauseBox --|> VBox
+LoseStackPane --|> StackPane
+
+PauseBox --> SoundManager
+
+@enduml

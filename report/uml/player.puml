@@ -1,0 +1,92 @@
+@startuml Player
+
+' =========================
+'  Style
+' =========================
+
+skinparam shadowing false
+skinparam roundcorner 5
+skinparam dpi 150
+
+skinparam DefaultFontName "Inter"
+skinparam DefaultFontSize 12
+skinparam classAttributeIconSize 0
+
+skinparam class {
+  BackgroundColor #F9F9F9
+  BorderColor #BFBFBF
+  FontColor #333333
+}
+
+skinparam Arrow {
+  Color #9E9E9E
+  Thickness 1
+}
+
+hide circle
+hide empty members
+
+' =========================
+'  Interfaces
+' =========================
+
+interface Entity {
+    + getHealth() : double
+    + getMaxHealth() : double
+}
+
+interface Player {
+    + addExp(amount : int) : void
+    + heal(amount : double) : void
+    + addMoney(amount : int) : void
+    + levelUp() : void
+}
+
+interface Collectible {
+    + getValue() : int
+    + apply(target : Player) : void
+}
+
+' =========================
+'  Classes
+' =========================
+
+class PlayerImpl <<final>> {
+    - currentHealth : double
+    - experience : int
+    - coins : int
+}
+
+abstract class AbstractCollectible {
+    - value : int
+    + getValue() : int
+}
+
+class ExperienceGem {
+    + apply(target : Player)
+}
+
+class HealthPotion {
+    + apply(target : Player)
+}
+
+class MoneyCoin {
+    + apply(target : Player)
+}
+
+' =========================
+'  Relations
+' =========================
+
+Entity <|-- Player
+Player <|.. PlayerImpl
+
+Collectible <|.. AbstractCollectible
+AbstractCollectible <|-- ExperienceGem
+AbstractCollectible <|-- HealthPotion
+AbstractCollectible <|-- MoneyCoin
+
+Collectible ..> Player
+
+
+@enduml

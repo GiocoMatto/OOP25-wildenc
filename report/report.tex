@@ -155,6 +155,10 @@ Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura
 Il contributo si è focalizzato sulla definizione dell'entità principale di gioco, sulla gestione degli input utente per il movimento, sul sistema audio, sulle interfacce di overlay e sui collezionabili.
 %
 \subsubsection{Gestione Input e Movimento (WASD)}
+\begin{figure}[H]
+	\includegraphics[width=13cm]{Movement}
+	\caption{UML rappresenta la gestione del movimento}\label{uml:movement}
+\end{figure}
 \textbf{Problema:} Era necessario implementare un sistema di controllo del personaggio che fosse reattivo e completamente disaccoppiato dalla libreria grafica (JavaFX), permettendo al \textit{Controller} di gestire la logica di movimento senza conoscere i dettagli dell'evento tastiera.
 
 \textbf{Soluzione:} È stata definita l'interfaccia \texttt{InputHandler} e la sua implementazione \texttt{InputHandlerImpl}.
@@ -164,6 +168,10 @@ Il sistema utilizza un approccio basato su enumerazioni (\texttt{MovementInput})
     \item \textbf{Model:} Il vettore calcolato viene applicato all'entità \texttt{Player}, che aggiorna la sua posizione in base alla velocità corrente.
 \end{itemize}
 %
+\begin{figure}[H]
+	\includegraphics[width=13cm]{Player}
+	\caption{UML rappresenta il giocatore e i collezionabili}\label{uml:player}
+\end{figure}
 \subsubsection*{Modellazione dell'Entità Giocatore}
 \textbf{Problema:} Era necessario definire un'entità principale capace di evolvere nel tempo, gestendo statistiche dinamiche come l'esperienza e la salute, e che fosse robusta rispetto a modifiche esterne.\\
 \textbf{Soluzione:} La classe \texttt{PlayerImpl} estende \texttt{AbstractEntity} e implementa l'interfaccia \texttt{Player}.
@@ -185,6 +193,11 @@ Il comportamento specifico di ogni oggetto è incapsulato nel metodo \texttt{app
     \item \texttt{HealthPotion}: Nel metodo \texttt{apply}, invoca \texttt{heal()}, ripristinando la salute fino al massimo consentito.
     \item \texttt{MoneyCoin}: Nel metodo \texttt{apply}, invoca \texttt{addMoney()} incrementando il contatore delle monete.
 \end{itemize}
+\newpage
+\begin{figure}[H]
+	\includegraphics[width=13cm]{Sound_UI}
+	\caption{UML rappresenta la gestione degli effetti sonori e degli overlay di gioco}\label{uml:sound_ui}
+\end{figure}
 \subsubsection{Gestione Audio (SoundManager)}
 \textbf{Problema:} Gestire la riproduzione concorrente di effetti sonori (brevi e frequenti) e musica di sottofondo (loop continuo) senza bloccare il thread principale.
 
