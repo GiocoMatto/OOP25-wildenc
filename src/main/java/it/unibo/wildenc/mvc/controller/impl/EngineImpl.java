@@ -104,7 +104,7 @@ public class EngineImpl implements Engine {
     public void startGameLoop() {
         final GameLoop loop;
         this.model = new GameImpl(playerType);
-        this.views.forEach(v -> v.switchRoot(v.game()));
+        this.views.forEach(v -> v.showGame());
         loop = new GameLoop();
         loop.setDaemon(true);
         loop.start();
@@ -150,7 +150,7 @@ public class EngineImpl implements Engine {
      */
     @Override
     public void pokedex() {
-        this.views.forEach(e -> e.switchRoot(e.pokedexView(data.getPokedex())));
+        this.views.forEach(e -> e.pokedexView(data.getPokedex()));
     }
 
     /**
@@ -159,7 +159,7 @@ public class EngineImpl implements Engine {
     @Override
     public void menu(final Lobby.PlayerType pt) {
         this.playerType = pt;
-        this.views.forEach(e -> e.switchRoot(e.menu(pt)));
+        this.views.forEach(e -> e.menu(pt));
     }
 
     /**

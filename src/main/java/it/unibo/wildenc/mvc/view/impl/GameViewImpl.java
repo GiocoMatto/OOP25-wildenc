@@ -108,7 +108,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         this.gameStage.show();
         gameStage.toFront();
         gameStage.centerOnScreen();
-        switchRoot(menu(pt));
+        menu(pt);
     }
 
 
@@ -120,11 +120,7 @@ public class GameViewImpl implements GameView, GamePointerView {
         this.engine = e;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void switchRoot(final Parent root) {
+    private void switchRoot(final Parent root) {
         root.requestFocus();
         this.gameStage.getScene().setRoot(root);
     }
@@ -133,7 +129,7 @@ public class GameViewImpl implements GameView, GamePointerView {
      * {@inheritDoc}
      */
     @Override
-    public Parent game() {
+    public void showGame() {
         /* defining layout */
         final StackPane root = new StackPane();
         
@@ -210,7 +206,8 @@ public class GameViewImpl implements GameView, GamePointerView {
         });
 
         soundManager.playMusic("theme.mp3");
-        return root;
+        
+        Platform.runLater(() -> switchRoot(root));
     }
 
     /**
@@ -301,16 +298,16 @@ public class GameViewImpl implements GameView, GamePointerView {
      * {@inheritDoc}
      */
     @Override
-    public Parent pokedexView(final Map<String, Integer> pokedexView) {
-        return new PokedexView(engine, pokedexView);
+    public void pokedexView(final Map<String, Integer> pokedexView) {
+        Platform.runLater(() -> switchRoot(new PokedexView(engine, pokedexView)));
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Parent menu(final Lobby.PlayerType pt) {
-        return new MenuView(engine, pt);
+    public void menu(final Lobby.PlayerType pt) {
+        Platform.runLater(() -> switchRoot(new MenuView(engine, pt)));
     }
 
     /**
@@ -398,19 +395,4 @@ public class GameViewImpl implements GameView, GamePointerView {
             return percent;
         }
     }
-
-    private enum Constants {
-        Padding(15);
-
-        private final int value;
-
-        Constants(final int v) {
-            this.value = v;
-        }
-
-        public int getValue() {
-            return this.value;
-        }
-    }
-
 }
