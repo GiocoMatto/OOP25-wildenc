@@ -17,21 +17,32 @@ import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponFactory;
 import it.unibo.wildenc.mvc.model.weaponary.weapons.WeaponStats;
 import it.unibo.wildenc.util.Utilities;
 
+/**
+ * Factory for BurstingArc weapons. A BurstingArc weapons is a type of {@link PointerWeapon}
+ * which shoots one or multiple projectiles splitting an arc of 60 degrees from the position
+ * of the pointer.
+ */
 public class BurstingArcFactory implements WeaponFactory {
 
+    public static final int LV_5 = 5;
+    public static final int LV_7 = 7;
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Weapon createWeapon(
-        String weaponName, 
-        double baseCooldown, 
-        double baseDamage, 
-        double hbRadius,
-        double baseVelocity, 
-        double baseTTL, 
-        int baseProjAtOnce, 
-        int baseBurst, 
-        Entity ownedBy,
+        final String weaponName, 
+        final double baseCooldown, 
+        final double baseDamage, 
+        final double hbRadius,
+        final double baseVelocity, 
+        final double baseTTL, 
+        final int baseProjAtOnce, 
+        final int baseBurst, 
+        final Entity ownedBy,
         final boolean immortal,
-        Supplier<Vector2dc> posToHit
+        final Supplier<Vector2dc> posToHit
     ) {
         return new PointerWeapon(
             weaponName,
@@ -41,7 +52,7 @@ public class BurstingArcFactory implements WeaponFactory {
             posToHit,
             ProjectileStats.getBuilder()
                 .damage(baseDamage)
-                .physics((dt, atkInfo) -> straightMovement(dt, atkInfo))
+                .physics(BurstingArcFactory::straightMovement)
                 .radius(hbRadius)
                 .velocity(baseVelocity)
                 .ttl(baseTTL)
@@ -51,16 +62,16 @@ public class BurstingArcFactory implements WeaponFactory {
             (level, weaponStats) -> {
                 weaponStats.getProjStats().setMultiplier(ProjStatType.DAMAGE, level / 2);
                 weaponStats.getProjStats().setMultiplier(ProjStatType.VELOCITY, level / 2);
-                if(level % 5 == 0) {
+                if (level % LV_5 == 0) {
                     weaponStats.increaseProjectilesShotAtOnce();
                 }
-                if(level % 7 == 0) {
+                if (level % LV_7 == 0) {
                     weaponStats.setBurstSize(
                         weaponStats.getCurrentBurstSize() + 1
                     );
                 }
             },
-            weaponStats -> arcSpawn(weaponStats)
+            BurstingArcFactory::arcSpawn
         );
     }
 
@@ -78,7 +89,7 @@ public class BurstingArcFactory implements WeaponFactory {
 
         for (int i = 0; i < pelletNumber; i++) {
             final double currentAngle = (pelletNumber > 1) 
-                ? - (totalArc / 2.0) + (i * (totalArc / (pelletNumber - 1))) 
+                ? -(totalArc / 2.0) + (i * (totalArc / (pelletNumber - 1))) 
                 : 0;
 
             final double cos = Math.cos(currentAngle);

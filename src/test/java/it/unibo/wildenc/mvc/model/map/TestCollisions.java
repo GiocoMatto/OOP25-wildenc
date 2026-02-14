@@ -6,13 +6,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.joml.Vector2d;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.wildenc.mvc.model.Movable;
 import it.unibo.wildenc.mvc.model.map.MapTestingConstants.MovableObjectTest;
-import it.unibo.wildenc.mvc.model.map.MapTestingConstants.TestObject;
 
+/**
+ * Testing for {@link CollisionLogic}.
+ */
 public class TestCollisions {
 
     @Test
@@ -48,9 +49,5 @@ public class TestCollisions {
             first.updatePosition(TEST_TIME_SECONDS);
             second.updatePosition(TEST_TIME_SECONDS);
         }
-
-
     }
-
-
 }

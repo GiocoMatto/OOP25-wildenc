@@ -1,12 +1,10 @@
-package it.unibo.wildenc;
+package it.unibo.wildenc.mvc.model.enemy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.Optional;
 import java.util.Set;
-
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 import org.junit.jupiter.api.Test;
@@ -21,21 +19,32 @@ import it.unibo.wildenc.mvc.model.enemies.RoamingEnemy;
 import it.unibo.wildenc.mvc.model.map.CollisionLogic;
 import it.unibo.wildenc.mvc.model.map.objects.ExperienceGem;
 
+/**
+ * Test class for Enemies.
+ */
 public class EnemyTest {
     private static final double DELTA_SECONDS = 0.1;
     private static final Vector2d SPAWN_POSITION = new Vector2d(0, 0);
-    private static final int HITBOX = 2;
+    private static final int HITBOX = 1;
     private static final int SPEED = 10;
     private static final int HEALTH = 500;
     private static final String NAME = "Pikachu";
+    private static final double MAX_DISTANCE = 400;
+    private static final double MIN_DISTANCE = 250;
     /* Collectible */
-    private static final double HITBOX_COLLECTIBLE = 5;
     private static final int VALUE_COLLECTIBLE = 34;
+    private static final String UNIMPLEMENTED_MSG = "Unimplemented method 'getName'";
+    private static final double TARGET_1_POS_X = 5;
+    private static final double TARGET_2_POS_X = 105;
+    private static final double TARGET_3_POS_X = 77;
+
     private static final MapObject TARGET_1 = new MapObject() {
+        private static final double X = 5;
+        private static final double Y = 0;
 
         @Override
         public Vector2dc getPosition() {
-            return new Vector2d(5, 0);
+            return new Vector2d(X, Y);
         }
 
         @Override
@@ -50,16 +59,17 @@ public class EnemyTest {
 
         @Override
         public String getName() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getName'");
-        };
+            return NAME;
+        }
 
     };
     private static final MapObject TARGET_2 = new MapObject() {
+        private static final double X = 405;
+        private static final double Y = 0;
 
         @Override
         public Vector2dc getPosition() {
-            return new Vector2d(105, 0);
+            return new Vector2d(X, Y);
         }
 
         @Override
@@ -74,16 +84,17 @@ public class EnemyTest {
 
         @Override
         public String getName() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getName'");
-        };
+            return NAME;
+        }
 
     };
     private static final MapObject TARGET_3 = new MapObject() {
+        private static final double X = 77;
+        private static final double Y = 0;
 
         @Override
         public Vector2dc getPosition() {
-            return new Vector2d(77, 0);
+            return new Vector2d(X, Y);
         }
 
         @Override
@@ -98,20 +109,29 @@ public class EnemyTest {
 
         @Override
         public String getName() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getName'");
-        };
+            return NAME;
+        }
 
     };
-    private Enemy enemy;
 
     private Optional<Collectible> experienceLoot(final Vector2dc pos) {
         return Optional.of(new ExperienceGem(pos, VALUE_COLLECTIBLE));
     }
 
+    /**
+     * Test logic for CloseRangeEnemy.
+     */
     @Test
-    public void CloseRangeEnemyTest() {
-        this.enemy = new CloseRangeEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_1), Set.of(e -> experienceLoot(e.getPosition()))));
+    void closeRangeEnemyTest() {
+        final Enemy enemy = new CloseRangeEnemy(new AbstractEnemyField(
+            SPAWN_POSITION, 
+            HITBOX, 
+            SPEED, 
+            HEALTH, 
+            NAME, 
+            Optional.of(TARGET_1), 
+            Set.of(e -> experienceLoot(e.getPosition())
+        )));
         int count = 0;
         while (!CollisionLogic.areColliding(enemy, TARGET_1)) {
             enemy.updatePosition(DELTA_SECONDS);
@@ -120,33 +140,64 @@ public class EnemyTest {
         assertEquals(3, count);
     }
 
+    /**
+     * Test logic for RangedEnemy.
+     */
     @Test
-    public void RangedEnemyTest() {
+    void rangedEnemyTest() {
+        final int steps = 178;
         /* enemy is fare away the player */
-        this.enemy = new RangedEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_2), Set.of(e -> experienceLoot(e.getPosition()))));
+        Enemy enemy = new RangedEnemy(new AbstractEnemyField(
+            SPAWN_POSITION, 
+            HITBOX, 
+            SPEED, 
+            HEALTH, 
+            NAME, 
+            Optional.of(TARGET_2), 
+            Set.of(e -> experienceLoot(e.getPosition())
+        )));
         int count = 0;
-        while (!CollisionLogic.areInRange(enemy, TARGET_2, RangedEnemy.MAX_DISTANCE)) {
+        while (!CollisionLogic.areInRange(enemy, TARGET_2, MAX_DISTANCE)) {
             enemy.updatePosition(DELTA_SECONDS);
             count++;
         }
         assertEquals(1, count);
         /* enemy is too much near the player */
-        this.enemy = new RangedEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.of(TARGET_3), Set.of(e -> experienceLoot(e.getPosition()))));
+        enemy = new RangedEnemy(new AbstractEnemyField(
+            SPAWN_POSITION, 
+            HITBOX, 
+            SPEED, 
+            HEALTH, 
+            NAME, 
+            Optional.of(TARGET_3), 
+            Set.of(e -> experienceLoot(e.getPosition()))
+        ));
         count = 0;
-        while (CollisionLogic.areInRange(enemy, TARGET_3, RangedEnemy.MIN_DISTANCE)) {
+        while (CollisionLogic.areInRange(enemy, TARGET_3, MIN_DISTANCE)) {
             enemy.updatePosition(DELTA_SECONDS);
             count++;
         }
-        assertEquals(8, count);
+        assertEquals(steps, count);
     }
 
+    /**
+     * Test logic for RoamingEnemy.
+     */
     @Test
-    public void RoamingEnemyTest() {
+    void roamingEnemyTest() {
         /* Try enemy is immortal for 5s */
-        this.enemy = new RoamingEnemy(new AbstractEnemyField(SPAWN_POSITION, HITBOX, SPEED, HEALTH, NAME, Optional.empty(), Set.of(e -> experienceLoot(e.getPosition()))));
+        final Enemy enemy = new RoamingEnemy(new AbstractEnemyField(
+            SPAWN_POSITION, 
+            HITBOX, 
+            SPEED, 
+            HEALTH, 
+            NAME, 
+            Optional.empty(), 
+            Set.of(e -> experienceLoot(e.getPosition())
+        )));
         try {
             Thread.sleep(RoamingEnemy.TIME_SAFE);
-            assertTrue(((Entity)enemy).canTakeDamage());
+            assertTrue(((Entity) enemy).canTakeDamage());
         } catch (final InterruptedException e) {
             System.out.println("ERROR: " + e.getMessage());
         }

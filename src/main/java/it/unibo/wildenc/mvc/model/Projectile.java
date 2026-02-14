@@ -10,7 +10,7 @@ public interface Projectile extends Movable {
      * @return the damage of the projectile.
      */
     double getDamage();
-    
+
     /**
      * Method used to know if the projectile has lived more than its Time To Live.
      * 

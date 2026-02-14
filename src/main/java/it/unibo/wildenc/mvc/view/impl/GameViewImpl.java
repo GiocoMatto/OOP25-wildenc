@@ -6,6 +6,8 @@ import java.util.Set;
 import org.joml.Vector2d;
 import org.joml.Vector2dc;
 import java.util.Map;
+import java.util.Objects;
+
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.controller.api.MapObjViewData;
 import it.unibo.wildenc.mvc.controller.api.InputHandler.MovementInput;
@@ -28,6 +30,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -42,9 +45,11 @@ import javafx.stage.StageStyle;
  * Basic view implementation with pointing system.
  */
 public class GameViewImpl implements GameView, GamePointerView {
+    private static final String PATH = "/images/menu/";
     private Engine engine;
     private final ViewRenderer renderer;
     private final ProgressBar experienceBar = new ProgressBar(0);
+    private ProgressBar hpBar;
     private final Text levelText = new Text("LV 1");
     private StackPane powerUpWrapper = new StackPane();
     private VBox pauseMenu = new VBox();
@@ -84,6 +89,12 @@ public class GameViewImpl implements GameView, GamePointerView {
         gameStage.setHeight(rec.getHeight() * Proportions.EightyFive.getPercent());
         gameStage.setWidth(rec.getWidth() * Proportions.EightyFive.getPercent());
         experienceBar.setPrefWidth(rec.getWidth() * Proportions.Half.getPercent());
+        final Image icon = new Image(
+            Objects.requireNonNull(
+                getClass().getResource(PATH + "icon.png")
+            ).toExternalForm()
+        );
+        gameStage.getIcons().add(icon);
         final Scene scene = new Scene(new StackPane());
         gameStage.setScene(scene);
         gameStage.setOnCloseRequest(e -> {
@@ -127,15 +138,29 @@ public class GameViewImpl implements GameView, GamePointerView {
         canvas.widthProperty().bind(root.widthProperty());
         canvas.heightProperty().bind(root.heightProperty());
         root.getChildren().add(canvas);
+        
         final BorderPane ui = new BorderPane();
-        final HBox expBox = new HBox();
         root.getChildren().add(ui);
         ui.setPickOnBounds(false);
+
+        final HBox expBox = new HBox(10);
         expBox.setAlignment(Pos.TOP_CENTER);
         expBox.setPadding(new Insets(Constants.Padding.getValue()));
-        expBox.getChildren().add(levelText);
-        expBox.getChildren().add(experienceBar);
         ui.setTop(expBox);
+        expBox.getChildren().addAll(levelText, experienceBar);
+
+        hpBar = new javafx.scene.control.ProgressBar(1.0);
+        hpBar.setStyle("-fx-accent: red;");
+        hpBar.setPrefWidth(200);
+
+        final VBox hud = new VBox(5);
+        hud.setFocusTraversable(false);
+        hud.setAlignment(Pos.TOP_CENTER);
+        hud.setPadding(new Insets(15));
+        hud.getChildren().addAll(expBox, hpBar); // prima l'exp poi gli HP sotto
+
+        ui.setTop(hud);
+
         canvas.setManaged(false); // canvas should be indipendent
         canvas.setFocusTraversable(true);
         canvas.requestFocus();
@@ -217,6 +242,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     public void openPowerUp(final Set<Game.WeaponChoice> powerUps) {
         final StackPane root = (StackPane) gameStage.getScene().getRoot();
         powerUpWrapper = new PowerUpStackPane(root, powerUps, this::levelupHandler);
+        powerUpWrapper.getStyleClass().add("powerup");
         renderer.setStyleToContainer(powerUpWrapper, "css/powerup.css");
         Platform.runLater(() -> {
             root.getChildren().add(powerUpWrapper);
@@ -328,6 +354,13 @@ public class GameViewImpl implements GameView, GamePointerView {
     @Override
     public final void resumeMusic() {
         soundManager.resumeMusic();
+    }
+    
+    @Override
+    public void updateHealthBar(double currentHealth, double maxHealth) {
+        if(hpBar != null && maxHealth > 0) {
+            Platform.runLater(() -> hpBar.setProgress(currentHealth/maxHealth));
+        }
     }
 
     private enum Proportions {
