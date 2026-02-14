@@ -9,7 +9,7 @@ import javafx.scene.layout.Region;
 public interface ViewRenderer {
     void setCanvas(Canvas c);
 
-    void setContainer(Region cont);
+    void setStyleToContainer(Region cont, String css);
 
     void renderAll(Collection<MapObjViewData> objectDatas);
 

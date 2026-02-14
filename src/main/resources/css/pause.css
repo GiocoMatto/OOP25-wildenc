@@ -1,0 +1,16 @@
+.pauseMenu {
+    -fx-spacing: 20;
+    -fx-alignment: center;
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+}
+
+.label {
+    -fx-text-fill: white; 
+    -fx-font-size: 50px; 
+    -fx-font-weight: bold;
+}
+
+.button {
+    -fx-font-size: 20px; 
+    -fx-padding: 10 20;
+}

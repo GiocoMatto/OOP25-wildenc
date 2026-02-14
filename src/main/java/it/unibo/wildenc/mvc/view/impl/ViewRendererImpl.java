@@ -25,8 +25,6 @@ public class ViewRendererImpl implements ViewRenderer {
     private double cameraX;
     private double cameraY;
 
-    private Region backgroundContainer;
-
     public ViewRendererImpl () {
         this.spriteManager = new SpriteManagerImpl();
     }
@@ -74,7 +72,7 @@ public class ViewRendererImpl implements ViewRenderer {
                     radius * 2
                 );
                  */
-                 
+
         });
         draw.restore();
 
@@ -128,8 +126,7 @@ public class ViewRendererImpl implements ViewRenderer {
         this.cameraY = playerObj.y() - effectiveHeight / 2;
     }
 
-    public void setContainer(Region container) {
-        this.backgroundContainer = container;
-        backgroundContainer.getStylesheets().add(ClassLoader.getSystemResource("css/style.css").toExternalForm());
+    public void setStyleToContainer(Region container, String css) {
+        container.getStylesheets().add(ClassLoader.getSystemResource(css).toExternalForm());
     }
 }

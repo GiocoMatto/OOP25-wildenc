@@ -25,7 +25,7 @@ public class InputHandlerImpl implements InputHandler {
 
     @Override
     public Vector2dc handleMovement(Set<MovementInput> movementCommands) {
-        System.out.println(movementCommands);
+        // System.out.println(movementCommands);
         final Vector2d effectiveMovementVersor = new Vector2d(0, 0);
         synchronized (movementCommands) {
             movementCommands.stream()

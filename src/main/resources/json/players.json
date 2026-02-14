@@ -11,13 +11,13 @@
         "hbRadius": 30,
         "maxHealth": 200.0,
         "velocity": 210,
-        "weapon": "melee"
+        "weapon": "frenzyplant"
     },
     "squirtle": {
         "entityName": "Squirtle",
         "hbRadius": 20,
         "maxHealth": 150.0,
         "velocity": 200,
-        "weapon": "ember"
+        "weapon": "bubble"
     } 
 }
