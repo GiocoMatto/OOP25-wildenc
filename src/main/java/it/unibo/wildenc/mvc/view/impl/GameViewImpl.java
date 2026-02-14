@@ -45,7 +45,7 @@ import javafx.stage.StageStyle;
 /**
  * Basic view implementation with pointing system.
  */
-public class GameViewImpl implements GameView, GamePointerView {
+public final class GameViewImpl implements GameView, GamePointerView {
     private static final String PATH = "/images/menu/";
     private static final String STYLE = "css/style.css";
     private static final int PADDING = 15;
@@ -325,12 +325,12 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public final void playSound(final String soundName) {
+    public void playSound(final String soundName) {
         soundManager.play(soundName);
     }
 
     @Override
-    public final void pause() {
+    public void pause() {
         Platform.runLater(() -> {
             final StackPane root = (StackPane) gameStage.getScene().getRoot();
             pauseMenu = new PauseBox(engine, soundManager);
@@ -342,7 +342,7 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public final void closePause() {
+    public void closePause() {
         final StackPane root = (StackPane) gameStage.getScene().getRoot();
         Platform.runLater(() -> {
             root.getChildren().remove(pauseMenu);
@@ -352,17 +352,17 @@ public class GameViewImpl implements GameView, GamePointerView {
     }
 
     @Override
-    public final void pauseMusic() {
+    public void pauseMusic() {
         soundManager.pauseMusic();
     }
 
     @Override
-    public final void resumeMusic() {
+    public void resumeMusic() {
         soundManager.resumeMusic();
     }
 
     @Override
-    public final void updateHealthBar(final double currentHealth, final double maxHealth) {
+    public void updateHealthBar(final double currentHealth, final double maxHealth) {
         if (hpBar != null && maxHealth > 0) {
             Platform.runLater(() -> hpBar.setProgress(currentHealth / maxHealth));
         }
