@@ -149,6 +149,62 @@ Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura
 %
 \textbf{Soluzione:} Applico il \textit{Template method} impostato nella Abstract Entity class col metodo astratto alterDirection e canTakeDamage per specificare il movimento specifico del nemico e per il Roaming enemy che può acuisire danno solo dopo un tempo specifico.
 
+\section{Design Dettagliato}
+\subsection{Kleo Rama - Gestione Player, Audio, Input movimento e UI }
+%
+Il contributo si è focalizzato sulla definizione dell'entità principale di gioco, sulla gestione degli input utente per il movimento, sul sistema audio, sulle interfacce di overlay e sui collezionabili.
+%
+\subsubsection{Gestione Input e Movimento (WASD)}
+\textbf{Problema:} Era necessario implementare un sistema di controllo del personaggio che fosse reattivo e completamente disaccoppiato dalla libreria grafica (JavaFX), permettendo al \textit{Controller} di gestire la logica di movimento senza conoscere i dettagli dell'evento tastiera.
+
+\textbf{Soluzione:} È stata definita l'interfaccia \texttt{InputHandler} e la sua implementazione \texttt{InputHandlerImpl}.
+Il sistema utilizza un approccio basato su enumerazioni (\texttt{MovementInput}) per astrarre i comandi grezzi (tasti W, A, S, D).
+\begin{itemize}
+    \item \textbf{View:} La classe \texttt{GameViewImpl} intercetta gli eventi \texttt{KeyEvent} di JavaFX e li traduce in comandi logici (es. \texttt{KeyCode.W} $\rightarrow$ \texttt{MovementInput.GO\_UP}) che vengono inviati all'Engine.
+    \item \textbf{Model:} Il vettore calcolato viene applicato all'entità \texttt{Player}, che aggiorna la sua posizione in base alla velocità corrente.
+\end{itemize}
+%
+\subsubsection*{Modellazione dell'Entità Giocatore}
+\textbf{Problema:} Era necessario definire un'entità principale capace di evolvere nel tempo, gestendo statistiche dinamiche come l'esperienza e la salute, e che fosse robusta rispetto a modifiche esterne.\\
+\textbf{Soluzione:} La classe \texttt{PlayerImpl} estende \texttt{AbstractEntity} e implementa l'interfaccia \texttt{Player}.
+Per garantire la stabilità del codice e prevenire estensioni non sicure  la classe è stata dichiarata \texttt{final}.
+La logica di progressione è stata divisa in due fasi per permettere al Controller di gestire l'interazione con l'utente:
+\begin{itemize}
+    \item \texttt{canLevelUp()}: Verifica semplicemente se l'esperienza accumulata supera la soglia necessaria.
+    \item \texttt{levelUp()}: Effettua concretamente il passaggio di livello, incrementando le statistiche (HP massimi, velocità) e resettando l'esperienza.
+\end{itemize}
+È stata inoltre implementata una suite di test unitari (\texttt{PlayerTest}) che simula il ciclo di vita del giocatore, verificando casi limite come il guadagno multiplo di livelli in un singolo aggiornamento.
+%
+\subsubsection{Sistema di Collezionabili (Collectibles)}
+\textbf{Problema:} Il gioco richiede oggetti interagibili che forniscano benefici immediati al giocatore (esperienza, cura, monete) una volta raccolti, e un sistema flessibile per generarli alla morte dei nemici.\\
+%
+\textbf{Soluzione:} È stata creata una gerarchia basata sull'interfaccia \texttt{Collectible} e sulla classe astratta \texttt{AbstractCollectible}. Le implementazioni concrete includono:
+Il comportamento specifico di ogni oggetto è incapsulato nel metodo \texttt{apply(Player target)}. Questo design permette al sistema di collisioni di interagire con qualsiasi oggetto raccolto senza conoscerne la natura specifica:
+\begin{itemize}
+    \item \texttt{ExperienceGem}: Nel metodo \texttt{apply}, invoca \texttt{addExp()} sul giocatore per conferire esperienza.
+    \item \texttt{HealthPotion}: Nel metodo \texttt{apply}, invoca \texttt{heal()}, ripristinando la salute fino al massimo consentito.
+    \item \texttt{MoneyCoin}: Nel metodo \texttt{apply}, invoca \texttt{addMoney()} incrementando il contatore delle monete.
+\end{itemize}
+\subsubsection{Gestione Audio (SoundManager)}
+\textbf{Problema:} Gestire la riproduzione concorrente di effetti sonori (brevi e frequenti) e musica di sottofondo (loop continuo) senza bloccare il thread principale.
+
+\textbf{Soluzione:} Il componente \texttt{SoundManagerImpl} incapsula la logica delle librerie JavaFX \texttt{Media}.
+La classe distingue due tipologie di riproduzione:
+\begin{itemize}
+    \item \textbf{Effetti Sonori:} Utilizza \texttt{AudioClip} per suoni a bassa latenza che possono sovrapporsi (es. raccolta oggetti, levelUp).
+    \item \textbf{Musica:} Utilizza \texttt{MediaPlayer} per le tracce di sottofondo, gestendo il loop continuo e permettendo funzioni di pausa/ripresa quando il gioco viene interrotto.
+\end{itemize}
+\subsubsection{Interfaccia Utente: Overlay di Gioco}
+\textbf{Problema:} Visualizzare schermate informative sopra la vista di gioco principale senza interrompere il rendering sottostante o creare conflitti tra i vari componenti JavaFX.
+
+\textbf{Soluzione:} Sono stati realizzati componenti grafici personalizzati estendendo i container di JavaFX.
+\begin{itemize}
+    \item \textbf{PauseBox}: Un menu a comparsa (\texttt{VBox}) che permette di riprendere il gioco o tornare al menu principale. La classe è stata resa \texttt{final} per risolvere vulnerabilità legate alla chiamata di metodi sovrascrivibili (\texttt{getChildren}) all'interno del costruttore.
+    \item \textbf{LoseStackPane}: Una schermata di "Game Over" che presenta le statistiche finali della partita. Utilizza mappe chiave-valore per mostrare le etichette dei punteggi e offre opzioni di navigazione.
+\end{itemize}
+Entrambi i componenti sono gestiti dalla \texttt{GameViewImpl} che ne controlla la visibilità e il focus, garantendo che le interazioni da tastiera (es. tasto ESC) siano correttamente indirizzate.
+\end{document}
+
 \appendix
 \chapter{Guida utente}
 All'avvio dell'applicazione si può selezionare il personaggio da giocare e avviare una nuova partita o ovviare la partita con il personaggio selezionato di defaut. Dalla stesa interfaccia si può anche andare nel Pokédex, chiccando il rispettivo menu, per visualizzare i risultati totali delle partite precedenti. Al primo avvio il Pokédex si presenterà vuoto non avendo ancora effettua alcuna partita.
@@ -178,7 +234,7 @@ La chiusura della finestra in partita non comporta il salvataggio dei dati della
 \end{itemize}
 
 \paragraph{Leonardo Mengozzi} \begin{itemize}
-	\item Laboratorio 4 : https://virtuale.unibo.it/mod/forum/discuss.php?d=206731#p284046
+	\item Laboratorio 4 : 
 	\item Laboratorio 5 : 
 	\item Laboratorio 6 : 
 	\item Laboratorio 7 : 
