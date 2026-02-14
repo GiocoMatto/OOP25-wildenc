@@ -1,5 +1,7 @@
 package it.unibo.wildenc.mvc.view.impl.roots;
 
+import java.util.Locale;
+
 import it.unibo.wildenc.mvc.controller.api.Engine;
 import it.unibo.wildenc.mvc.model.Lobby.PlayerType;
 import javafx.geometry.Insets;
@@ -23,7 +25,7 @@ import javafx.stage.Screen;
 /**
  * View of menu.
  */
-public class MenuView extends StackPane {
+public final class MenuView extends StackPane {
     private static final Rectangle2D SCREEN = Screen.getPrimary().getVisualBounds();
     private static final String PATH = "/images/menu/";
     private static final double HEIGHT_RATIO = 0.6;
@@ -54,7 +56,7 @@ public class MenuView extends StackPane {
         box.prefHeightProperty().bind(heightProperty().multiply(HEIGHT_RATIO));
         /* start game play */
         final ImageView avatar = new ImageView(new Image(getClass()
-            .getResource(PATH + pt.name().toLowerCase() + ".png").toExternalForm()
+            .getResource(PATH + pt.name().toLowerCase(Locale.ENGLISH) + ".png").toExternalForm()
         ));
         avatar.setFitWidth(IMAGE_SIZE);
         avatar.setFitHeight(IMAGE_SIZE);

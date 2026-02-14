@@ -18,7 +18,6 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -26,7 +25,7 @@ import javafx.stage.Screen;
 /**
  * View of the Pokedex.
  */
-public class PokedexView extends StackPane {
+public final class PokedexView extends StackPane {
     private static final Rectangle2D SCREEN = Screen.getPrimary().getVisualBounds();
     private static final String PATH = "/images/menu/";
     private static final double WIDTH_RATIO = 0.35;
@@ -68,7 +67,7 @@ public class PokedexView extends StackPane {
         box.setPadding(new Insets(PADDING));
         box.setStyle("-fx-background-color: #AEC6CF;");
         box.setMaxWidth(SCREEN.getWidth() * WIDTH_RATIO);
-        box.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        box.setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
         box.prefWidthProperty().bind(widthProperty().multiply(WIDTH_RATIO));
         VBox.setVgrow(listView, Priority.ALWAYS);
         box.setMaxWidth(SCREEN.getWidth() * WIDTH_RATIO);

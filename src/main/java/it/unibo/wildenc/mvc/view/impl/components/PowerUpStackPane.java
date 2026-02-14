@@ -5,7 +5,6 @@ import java.util.function.BiConsumer;
 import it.unibo.wildenc.mvc.model.Game;
 import it.unibo.wildenc.mvc.model.Game.WeaponChoice;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
@@ -16,7 +15,7 @@ import javafx.scene.input.KeyCode;
 /**
  * Power-up view.
  */
-public class PowerUpStackPane extends StackPane {
+public final class PowerUpStackPane extends StackPane {
     private static final double WIDTH_RATIO = 0.4;
     private static final double HEIGHT_RATIO = 0.2;
     private static final int CELLSIZE = 26;
@@ -56,7 +55,7 @@ public class PowerUpStackPane extends StackPane {
         });
         VBox.setVgrow(listView, Priority.ALWAYS);
         listView.setMaxWidth(Double.MAX_VALUE);
-        setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
         prefWidthProperty().bind(root.widthProperty().multiply(WIDTH_RATIO));
         prefHeightProperty().bind(root.heightProperty().multiply(HEIGHT_RATIO));
         getChildren().add(box);
