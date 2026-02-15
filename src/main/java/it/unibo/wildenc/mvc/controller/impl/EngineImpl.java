@@ -253,13 +253,13 @@ public class EngineImpl implements Engine {
         @Override
         public void run() {
             try {
-                final PlayerInfos playerInfos = model.getPlayerInfos();
+                //final PlayerInfos playerInfos = model.getPlayerInfos();
                 //variabili per i suoni
                 long lastStepTime = 0; //per il ritmo dei passi
                 int lastExp = 0;
 
                 if (model != null) {
-                    lastExp = playerInfos.experience();
+                    lastExp = model.getPlayerInfos().experience();
                 }
                 long lastTime = System.nanoTime();
                 while (STATUS.END != gameStatus) {
@@ -275,12 +275,14 @@ public class EngineImpl implements Engine {
                     //passo il nuovo vettore calcolato
                     model.updateEntities(dt, ih.handleMovement(activeMovements));
 
+                    final PlayerInfos currentInfos = model.getPlayerInfos();
+                    final int currentExp = currentInfos.experience();
+
                     if (!activeMovements.isEmpty() && (now - lastStepTime) / DIVISOR > LIMIT) {
                         // Suona ogni 350ms per simulare il passo
                         views.forEach(v -> v.playSound("walk"));
                         lastStepTime = now;
                     }
-                    final int currentExp = playerInfos.experience();
 
                     if (currentExp != lastExp) {
                         views.forEach(v -> v.playSound("collect"));
