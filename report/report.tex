@@ -11,7 +11,7 @@
 
 \usepackage[italian]{cleveref}
 
-\graphicspath{{./}{uml/}{report/uml/}}
+\graphicspath{{./}{uml/}{report/uml/}{img/}}
 
 \title{Wild Encounter}
 
@@ -381,8 +381,12 @@ La gestione delle posizioni di ogni elemento è stata facilitata di molto grazie
 tutto ciò che riguarda il lato matematico del movimento di oggetti, ciò grazie ai suoi Vector2d.
 %
 \subsection{Log4J}
+E' stato necessario l'uso di un logger per evitare l'uso di System.log.println e simili. Si è preferito utilizzare Log4J
+in quanto consigliato a lezione.
 %
 \subsection{Jackson}
+Libreria necessaria per la lettura di file .json, rendendoli di fatto oggetti concreti e permettendone il raggruppamento
+di tali all'interno di mappe.
 %
 \subsection{JavaFX}
 La grafica è stata creata grazie a JavaFX, la quale si occupa di fornire un moderno API per lo sviluppo di interfacce grafiche in Java.
@@ -523,18 +527,26 @@ Infine, l'esperienza è stata resa estremamente positiva dai miei compagni: la l
 
 \appendix
 \chapter{Guida utente}
-All'avvio dell'applicazione si può selezionare il personaggio da giocare e avviare una nuova partita o ovviare la partita con il personaggio selezionato di defaut. Dalla stesa interfaccia si può anche andare nel Pokédex, chiccando il rispettivo menu, per visualizzare i risultati totali delle partite precedenti. Al primo avvio il Pokédex si presenterà vuoto non avendo ancora effettua alcuna partita.
+\begin{figure}[H]
+	\includegraphics[width=13cm]{mainmenu.png}
+	\caption{Schermata principale del gioco.}\label{img:mainmenu}
+\end{figure}
+All'avvio dell'applicazione si può selezionare il personaggio da giocare e avviare una nuova partita o avviare la partita con il personaggio selezionato di defaut. Dalla stesa interfaccia si può anche andare nel Pokédex, chiccando il rispettivo menu, per visualizzare i risultati totali delle partite precedenti. Al primo avvio il Pokédex si presenterà vuoto non avendo ancora effettua alcuna partita.
 
 Avviato il gioco si potrà muovere il personaggio con "WASD" e direzionare gli attacchi con il cursore del mouse. 
 
-Durante la partita a ogni nuovo livello del player apparità una interfaccia per selezionare un power-up. L'interfaccia sarà già selezionata e si potranno usare le frecette SU e GIU per selezionare il potenziamento e premere INVIO per applicarlo oppure con un doppio click del muose.
+Durante la partita a ogni nuovo livello del player apparità una interfaccia per selezionare un power-up. Si potranno usare le frecette SU e GIU per selezionare il potenziamento e premere INVIO per applicarlo oppure con un doppio click del muose.
 
-Sempre durante la partita premendo ESC si mette il gioco in pausa e dalla interfaccia che appare si può riprendere la partita, oppure ripremendo ESC si riprende la partita.
+Sempre durante la partita premendo ESC è possibile mettere il gioco in pausa e dalla interfaccia che appare si può riprendere la partita o tornare al menu principale.
 
-A fine partita si visualizza l'interfaccia per tornare al menu di gioco o chiudere l'applicazione, in entrambi i casi si effettua il salvataggi dei risultati della parita consultabili nel Pokédex. 
+A fine partita si visualizza l'interfaccia per tornare al menu di gioco o chiudere l'applicazione, in entrambi i casi si effettua il salvataggio dei risultati della parita, i cui dati verranno memorizzati nel Pokédex. 
 
 La chiusura della finestra in partita non comporta il salvataggio dei dati della partita.
 
+\begin{figure}[H]
+	\includegraphics[width=13cm]{pokedex.png}
+	\caption{Schermata del Pokedex, dov'è possibile vedere quali e quanti nemici sono stati eliminati nelle partite.}\label{img:pokedex}
+\end{figure}
 \chapter{Esercitazioni di laboratorio}
 
 \paragraph{Andrea Maria Castronovo} \begin{itemize}
@@ -585,18 +597,6 @@ La chiusura della finestra in partita non comporta il salvataggio dei dati della
 	\item Laboratorio 10 : 
 	\item Laboratorio 11 : https://virtuale.unibo.it/mod/forum/discuss.php?d=210617\#p288950
 	\item Laboratorio 12 : https://virtuale.unibo.it/mod/forum/discuss.php?d=211539\#p290624
-\end{itemize}
-
-\paragraph{Kleo Rama} \begin{itemize}
-	\item Laboratorio 4 : 
-	\item Laboratorio 5 : 
-	\item Laboratorio 6 : 
-	\item Laboratorio 7 : 
-	\item Laboratorio 8 : 
-	\item Laboratorio 9 : 
-	\item Laboratorio 10 : 
-	\item Laboratorio 11 : 
-	\item Laboratorio 12 : 
 \end{itemize}
 
 \end{document}
