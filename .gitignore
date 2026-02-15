@@ -11,7 +11,7 @@ bin/
 
 # LaTeX and report build files
 plantuml*.jar
-report.pdf
+report/report.pdf
 *.toc
 *.synctex.gz
 *.synctex.bbl
