@@ -30,9 +30,13 @@ hide empty members
 '  Classes
 ' =========================
 
-class AbstractEntity <<Interface>> {
+class Entity <<Interface>> {
+
+}
+
+class AbstractEntity {
     +updatePosition(deltaTime : double) : void
-    #alterDirection() : Vector2dc
+    {abstract} +alterDirection() : Vector2dc
 }
 
 class CloseRangeEnemy { 
@@ -48,9 +52,10 @@ class RoamingEnemy {
 ' =========================
 '  Relations
 ' =========================
+AbstractEntity -up-|> Entity 
 
-CloseRangeEnemy --|> AbstractEntity
-RangedEnemy --|> AbstractEntity
-RoamingEnemy --|> AbstractEntity
+CloseRangeEnemy -up-|> AbstractEntity
+RangedEnemy -up-|> AbstractEntity
+RoamingEnemy -up-|> AbstractEntity
 
 @enduml

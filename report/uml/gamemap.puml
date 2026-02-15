@@ -31,18 +31,18 @@ hide empty members
 '  Classes
 ' =========================
 
-interface MapObject {
-    getPosition() : Vector2dc
-    getHitbox() : double
-    isAlive() : boolean
+interface MapObject << Interface >> {
+    +getPosition() : Vector2dc
+    +getHitbox() : double
+    +isAlive() : boolean
 }
 
-interface GameMap {
-    getAllObjects() : List<MapObject>
-    updateEntities(long deltaTime, Vector2dc playerDirection) : void 
-    spawnEnemies(double deltaSeconds) : void 
-    setEnemySpawnLogic(EnemySpawner spawnLogic) : void 
-    getMapBestiary() : Map<String, Integer> 
+interface GameMap << Interface >> {
+    +getAllObjects() : List<MapObject>
+    +updateEntities(long deltaTime, Vector2dc playerDirection) : void 
+    +spawnEnemies(double deltaSeconds) : void 
+    +setEnemySpawnLogic(EnemySpawner spawnLogic) : void 
+    +getMapBestiary() : Map<String, Integer> 
 }
 
 class GameMapImpl {
@@ -52,7 +52,7 @@ class GameMapImpl {
 
 GameMap --o MapObject
 
-GameMapImpl --|> GameMap
+GameMapImpl ..|> GameMap
 
 
 @enduml 

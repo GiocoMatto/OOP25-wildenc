@@ -35,10 +35,10 @@ hide empty members
 ' Subtitle for classes: 
 ' \n<size:10><i>(from model)</i></size>
 interface Weapon <<Interface>>{
-    attack(double deltaTime): Set<Projectile>
-    upgrade(): void
-    getName(): String
-    getStats(): WeaponStats
+    +attack(double deltaTime): Set<Projectile>
+    +upgrade(): void
+    +getName(): String
+    +getStats(): WeaponStats
 }
 
 GenericWeapon .up.|> Weapon
@@ -49,26 +49,26 @@ class GenericWeapon {
 PointerWeapon -up-|> GenericWeapon
 
 class PointerWeapon {
-    setPosToHit(Supplier<Vector2d>) : void
+    +setPosToHit(Supplier<Vector2d>) : void
 }
 
 WeaponFactory *-right- Weapon : << creates >>
 
 interface WeaponFactory <<Interface>>{
-  createWeapon(Object... stats): Weapon
+  +createWeapon(Object... stats): Weapon
 }
 
 GenericFactory .up.|> WeaponFactory
 GenericFactory *-right- GenericWeapon
 
 class GenericFactory {
-  createWeapon(Object... stats): GenericWeapon
+  +createWeapon(Object... stats): GenericWeapon
 }
 
 PointerFactory .up.|> WeaponFactory
 
 class PointerFactory {
-  createWeapon(Object... stats): PointerWeapon
+  +createWeapon(Object... stats): PointerWeapon
 }
 
 PointerWeapon -left-* PointerFactory

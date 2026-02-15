@@ -36,17 +36,17 @@ hide empty members
 ' \n<size:10><i>(from model)</i></size>
 
 class StatLoader {
-    getInstance(): StatLoader
+    +getInstance(): StatLoader
     
-    getLoadedWeaponStats(): LoadedWeaponStats
-    getLoadedEnemyStats(): LoadedEntityStats
-    getLoadedPlayerStats(): LoadedEntityStats
+    +getLoadedWeaponStats(): LoadedWeaponStats
+    +getLoadedEnemyStats(): LoadedEntityStats
+    +getLoadedPlayerStats(): LoadedEntityStats
 
-    getAllEnemyData(): Collection<LoadedEntityStats>
-    getAllLoadedWeapons(): Collection<LoadedWeaponStats>
-    getAllPlayerData(): Collection<LoadedEntityStats>
+    +getAllEnemyData(): Collection<LoadedEntityStats>
+    +getAllLoadedWeapons(): Collection<LoadedWeaponStats>
+    +getAllPlayerData(): Collection<LoadedEntityStats>
     
-    getWeaponFactoryForWeapon(Object... stats): Weapon
+    +getWeaponFactoryForWeapon(Object... stats): Weapon
 }
 
 @enduml

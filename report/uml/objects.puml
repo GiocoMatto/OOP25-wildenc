@@ -32,10 +32,10 @@ hide empty members
 ' =========================
 
 interface MapObject {
-    getPosition() : Vector2dc
-    getHitbox() : double
-    isAlive() : boolean
-    getName() : String
+    +getPosition() : Vector2dc
+    +getHitbox() : double
+    +isAlive() : boolean
+    +getName() : String
 }
 
 abstract AbstractMapObject {
@@ -43,9 +43,9 @@ abstract AbstractMapObject {
 }
 
 interface Movable {
-    updatePosition(double deltaSeconds) : void
-    getDirection() : Vector2dc
-    getSpeed() : double
+    +updatePosition(double deltaSeconds) : void
+    +getDirection() : Vector2dc
+    +getSpeed() : double
 }
 
 abstract AbstractMovable {
@@ -53,12 +53,12 @@ abstract AbstractMovable {
 }
 
 interface Entity {
-    getCurrentHealth() : double
-    getMaxHealth() : double
-    takeDamage(double dmg) : void
-    getWeapons() : Set<Weapon>
-    addWeapon(Weapon p) : void
-    canTakeDamage() : boolean
+    +getCurrentHealth() : double
+    +getMaxHealth() : double
+    +takeDamage(double dmg) : void
+    +getWeapons() : Set<Weapon>
+    +addWeapon(Weapon p) : void
+    +canTakeDamage() : boolean
 }
 
 abstract AbstractEntity {

@@ -35,14 +35,14 @@ hide empty members
 ' \n<size:10><i>(from model)</i></size>
 
 interface Game << Interface >> {
-    updateEntities(long deltaTime, Vector2dc playerDirection) : void 
-    isGameEnded() : boolean 
-    choosenWeapon(String wc) : void 
-    weaponsToChooseFrom() : Set<WeaponChoice>
-    hasPlayerLevelledUp() : boolean 
-    getGameStatistics() : Map<String, Integer>
-    getAllMapObjects() : Collection<MapObject>
-    getPlayerInfos() : PlayerInfos 
+    +updateEntities(long deltaTime, Vector2dc playerDirection) : void 
+    +isGameEnded() : boolean 
+    +choosenWeapon(String wc) : void 
+    +weaponsToChooseFrom() : Set<WeaponChoice>
+    +hasPlayerLevelledUp() : boolean 
+    +getGameStatistics() : Map<String, Integer>
+    +getAllMapObjects() : Collection<MapObject>
+    +getPlayerInfos() : PlayerInfos 
 }
 
 class GameImpl {
@@ -50,17 +50,17 @@ class GameImpl {
 }
 
 record PlayerInfos << Record >> {
-  experience() : int
-  level() : int
-  neededExp() : int
-  coins() : int
-  currentHealth() : double
-  maxHealth() : double
+  +experience() : int
+  +level() : int
+  +neededExp() : int
+  +coins() : int
+  +currentHealth() : double
+  +maxHealth() : double
 }
 
 record WeaponChoice << Record >> {
-  name() : String 
-  lvlUpDescriptio() : String 
+  +name() : String 
+  +lvlUpDescriptio() : String 
 }
 
 interface GameMap << Interface >> {

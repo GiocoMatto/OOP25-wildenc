@@ -34,10 +34,10 @@ hide empty members
 ' Subtitle for classes: 
 ' \n<size:10><i>(from model)</i></size>
 interface Weapon <<Interface>>{
-    attack(double deltaTime): Set<Projectile>
-    upgrade(): void
-    getName(): String
-    getStats(): WeaponStats
+    +attack(double deltaTime): Set<Projectile>
+    +upgrade(): void
+    +getName(): String
+    +getStats(): WeaponStats
 }
 
 GenericWeapon .up.|> Weapon
@@ -48,15 +48,15 @@ class GenericWeapon {
 PointerWeapon -up-|> GenericWeapon
 
 class PointerWeapon {
-    setPosToHit(Supplier<Vector2d>) : void
+    +setPosToHit(Supplier<Vector2d>) : void
 }
 
 interface Projectile <<Interface>> {
-    getDamage(): double
-    isAlive(): boolean
-    getOwnerPosition(): Vector2dc
-    getOwnerName(): String
-    isImmortal(): boolean
+    +getDamage(): double
+    +isAlive(): boolean
+    +getOwnerPosition(): Vector2dc
+    +getOwnerName(): String
+    +isImmortal(): boolean
 }
 
 class ConcreteProjectile {
@@ -64,8 +64,8 @@ class ConcreteProjectile {
 }
 
 class ProjectileStats {
-  setMultiplier(double newMult): void
-  getStat(ProjStatType type): double
+  +setMultiplier(double newMult): void
+  +getStat(ProjStatType type): double
 
 }
 

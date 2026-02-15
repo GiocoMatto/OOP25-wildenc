@@ -35,17 +35,17 @@ hide empty members
 ' Subtitle for classes: 
 ' \n<size:10><i>(from model)</i></size>
 interface SavedDataHandler <<Interface>> {
-  saveData(SavedData): void
-  loadData(): SavedData
+  +saveData(SavedData): void
+  +loadData(): SavedData
 }
 
 class SavedDataHandlerImpl {}
 
 interface SavedData <<Interface>> {
-  updateCoins(int newCoins) : void
-  updatePokedex(String name, int newElims) : void
-  getCoins() : int
-  getPokedex() Map<String, Integer> 
+  +updateCoins(int newCoins) : void
+  +updatePokedex(String name, int newElims) : void
+  +getCoins() : int
+  +getPokedex() Map<String, Integer> 
 }
 
 class SavedDataImpl {}

@@ -45,7 +45,7 @@ class GameView <<Inteface>> {
     +pokedexView() : void
 }
 
-class gameviewImpl {
+class GameViewImpl {
 
 }
 
@@ -53,7 +53,7 @@ class gameviewImpl {
 '  Relations
 ' =========================
 
-GameView ..* Engine
-GameView <|.. gameviewImpl
+GameView --* Engine
+GameView <|.. GameViewImpl
 
 @enduml

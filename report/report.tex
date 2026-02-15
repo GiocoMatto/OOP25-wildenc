@@ -112,10 +112,10 @@ all'interno del sistema di movimento dei nemici nel model.
 %
 Sarà presente una fase di Menù statica, che non interesserà il game loop (gestito all'interno del Motore di Gioco principale) in quanto non vi sono entità animate da gestire;
 %
-durante questa fase sarà possibile avviare la partita, acquistare potenziamenti permanenti tramite le monete guadagnate
-nelle varie partite e controllare il proprio Pokédex.
+durante questa fase sarà possibile avviare la partita, controllare il proprio Pokédex e, in futuro, acquistare potenziamenti permanenti tramite le monete guadagnate
+nelle varie partite.
 %
-La View sarà rimpiazzabile facilmente implementando tutto ciò che è richiesto dall'app per funzionare, così facendo sarebbe possiible
+La View sarà rimpiazzabile facilmente implementando tutto ciò che è richiesto dall'app per funzionare, così facendo sarebbe possibile
 in futuro anche l'implementazione dello stesso gioco per altre piattaforme come telefoni o schermi touchscreen.
 
 Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura della fase di gioco appena descritta.
@@ -126,7 +126,7 @@ Nella \autoref{uml:gameArchitecture} è illustrata ed evidenziata l'architettura
 \end{figure}
 
 \section{Design Dettagliato}
-\subsection*{Andrea Maria Castronovo - Gestione mappa ed entità}
+\subsection{Andrea Maria Castronovo -\ Gestione mappa ed entità}
 %
 \subsubsection{Oggetti di gioco}
 %
@@ -192,7 +192,7 @@ fornire le armi che saranno sbloccate durante la progressione del gioco, ma anch
 L'interfaccia \textit{Game} è un Facade per \textit{GameMap}, in quanto si occupa di impacchettare e gestire i dati
 nei record, così facendo è possibile gestire gli oggetti della mappa in modo sicuro.
 %
-\subsection*{Lorenzo Mazzini - Gestione armi e proiettili}
+\subsection{Lorenzo Mazzini -\ Gestione armi e proiettili}
 
 \textbf{Introduzione:} All'interno del gioco dovranno essere disponibili varie tipologie di armi, ciascuna capace di generare diverse tipologie di attacchi con i quali sarà possibile colpire i nemici. Tali attacchi dovranno variare non solo dal punto di vista delle statistiche (quali danno, velocità...), ma anche dal punto di vista del loro comportamento relativo al movimento e alla generazione.
 
@@ -205,7 +205,7 @@ nei record, così facendo è possibile gestire gli oggetti della mappa in modo s
 \textbf{Soluzione}: il concetto di arma è stato generalizzato in modo che ogni implementazione differisca sulla base di come l'arma si deve comportare; nello specifico è stata creata una classe
 \textit{GenericWeapon}, la quale ottiene le informazioni relative al suo comportamento nel momento in cui viene istanziata: in questo modo è ampiamente permessa la personalizzazione dei vari attacchi.
 Ogni \textit{Weapon} è una \textit{factory} di \textit{Projectiles}; la tipologia di proiettile che l'arma sarà in grado di generare è specificato alla costruzione dell'arma stessa tramite le sue statistiche, nella forma di una classe \textit{ProjectileStats}. Ogni proiettile generato dall'arma otterrà tali statistiche, le quali definiscono sia come il proiettile è fatto concretamente, ma anche come esso deve muoversi. In questo modo si scorpora la dipendenza tra arma e proiettile dopo che il proiettile è stato generato. Oltre al tipo di proiettile, l'arma dovrà ottenere anche altre informazioni, come il nome dell'arma, il suo tempo di ricarica e il numero di proiettili sparati alla volta. Ultima, fondamentale, componente di cui l'arma ha bisogno è il metodo di generazione dei proiettili: ogni arma genererà i proiettili per mezzo di una classe \textit{AttackContext}, la quale contiene tutte le informazioni utili al proiettile per esitere (posizione, direzione, velocità e posizione da seguire).\\
-Armi così definite vengono specializzate per mezzo del \textit{design pattern} Factory Method: ogni Factory produce una specifica tipologia di arma, di cui cambiano solamente i parametri riguardanti le statistiche.
+Armi così definite vengono specializzate per mezzo del \textit{design pattern} Abstract Factory: ogni Factory produce una specifica tipologia di arma, di cui cambiano solamente i parametri riguardanti le statistiche.
 \newline
 \begin{figure}[H]
 	\includegraphics[width=13cm]{Weapons}
@@ -242,12 +242,12 @@ Armi così definite vengono specializzate per mezzo del \textit{design pattern} 
 \begin{figure}[H]
 	\includegraphics[width=13cm]{StatLoader}
 	\caption{Schema UML che rappresenta il Singleton StatLoader.
-	}\label{uml:spriterendering}
+	}\label{uml:statloader}
 \end{figure}
 \textbf{Problema}: vogliamo che le statistiche delle entità di gioco siano separate dal codice del gioco stesso, permettendo così la modifica di entità già esistenti o la creazione di nuove entità in modo semplice.\\
 \textbf{Soluzione}: inizialmente, la gestione delle statistiche dei personaggi, dei nemici e delle armi era completamente interna al codice. Al fine di separare le statistiche dalle implementazioni è stata utilizzata una classe \textit{StatLoader}, che sfrutta il \textit{design pattern} Singleton. Tale classe, carica da file in formato JSON le statistiche relative ad armi ed entità, memorizzandole nei record \textit{LoadedWeaponStats} e \textit{LoadedEntityStats}. Al momento della generazione di armi o entità, la classe può restituire questi record al fine di permettere la generazione tramite i dati letti da file. In questo modo è resa facile l'implementazione da parte di utenti esterni di nuove entità o nuove armi, specificandone semplicemente le statistiche (per le weapon va anche specificata la Factory con la quale vengono prodotte).
 %
-\subsubsection{Leonardo Mengozzi - Gestione nemici e Controller}
+\subsection{Leonardo Mengozzi -\ Gestione nemici e Controller}
 %
 \subsubsection{Abstract Factory di enemy}
 %
@@ -256,9 +256,9 @@ Armi così definite vengono specializzate per mezzo del \textit{design pattern} 
 	\caption{UML rappresenta Abstract factory, con metodi d'esempio, per gli enemys}\label{uml:factoryEnemy}
 \end{figure}
 %
-\paragraph{Problema:} Wild Encounter ha diverse tipologie di nemici, ma la cui creazione richiede parametri simili e l'assegnamento delle armi fisso dopo la creazione delle istanze. 
+\paragraph{Problema:} Wild Encounter ha diverse tipologie di nemici, la cui creazione richiede parametri simili e l'assegnamento delle armi deve essere fisso dopo la creazione delle istanze. 
 %
-\paragraph{Soluzione}: Per rendere facile e sicura la creazione delle istanze di nemici si è adottato un \textit{Abstract factory} che espone un metodo con parametri necessari a ogni nemico per essere istanziato.
+\paragraph{Soluzione:} Per rendere facile e sicura la creazione delle istanze di nemici si è adottato un \textit{Abstract factory} che espone un metodo con parametri necessari a ogni nemico per essere istanziato.
 % applicato il template method
 \subsubsection{Applicazione template method}
 %
@@ -269,7 +269,7 @@ Armi così definite vengono specializzate per mezzo del \textit{design pattern} 
 %
 \paragraph{Problema:} Le implementazioni dei nemici differiscono solamenete per la specializzazione della logica di movimento e se possono o meno subire danno.
 %
-\paragraph{Soluzione:} Concretizzo il metodo astratto alterDirection e canTakeDamage creati seguendo il design patter \textit{Template method}  nella Abstract Entity class per specificare il movimento specifico del nemico e per il Roaming enemy che può acuisire danno solo dopo un tempo specifico.
+\paragraph{Soluzione:} Concretizzo i metodi astratti alterDirection e canTakeDamage, creati seguendo il design pattern \textit{Template method} nella Abstract Entity class, per specificare il movimento specifico del nemico e per il Roaming enemy che può acquisire danno solo dopo un tempo specifico.
 % Gestione del game loop
 \subsubsection{Aggiornamento della grafica}
 \begin{figure}[H]
@@ -277,11 +277,13 @@ Armi così definite vengono specializzate per mezzo del \textit{design pattern} 
 	\caption{UML rappresenta osberver controller e view}\label{uml:observer}
 \end{figure}
 %
-\paragraph{Problema} Nel caso un istanza dell'applicazione disponga di più GUI o CLI queste devono coerentemente rispondere alla unica logica.
+\paragraph{Problema:} Nel caso un'istanza dell'applicazione disponga di più GUI o CLI queste devono coerentemente rispondere alla unica logica.
 %
-\paragraph{Soluzione} Appico il design pattern Observe per notificare in modo coerente tutte le view registrate quando lo stato del gioco cambia. Seguendo l'architettura MVC, il controller (Engine) funge da Subject/Observable, mentre le view si registrano come Observer e vengono aggiornate dal controller durante il game loop.
+\paragraph{Soluzione:} Applico il design pattern \textit{Observer} per notificare in modo coerente tutte le view registrate quando lo stato del gioco cambia. Seguendo l'architettura MVC, il controller (Engine) funge da Subject/Observable, mentre le view si registrano come Observer e vengono aggiornate dal controller durante il game loop.
 %
-\subsection*{Kleo Rama - Gestione Player, Audio, Input movimento e UI }
+L'implementazione differisce dal modello standard per l'aggiunta della possibilità di disiscrivere un Observer dall'Observable e diversi metodi di notifica.
+%
+\subsection{Kleo Rama -\ Gestione Player, Audio, Input movimento e UI }
 %
 Il contributo si è focalizzato sulla definizione dell'entità principale di gioco, sulla gestione degli input utente per il movimento, sul sistema audio, sulle interfacce di overlay e sui collezionabili.
 %
@@ -291,7 +293,7 @@ Il contributo si è focalizzato sulla definizione dell'entità principale di gio
 	\caption{UML rappresenta la gestione del movimento}\label{uml:movement}
 \end{figure}
 \textbf{Problema:} Era necessario implementare un sistema di controllo del personaggio che fosse reattivo e completamente disaccoppiato dalla libreria grafica (JavaFX), permettendo al \textit{Controller} di gestire la logica di movimento senza conoscere i dettagli dell'evento tastiera.
-
+\newline
 \textbf{Soluzione:} È stata definita l'interfaccia \texttt{InputHandler} e la sua implementazione \texttt{InputHandlerImpl}.
 Il sistema utilizza un approccio basato su enumerazioni (\texttt{MovementInput}) per astrarre i comandi grezzi (tasti W, A, S, D).
 \begin{itemize}
@@ -331,7 +333,7 @@ Il comportamento specifico di ogni oggetto è incapsulato nel metodo \texttt{app
 \end{figure}
 \subsubsection{Gestione Audio (SoundManager)}
 \textbf{Problema:} Gestire la riproduzione concorrente di effetti sonori (brevi e frequenti) e musica di sottofondo (loop continuo) senza bloccare il thread principale.
-
+\newline
 \textbf{Soluzione:} Il componente \texttt{SoundManagerImpl} incapsula la logica delle librerie JavaFX \texttt{Media}.
 La classe distingue due tipologie di riproduzione:
 \begin{itemize}
@@ -348,7 +350,7 @@ La classe distingue due tipologie di riproduzione:
 \end{itemize}
 Entrambi i componenti sono gestiti dalla \texttt{GameViewImpl} che ne controlla la visibilità e il focus, garantendo che le interazioni da tastiera (es. tasto ESC) siano correttamente indirizzate.
 
-L'implementazione differisce dal modello standr per l'aggiunta della possibilità di disiscrivere un Observer dall'Observable e diversi metodi di notifica.
+
 
 \chapter{Sviluppo}
 
@@ -381,7 +383,7 @@ La gestione delle posizioni di ogni elemento è stata facilitata di molto grazie
 tutto ciò che riguarda il lato matematico del movimento di oggetti, ciò grazie ai suoi Vector2d.
 %
 \subsection{Log4J}
-E' stato necessario l'uso di un logger per evitare l'uso di System.log.println e simili. Si è preferito utilizzare Log4J
+È stato necessario l'uso di un logger per evitare l'uso di \texttt{System.log.println} e simili. Si è preferito utilizzare Log4J
 in quanto consigliato a lezione.
 %
 \subsection{Jackson}
@@ -394,39 +396,39 @@ La grafica è stata creata grazie a JavaFX, la quale si occupa di fornire un mod
 
 \paragraph{Andrea Maria Castronovo}
 \begin{itemize}
-	\item Gestione delle collisioni tramite Stream 
-	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L159C9-L159C15}{permalink 1}, 
-	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L226}{permalink 2}
-	\item Optional
-	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/76a93999af86865b827408da01535fbad8ae6eb9/src/test/java/it/unibo/wildenc/mvc/model/map/MapTestingConstants.java#L231}{permalink}
-	\item Method reference lambda
-	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L83}{permalink}
-	\item Utilizzo libreria JOML per calcoli con vettori
-	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/CollisionLogic.java#L20}{permalink}
+	\item Gestione delle collisioni tramite Stream: 
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L159C9-L159C15}{(permalink 1)}, 
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L226}{(permalink 2)}
+	\item Optional:
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/76a93999af86865b827408da01535fbad8ae6eb9/src/test/java/it/unibo/wildenc/mvc/model/map/MapTestingConstants.java#L231}{(permalink)}
+	\item Method reference lambda:
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/GameMapImpl.java#L83}{(permalink)}
+	\item Utilizzo libreria JOML per calcoli con vettori:
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/76a93999af86865b827408da01535fbad8ae6eb9/src/main/java/it/unibo/wildenc/mvc/model/map/CollisionLogic.java#L20}{(permalink)}
 \end{itemize}
 %
 \paragraph{Leonardo Mengozzi} 
 \begin{itemize}
 	\item Gestione della concorrenza con semafori per stoppare il gameLoop:
-	https://github.com/GiocoMatto/OOP25-wildenc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L75
-	https://github.com/GiocoMatto/OOP25-wildenc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L267
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L75}{(permalink 1)}
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/8571b87328e0761793f962c17a76b4878ab94f04/src/main/java/it/unibo/wildenc/mvc/controller/impl/EngineImpl.java\#L267}{(permalink 2)}
 	\item Esempio di uso di optional: 
 	
-	https://github.com/GiocoMatto/OOP25-wildenc/blob/c2c09abddaf900255b5bd60e0b6a763abe26b2ce/src/main/java/it/unibo/wildenc/mvc/model/enemies/AbstractEnemy.java\#L54
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c2c09abddaf900255b5bd60e0b6a763abe26b2ce/src/main/java/it/unibo/wildenc/mvc/model/enemies/AbstractEnemy.java\#L54}{(permalink)}
 
 	\item Uso di generic: 
 	
-	https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/util/Utilities.java\#L30
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/util/Utilities.java\#L30}{(permalink)}
 	
 	\item Uso di stream: 
 	
-	https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L124
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L124}{(permalink 1)}
 	
-	https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L139
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L139}{(permalink 2)}
 	
 	\item Esempio di uso di lambda: 
 	
-	https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L40
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/1c0b7d45586c27b49f1c4ecb6d7cac295a83e7d5/src/main/java/it/unibo/wildenc/mvc/model/enemies/EnemySpawnerImpl.java\#L40}{(permalink)}
 
 \end{itemize}
 
@@ -437,7 +439,7 @@ La grafica è stata creata grazie a JavaFX, la quale si occupa di fornire un mod
 		generazione proiettili (\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/model/weaponary/weapons/WeaponStats.java\#L21}{permalink}),
 		esempio d'uso pratico (\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/model/weaponary/weapons/factories/FixedFactory.java\#L57}{permalink}).
 
-	\item Utilizzo di Serializable per salvataggio dati
+	\item Utilizzo di Serializable per salvataggio dati:
 	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/controller/impl/SavedDataImpl.java\#L15C50-L15C63}{permalink}.
 
 	\item Uso di stream in varie occasioni:
@@ -447,6 +449,14 @@ La grafica è stata creata grazie a JavaFX, la quale si occupa di fornire un mod
 
 	\item Uso della libreria Jackson per la lettura da .json:
 	\href{https://github.com/GiocoMatto/OOP25-wildenc/blob/c58ced1c02923d7925d1160a11d0166dfc6780a7/src/main/java/it/unibo/wildenc/mvc/model/dataloaders/StatLoader.java\#L12}{permalink}.
+\end{itemize}
+
+\paragraph{Kleo Rama}
+\begin{itemize}
+	\item Gestione della view thread safe e lambda:
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/78e8f0e7bd44f109c811b926714a9d85072facff/src/main/java/it/unibo/wildenc/mvc/view/impl/GameViewImpl.java#L341}{(permalink)}
+	\item Utilizzo libreria JavaFX per gestione audio e caricamento da file:
+	\href{https://github.com/GiocoMatto/OOP25-wildenc/blame/78e8f0e7bd44f109c811b926714a9d85072facff/src/main/java/it/unibo/wildenc/mvc/view/impl/SoundManagerImpl.java#L35}{(permalink)}
 \end{itemize}
 %
 \chapter{Commenti finali}
@@ -469,11 +479,11 @@ implementava Player o Enemy tramite la keyword "instanceof" di Java. Questo ha p
 %
 \subsection{Leonardo Mengozzi} 
 %
-Mi sono occupato delle entità nemiche, della logica di spawn, del game loop del controller e alcune interfacce grafice e la logica di interfacciamento al controller.
+Mi sono occupato delle entità nemiche, della logica di spawn, del game loop del controller e alcune interfacce grafiche e la logica di interfacciamento al controller.
 %
-Il risultato finale mi soddisfa in quanto è una buona base solida per possibili sviluppi futuri già in parte abbozzatti, come lo shop e un sistema di valute.
+Il risultato finale mi soddisfa in quanto è una buona base solida per possibili sviluppi futuri già in parte abbozzati, come lo shop e un sistema di valute.
 %
-Una sezione migliorabile è la logia si spawn dei nemici che per quanto gia stata perfezionata rimane acerba e rifibile su aspetti come i parametri su cui viene scelto il nemico da spawnare e probabilità di spawn ad'och per ogni nemnico.
+Una sezione migliorabile è la logica di spawn dei nemici che, per quanto sia già stata perfezionata, rimane acerba e rifinibile su aspetti come i parametri su cui viene scelto il nemico da spawnare e probabilità di spawn ad hoc per ogni nemico.
 %
 \subsection{Lorenzo Mazzini}
 Mi sono occupato della creazione delle armi per le entità e qualche altra funzione utile al progetto.
@@ -506,7 +516,7 @@ Grazie a questo progetto ho potuto esercitarmi molto per quanto riguarda l'organ
 e credo che riuscire ad allenare questa "soft skill" prima di entrare nel mondo del lavoro sia una grande fortuna.
 %
 \subsection{Leonardo Mengozzi}
-Anche per me questo è stato il primo grande progetto. Mi sono trovato a lavorare e sincronizzare quantità di istruzioni mai affrontate prima e sopprattuto a interfacciarmi in un progetto di cui non avevo il pieno controllo. 
+Questo è stato il primo grande progetto. Mi sono trovato a lavorare e sincronizzare quantità di istruzioni mai affrontate prima e sopprattuto a interfacciarmi in un progetto di cui non avevo il pieno controllo. 
 %
 L'abilità nel confronto, l'ascolto, e le altre numerose soft skill che questo progetto hanno richiesto e che mi ha portato ad'affinare si riveleranno utili in futuro.
 %
@@ -531,11 +541,11 @@ Infine, l'esperienza è stata resa estremamente positiva dai miei compagni: la l
 	\includegraphics[width=13cm]{mainmenu.png}
 	\caption{Schermata principale del gioco.}\label{img:mainmenu}
 \end{figure}
-All'avvio dell'applicazione si può selezionare il personaggio da giocare e avviare una nuova partita o avviare la partita con il personaggio selezionato di defaut. Dalla stesa interfaccia si può anche andare nel Pokédex, chiccando il rispettivo menu, per visualizzare i risultati totali delle partite precedenti. Al primo avvio il Pokédex si presenterà vuoto non avendo ancora effettua alcuna partita.
+All'avvio dell'applicazione si può selezionare il personaggio da giocare e avviare una nuova partita o avviare la partita con il personaggio selezionato di default. Dalla stessa interfaccia si può anche andare nel Pokédex, chiccando il rispettivo menu, per visualizzare i risultati totali delle partite precedenti. Al primo avvio il Pokédex si presenterà vuoto non avendo ancora effettua alcuna partita.
 
 Avviato il gioco si potrà muovere il personaggio con "WASD" e direzionare gli attacchi con il cursore del mouse. 
 
-Durante la partita a ogni nuovo livello del player apparità una interfaccia per selezionare un power-up. Si potranno usare le frecette SU e GIU per selezionare il potenziamento e premere INVIO per applicarlo oppure con un doppio click del muose.
+Durante la partita a ogni nuovo livello del player apparità un'interfaccia per selezionare un power-up. Si potranno usare le frecette SU e GIÙ per selezionare il potenziamento e premere INVIO per applicarlo oppure con un doppio click del muose.
 
 Sempre durante la partita premendo ESC è possibile mettere il gioco in pausa e dalla interfaccia che appare si può riprendere la partita o tornare al menu principale.
 
@@ -550,7 +560,7 @@ La chiusura della finestra in partita non comporta il salvataggio dei dati della
 \chapter{Esercitazioni di laboratorio}
 
 \paragraph{Andrea Maria Castronovo} \begin{itemize}
-	\item Laboratorio 6 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=206731\#p284103}{permalink lab 6}
+	\item Laboratorio 6 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=206731#p284103}{permalink lab 6}
 	\item Laboratorio 7 :  \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=207193#p284592}{permalink lab 7}
 	\item Laboratorio 8 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=207921#p286066}{permalink lab 8}
 	\item Laboratorio 9 : \href{https://virtuale.unibo.it/mod/forum/discuss.php?d=208718#p287147}{permalink lab 9}

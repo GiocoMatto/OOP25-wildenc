@@ -35,7 +35,7 @@ hide empty members
 ' \n<size:10><i>(from model)</i></size>
 
 interface SpriteRenderer <<Interface>> {
-    getSprite(int frameCount, MapObjViewData objData) : Sprite
+    +getSprite(int frameCount, MapObjViewData objData) : Sprite
 }
 
 class SpriteRendererImpl {
@@ -43,10 +43,10 @@ class SpriteRendererImpl {
 }
 
 interface ViewRenderer <<Interface>> {
-    setCanvas(Canvas): void
-    setContainer(Region): void
-    renderAll(Collection<MapObjViewData>): void
-    clean(): void
+    +setCanvas(Canvas): void
+    +setContainer(Region): void
+    +renderAll(Collection<MapObjViewData>): void
+    +clean(): void
 }
 
 class ViewRendererImpl {
