@@ -6,7 +6,6 @@ import javafx.scene.media.MediaPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.sun.media.jfxmedia.logging.Logger;
 
 import it.unibo.wildenc.mvc.view.api.SoundManager;
@@ -19,15 +18,27 @@ public final class SoundManagerImpl implements SoundManager {
     private static final double TEN_PERCENT = 0.1;
 
     private final Map<String, AudioClip> sounds = new HashMap<>();
+    private boolean isAudioSupported = true;
     private MediaPlayer backgroundMusic;
 
     /**
      * Constructor for the class. Loads the sounds used.
      */
     public SoundManagerImpl() {
+        checkAudioSupport();
+
         loadSound("collect", "/sounds/collect.wav");
         loadSound("walk", "/sounds/walk.wav");
         loadSound("levelUp", "/sounds/levelUp.mp3");
+    }
+
+    // This was made for system which don't have an audio codec installed.
+    private void checkAudioSupport() {
+    Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
+        if (throwable.getMessage() != null && throwable.getMessage().contains("jfxmedia")) {
+            isAudioSupported = false;
+        }
+    });
     }
 
     private void loadSound(final String name, final String path) {
@@ -43,7 +54,7 @@ public final class SoundManagerImpl implements SoundManager {
      */
     @Override
     public void play(final String name) {
-        if (sounds.containsKey(name)) {
+        if (sounds.containsKey(name) && isAudioSupported) {
             sounds.get(name).play();
         }
     }
@@ -54,7 +65,7 @@ public final class SoundManagerImpl implements SoundManager {
     @Override
     public void playMusic(final String filename) {
         final String path = "/sounds/" + filename;
-        if (getClass().getResource(path) == null) {
+        if (getClass().getResource(path) == null || !isAudioSupported) {
             Logger.logMsg(Logger.ERROR, "Sounds can't be loaded.");
             return;
         }
